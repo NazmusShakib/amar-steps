@@ -168,6 +168,7 @@ return [
 
         Zizaco\Entrust\EntrustServiceProvider::class,
         L5Swagger\L5SwaggerServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
 
         /*
          * Application Service Providers...
