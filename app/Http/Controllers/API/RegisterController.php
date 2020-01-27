@@ -215,6 +215,5 @@ class RegisterController extends BaseController
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors(), 422);
         }
-        
     }
 }

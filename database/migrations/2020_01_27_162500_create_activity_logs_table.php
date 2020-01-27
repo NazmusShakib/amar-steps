@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProfilesTable extends Migration
+class CreateActivityLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,15 @@ class CreateProfilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('profiles', function (Blueprint $table) {
+        Schema::create('activity_logs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned()->nullable();
-            $table->enum('gender', ['male', 'female'])->nullable();
-            $table->date('dob')->nullable();
-            $table->string('country')->nullable();
-            $table->string('city')->nullable();
-            $table->text('bio')->nullable();
-            $table->text('address')->nullable();
+            $table->json('activity')->nullable();
+            $table->text('notes')->nullable();
+
             $table->foreign('user_id')->references('id')
                 ->on('users')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
@@ -35,6 +33,6 @@ class CreateProfilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('profiles');
+        Schema::dropIfExists('activity_logs');
     }
 }
