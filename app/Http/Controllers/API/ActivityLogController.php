@@ -102,7 +102,7 @@ class ActivityLogController extends BaseController
     public function destroy($id)
     {
         try {
-            ActivityLog::find($id)->delete();
+            ActivityLog::findOrFail($id)->delete();
             return $this->sendResponse([], 'Activity has been deleted successfully.');
         } catch (\Exception $exception) {
             return $this->sendError($exception->getMessage(), '', 422);

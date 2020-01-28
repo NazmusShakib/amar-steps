@@ -39,3 +39,12 @@ Route::group(['middleware' => ['auth:api']], function () {
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin']);
 
 });
+
+Route::fallback(function(){
+    return response()->json([
+        'message' => 'Hm, why did you land here somehow? If error persists, contact info@website.com'], 404);
+});
+
+Route::get('/doc', function () {
+    return view('api_documentation');
+});

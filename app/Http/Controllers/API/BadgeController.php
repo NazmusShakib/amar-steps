@@ -19,7 +19,7 @@ class BadgeController extends BaseController
     public function index()
     {
         $badges = Badge::with('createdBy')->select(
-            'id', 'name', 'display_name', 'description')
+            'id', 'name', 'display_name', 'description', 'created_by')
             ->orderBy('created_at', 'DESC')->paginate(10);
 
         return response()->json($badges, 200);
@@ -64,7 +64,7 @@ class BadgeController extends BaseController
             return $this->sendError('Badge not found.');
         }
 
-        return $this->sendResponse($badge, 'Baadge retrieved successfully.');
+        return $this->sendResponse($badge, 'Badge retrieved successfully.');
     }
 
     /**
@@ -74,10 +74,10 @@ class BadgeController extends BaseController
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Badge $badge)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:badges,name,' . $id,
+            'name' => 'required|unique:badges,name,' . $badge->id,
             'display_name' => 'nullable',
             'description' => 'nullable',
         ]);
@@ -86,7 +86,7 @@ class BadgeController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors(), 422);
         }
 
-        $badge = Badge::find($id);
+        // $badge = Badge::find($id);
         $badge->update([
             'name' => $request->name,
             'display_name' => $request->display_name,

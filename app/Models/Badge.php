@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Badge extends Model
@@ -31,7 +32,8 @@ class Badge extends Model
      */
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by', 'id');
+        return $this->belongsTo(User::class, 'created_by', 'id')
+            ->select('id', 'name', 'email', 'phone');
     }
 
 }
