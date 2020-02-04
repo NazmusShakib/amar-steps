@@ -17,6 +17,27 @@
         <div class="row">
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="white-box">
+                    <div class="row">
+                        <div class="col-md-10 col-lg-10 col-sm-12">
+                            <el-input
+                                placeholder="Search input"
+                                v-model="searchText"
+                                @keyup.native="filterTableData"
+                                suffix-icon="el-icon-search"
+                                size="small"
+                            />
+                        </div>
+                        <div class="col-md-2 col-lg-2 col-sm-12">
+                            <el-button
+                                type="primary"
+                                class="pull-right"
+                                size="small"
+                                @click="showDialog = !showDialog"
+                            >
+                                <i class="el-icon-plus el-icon-right"></i> Add new
+                            </el-button>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
@@ -32,19 +53,12 @@
                                 <tr class="text-center" v-if="badges.total === 0">
                                     <td colspan="6">No data to display.</td>
                                 </tr>
-                                <tr v-else v-for="badge in badges.data" v-bind:key="badge">
-                                    <td>{{ badges.from + key }}</td>
+                                <tr v-else v-for="(badge, index) in badges.data" v-bind:key="badge">
+                                    <td>{{ index + 1 }}</td>
                                     <td>{{ badge.name }}</td>
                                     <td>{{ badge.display_name }}</td>
                                     <td>{{ badge.description }}</td>
                                     <td>
-                                        <a href="#">
-                                            <button
-                                                type="button"
-                                                class="btn btn-info btn-xs"
-                                            >Details</button>
-                                        </a>
-                                        <span class="m-r-5">|</span>
                                         <router-link
                                             :to="{ name: 'BadgeUpdate', params: {id: badge.id } }"
                                             data-toggle="tooltip"
@@ -77,19 +91,22 @@
             </div>
         </div>
         <!-- /.row -->
+        <badge-modal :show-dialog.sync="showDialog" :dialog-title.sync="dialogTitle"></badge-modal>
     </div>
 </template>
 
 <script>
 import MasterLayout from "~/components/layouts/MasterLayoutComponent";
 import VuePagination from "~/components/partials/_PaginationComponent";
+import BadgeModal from "~/components/badge/_BadgeModalComponent";
 
 import { MessageBox } from "element-ui";
 
 export default {
     name: "BadgeList",
     components: {
-        VuePagination
+        VuePagination,
+        BadgeModal
     },
     data: () => ({
         badges: {
@@ -99,7 +116,10 @@ export default {
             to: 0,
             current_page: 1
         },
-        offset: 4
+        offset: 4,
+        searchText: "",
+        dialogTitle: "Add a new unit",
+        showDialog: false
     }),
     mounted: function() {
         this.getBadges();
@@ -115,6 +135,9 @@ export default {
                     console.log("handle server error from here.");
                 });
         },
+        filterTableData() {
+            //
+        },
         destroyBadge(id, index) {
             MessageBox.confirm(
                 "This will permanently delete. Continue?",
@@ -129,7 +152,7 @@ export default {
                     axios
                         .delete(this.$baseURL + "badges/" + id)
                         .then(response => {
-                            this.exports.data.splice(index, 1);
+                            this.badges.data.splice(index, 1);
                             this.$notification.success(response.data.message);
                         })
                         .catch(error => {
