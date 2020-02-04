@@ -11,39 +11,52 @@ import Blank from '~/components/BlankComponent';
 
 // Import Module Routes
 import userRoutes from './userRoutes';
-import requisitionRoutes from './requisitionRoutes';
+import badgeRoutes from './badgeRoutes';
 
 
-
-const baseRoutes = [
-    {
+const baseRoutes = [{
         path: '/login',
         component: Login,
         name: 'Login',
-        meta: {title: 'Login Page - App', guest: true}
+        meta: {
+            title: 'Login Page - App',
+            guest: true
+        }
     },
     {
-        path: '/register', component: Register,
+        path: '/register',
+        component: Register,
         name: 'Register',
-        meta: {title: 'Register Page - App', guest: true}
+        meta: {
+            title: 'Register Page - App',
+            guest: true
+        }
     },
     {
-        path: '/blank', component: Blank,
+        path: '/blank',
+        component: Blank,
         name: 'Blank',
-        meta: {title: 'Blank Page - App', guest: true}
+        meta: {
+            title: 'Blank Page - App',
+            guest: true
+        }
     },
     {
-        path: '*', component: Error404,
-        name: '404', meta: {title: 'Not Found - App'}
+        path: '*',
+        component: Error404,
+        name: '404',
+        meta: {
+            title: 'Not Found - App'
+        }
     },
     {
-        path: '/dashboard', component: Dashboard,
+        path: '/dashboard',
+        component: Dashboard,
         name: 'Dashboard',
         meta: {
             requireAuth: true,
             title: 'Dashboard - App',
-            metaTags: [
-                {
+            metaTags: [{
                     name: 'description',
                     content: 'The home page of our app.'
                 },
@@ -61,8 +74,7 @@ const baseRoutes = [
         meta: {
             requireAuth: true,
             title: 'Profile - App',
-            metaTags: [
-                {
+            metaTags: [{
                     name: 'description',
                     content: 'The profile page of our app.'
                 },
@@ -76,7 +88,7 @@ const baseRoutes = [
 ];
 
 const routes = baseRoutes.concat(
-    userRoutes, requisitionRoutes
+    userRoutes, badgeRoutes
 );
 
 export default routes;
