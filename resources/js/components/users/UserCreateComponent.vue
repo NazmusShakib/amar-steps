@@ -99,7 +99,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary" :disabled="errors.any()">Submit
+                            <button type="submit" class="btn btn-success" :disabled="errors.any()">Submit
                             </button>
                             <button class="btn btn-danger" type="reset">Clear</button>
                         </div>

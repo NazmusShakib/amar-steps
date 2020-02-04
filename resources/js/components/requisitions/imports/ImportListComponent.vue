@@ -42,14 +42,19 @@
                                 <td>{{ eachImports.requisition_location}}</td>
                                 <td>{{ eachImports.consignee_name }}</td>
                                 <td>
-                                    <router-link :to="{ name: 'importUpdate', params: {id: eachImports.id } }"
+                                    <router-link :to="{ name: 'ImportShow', params: {id: eachImports.id } }"
                                                  data-toggle="tooltip" title="Show!">
-                                        <button type="button" class="btn btn-info btn-xs">Edit</button>
+                                        <button type="button" class="btn btn-info btn-xs">Details</button>
+                                    </router-link>
+                                    <span class="m-r-5">|</span>
+                                    <router-link :to="{ name: 'ImportUpdate', params: {id: eachImports.id } }"
+                                                 data-toggle="tooltip" title="Edit!">
+                                        <button type="button" class="btn btn-success btn-xs">Update</button>
                                     </router-link>
                                     <span class="m-r-5">|</span>
                                     <a href="javascript:void(0)"
                                        data-toggle="tooltip" title="Delete!"
-                                       @click="destroyImport(eachImports.id, key)"> <button type="button" class="btn btn-danger btn-xs">Delete</button>
+                                       @click="destroyImport(eachImports.id, key)"><button type="button" class="btn btn-danger btn-xs">Delete</button>
                                     </a>
                                 </td>
                             </tr>
@@ -71,6 +76,8 @@
 <script>
     import MasterLayout from '~/components/layouts/MasterLayoutComponent';
     import VuePagination from '~/components/partials/_PaginationComponent';
+
+    import { MessageBox } from 'element-ui'
 
     export default {
         name: 'ListOfImports',
@@ -110,7 +117,11 @@
                     });
             },*/
             destroyImport(id, index) {
-                if (confirm("Do you really want to delete it?")) {
+                MessageBox.confirm('This will permanently delete. Continue?', 'Warning', {
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning'
+                }).then(() => {
                     axios.delete('/api/v1/imports/' + id)
                         .then(response => {
                             this.imports.data.splice(index, 1);
@@ -119,7 +130,12 @@
                         .catch(error => {
                             console.log("Could not delete this import.");
                         });
-                }
+                }).catch(() => {
+                    console.log("Delete canceled");
+                });
+
+
+
             }
         },
         created() {

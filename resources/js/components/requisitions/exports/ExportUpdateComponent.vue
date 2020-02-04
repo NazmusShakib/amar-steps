@@ -5,7 +5,7 @@
                 <h4 class="page-title">Export</h4></div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <ol class="breadcrumb">
-                    <li><a href="#">Export</a></li>
+                    <li><a href="#">Exports</a></li>
                     <li class="active">Update</li>
                 </ol>
             </div>
@@ -75,6 +75,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class=" form-group col-md-6">
                                 <label class="control-label">Buyer Name</label>
@@ -95,7 +96,6 @@
                                     {{ errors.first('Buyer Name') }}
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6">
                                 <label class="control-label">Load Point</label>
                                 <select class="form-control" name="Load Point"
@@ -112,6 +112,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class=" form-group col-md-6">
                                 <label class="control-label">Unload Point</label>
@@ -140,7 +141,6 @@
                                     {{ errors.first('Unload Point') }}
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6">
                                 <label class="control-label">Item</label>
                                 <input type="text"
@@ -154,6 +154,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class=" form-group col-md-6">
                                 <label class="control-label">Quantity</label>
@@ -167,7 +168,6 @@
                                     {{ errors.first('Quantity') }}
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6">
                                 <label class="control-label">CBM</label>
                                 <input type="number" name="cbm"
@@ -181,6 +181,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class=" form-group col-md-6">
                                 <label class="control-label">No Of Van</label>
@@ -194,7 +195,6 @@
                                     {{ errors.first('No Of Van') }}
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6 bootstrap-timepicker">
                                 <label class="control-label">Load Time</label>
                                 <div class="input-group">
@@ -213,6 +213,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class=" form-group col-md-6 bootstrap-timepicker">
                                 <label class="control-label">Unload Time</label>
@@ -231,7 +232,6 @@
                                     {{ errors.first('Unload Time') }}
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6 bootstrap-timepicker">
                                 <label class="control-label">Cut Off Time</label>
                                 <div class="input-group">
@@ -250,6 +250,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label class="control-label">Cut Off Date</label>
@@ -262,7 +263,6 @@
                                     {{ errors.first('Cut Off Date') }}
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6">
                                 <label class="control-label">Fare</label>
                                 <input type="number" name="fare"
@@ -275,6 +275,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class=" form-group col-md-6">
                                 <label class="control-label">Cover Van No</label>
@@ -288,7 +289,6 @@
                                     {{ errors.first('cover van no') }}
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6">
                                 <label class="control-label">Cover Van Capacity</label>
                                 <input type="number" name="Cover Van Capacity"
@@ -326,7 +326,7 @@
             exports: {}
         }),
         mounted: function () {
-            console.log('Export update component mounted.');
+            // console.log('Export update component mounted.');
             this.exportShow(this.$route.params.id);
         },
         methods: {

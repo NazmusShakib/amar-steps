@@ -24,7 +24,7 @@
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Role</th>
-                                <th class="text-nowrap">Action</th>
+                                <!--<th class="text-nowrap">Action</th>-->
                             </tr>
                             </thead>
                             <tbody>
@@ -41,7 +41,7 @@
                                 <td>{{ user.email }}</td>
                                 <td>{{ user.phone}}</td>
                                 <td>{{ user.role }}</td>
-                                <td>{{ user.id }}</td>
+                                <!--<td>{{ user.id }}</td>-->
                             </tr>
                             </tbody>
                         </table>

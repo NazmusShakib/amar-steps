@@ -32,14 +32,19 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::apiResource('users', 'API\UserController', ['only' => [
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin']);
 
-    Route::post('exports/generate-requisition-no', 'API\ExportController@generateRequisitionNo')
-        ->name('exports.generateRequisitionNo')->middleware(['role:admin']);
-    Route::apiResource('exports', 'API\ExportController', ['only' => [
+    Route::apiResource('badges', 'API\BadgeController', ['only' => [
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin']);
 
-    Route::post('imports/generate-requisition-no', 'API\ImportController@generateRequisitionNo')
-        ->name('imports.generateRequisitionNo')->middleware(['role:admin']);
-    Route::apiResource('imports', 'API\ImportController', ['only' => [
+    Route::apiResource('activities', 'API\ActivityLogController', ['only' => [
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin']);
 
+});
+
+Route::fallback(function(){
+    return response()->json([
+        'message' => 'Hm, why did you land here somehow? If error persists, contact info@website.com'], 404);
+});
+
+Route::get('/doc', function () {
+    return view('api_documentation');
 });

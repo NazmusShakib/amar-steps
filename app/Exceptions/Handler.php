@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Exception;
+use GuzzleHttp\Exception\RequestException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -86,6 +88,19 @@ class Handler extends ExceptionHandler
                     break;
             }
         } else {
+
+            if ($exception instanceof ModelNotFoundException) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Entry for '.str_replace('App\\', '', $exception->getModel()).' not found',
+                ], 404);
+            } else if ($exception instanceof RequestException) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'External API call failed.',
+                ], 500);
+            }
+
             return parent::render($request, $exception);
         }
     }

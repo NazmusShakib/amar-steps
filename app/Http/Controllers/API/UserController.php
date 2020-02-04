@@ -36,7 +36,7 @@ class UserController extends BaseController
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required|unique:users,phone',
+            'phone' => 'required',
             'role' => 'required|in:admin,staff,subscriber',
             'password' => 'required',
             'password_confirmation' => 'required|same:password',
@@ -85,14 +85,14 @@ class UserController extends BaseController
         $input = $request->all();
 
         $validator = Validator::make($input, [
-            'notes' => 'required',
+            'bio' => 'required',
         ]);
 
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $profile->notes = $input['notes'];
+        $profile->bio = $input['bio'];
         $profile->save();
 
         return $this->sendResponse(new UserResource($profile), 'Profile updated successfully.');

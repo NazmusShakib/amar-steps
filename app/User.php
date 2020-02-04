@@ -18,7 +18,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'phone', 'password',
+        'name', 'email', 'phone', 'user_code',
+        'height', 'weight', 'headshot', 'password',
     ];
 
     /**
@@ -58,6 +59,7 @@ class User extends Authenticatable
      */
     public function profile()
     {
-        return $this->hasOne(Profile::class)->select('gender', 'dob', 'bio', 'address');
+        return $this->hasOne(Profile::class)
+            ->select('gender', 'dob', 'country', 'city', 'bio', 'address');
     }
 }

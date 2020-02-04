@@ -42,14 +42,19 @@
                                 <td>{{ eachExport.requisition_location}}</td>
                                 <td>{{ eachExport.buyer_name }}</td>
                                 <td>
-                                    <router-link :to="{ name: 'ExportUpdate', params: {id: eachExport.id } }"
+                                    <router-link :to="{ name: 'ExportShow', params: {id: eachExport.id } }"
                                                  data-toggle="tooltip" title="Show!">
-                                        <button type="button" class="btn btn-info btn-xs">Edit</button>
+                                        <button type="button" class="btn btn-info btn-xs">Details</button>
+                                    </router-link>
+                                    <span class="m-r-5">|</span>
+                                    <router-link :to="{ name: 'ExportUpdate', params: {id: eachExport.id } }"
+                                                 data-toggle="tooltip" title="Edit!">
+                                        <button class="btn btn-success btn-xs m-r-5">Update</button>
                                     </router-link>
                                     <span class="m-r-5">|</span>
                                     <a href="javascript:void(0)"
                                        data-toggle="tooltip" title="Delete!"
-                                       @click="destroyExport(eachExport.id, key)"> <button type="button" class="btn btn-danger btn-xs">Delete</button>
+                                       @click="destroyExport(eachExport.id, key)"><button class="btn btn-danger btn-xs ">Delete</button>
                                     </a>
                                 </td>
                             </tr>
@@ -71,6 +76,8 @@
 <script>
     import MasterLayout from '~/components/layouts/MasterLayoutComponent';
     import VuePagination from '~/components/partials/_PaginationComponent';
+
+    import { MessageBox } from 'element-ui'
 
     export default {
         name: 'ListOfExports',
@@ -100,17 +107,12 @@
                         console.log('handle server error from here.');
                     });
             },
-            /*showExport(id) {
-                axios.get('/api/v1/exports/' + id)
-                    .then((response) => {
-                        this.exports = response.data;
-                    })
-                    .catch(() => {
-                        console.log('handle server error from here');
-                    });
-            },*/
             destroyExport(id, index) {
-                if (confirm("Do you really want to delete it?")) {
+                MessageBox.confirm('This will permanently delete. Continue?', 'Warning', {
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning'
+                }).then(() => {
                     axios.delete('/api/v1/exports/' + id)
                         .then(response => {
                             this.exports.data.splice(index, 1);
@@ -119,7 +121,9 @@
                         .catch(error => {
                             console.log("Could not delete this export.");
                         });
-                }
+                }).catch(() => {
+                    console.log("Delete canceled");
+                });
             }
         },
         created() {

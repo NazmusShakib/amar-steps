@@ -5,7 +5,7 @@
                 <h4 class="page-title">Export</h4></div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <ol class="breadcrumb">
-                    <li><a href="#">Export</a></li>
+                    <li><a href="#">Exports</a></li>
                     <li class="active">Create</li>
                 </ol>
             </div>
