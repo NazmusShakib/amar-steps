@@ -18,7 +18,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'phone', 'password',
+        'name', 'email', 'phone', 'user_code',
+        'height', 'weight', 'headshot', 'password',
     ];
 
     /**
@@ -37,7 +38,20 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-    ];
+        'phone_verified_at' => 'datetime',
+	];
+
+	public function hasVerifiedPhone()
+        {
+            return ! is_null($this->phone_verified_at);
+        }
+
+        public function markPhoneAsVerified()
+        {
+            return $this->forceFill([
+                'phone_verified_at' => $this->freshTimestamp(),
+            ])->save();
+        }
 
     /*Standard methods removed for brevity*/
     public function roles()
@@ -58,6 +72,7 @@ class User extends Authenticatable
      */
     public function profile()
     {
-        return $this->hasOne(Profile::class)->select('gender', 'dob', 'bio', 'address');
+        return $this->hasOne(Profile::class)
+            ->select('gender', 'dob', 'country', 'city', 'bio', 'address');
     }
 }

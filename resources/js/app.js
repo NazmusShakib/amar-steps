@@ -43,7 +43,11 @@ axios.interceptors.request.use(
     });
 
 
+// import vuex
 import store from './store'
+
+// initialize event bus
+Vue.prototype.$eventBus = new Vue();
 
 /* eslint-disable no-new */
 const app = new Vue({

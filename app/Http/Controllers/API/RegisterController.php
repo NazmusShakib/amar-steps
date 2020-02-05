@@ -15,8 +15,8 @@ use App\Http\Controllers\API\BaseController as BaseController;
 /**
  * @OA\Info(
  *      version="1.0.0",
- *      title="L5 Swagger API",
- *      description="L5 Swagger OpenApi description",
+ *      title="Amar Steps - Swagger API ",
+ *      description="L6 Swagger OpenApi description",
  *      @OA\Contact(
  *          email="nshakib.se@gmail.com"
  *      )
@@ -40,8 +40,8 @@ class RegisterController extends BaseController
      *      summary="Register Users!",
      *      description="Returns user name email and token.",
      *      @OA\Parameter(
-     *          name="name",
-     *          description="User Name",
+     *          name="phone",
+     *          description="Phone Number",
      *          required=true,
      *          in="query",
      *          @OA\Schema(
@@ -77,7 +77,7 @@ class RegisterController extends BaseController
      *      ),
      *      @OA\Response(
      *          response=200,
-     *          description="User register successfully.",
+     *          description="Account has been created successfully.",
      *          @OA\MediaType(
      *              mediaType="application/json",
      *          )
@@ -90,7 +90,7 @@ class RegisterController extends BaseController
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'nullable',
             'email' => 'required|email|unique:users,email',
             'phone' => 'required|unique:users,phone',
             'password' => 'required',
@@ -108,9 +108,9 @@ class RegisterController extends BaseController
         $user->roles()->attach($roleIDArr);
 
         $success['token'] = $user->createToken('MyApp')->accessToken;
-        $success['name'] = $user->name;
+        $success['phone'] = $user->phone;
 
-        return $this->sendResponse($success, 'User register successfully.');
+        return $this->sendResponse($success, 'Account has been created successfully.');
     }
 
     /**
@@ -215,6 +215,5 @@ class RegisterController extends BaseController
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors(), 422);
         }
-        
     }
 }
