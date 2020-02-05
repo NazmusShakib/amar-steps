@@ -11,12 +11,13 @@
 |
 */
 
-Route::post('register', 'API\RegisterController@register');
-Route::post('login', 'API\RegisterController@login');
+Route::post('register', 'RegisterController@register');
+Route::post('login', 'RegisterController@login');
 
-Route::get('phone/verify', 'API\PhoneVerificationController@show')->name('phoneverification.notice');
-Route::post('phone/verify', 'API\PhoneVerificationController@verify')->name('phoneverification.verify');
+Route::get('phone/verify', 'PhoneVerificationController@show')->name('phoneverification.notice');
+Route::post('phone/verify', 'PhoneVerificationController@verify')->name('phoneverification.verify');
 
+Route::post('build-twiml/{code}', 'PhoneVerificationController@buildTwiMl')->name('phoneverification.build');
 
 Route::get('unauthorized', function () {
     return response()->json([
@@ -30,17 +31,17 @@ Route::get('unauthorized', function () {
 });*/
 
 
-Route::group(['middleware' => ['auth:api']], function () {
+Route::group(['middleware' => ['auth:api', 'verifiedPhone']], function () {
 
-    Route::get('profile', 'API\RegisterController@profile');
+    Route::get('profile', 'RegisterController@profile');
 
-    Route::apiResource('users', 'API\UserController', ['only' => [
+    Route::apiResource('users', 'UserController', ['only' => [
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin']);
 
-    Route::apiResource('badges', 'API\BadgeController', ['only' => [
+    Route::apiResource('badges', 'BadgeController', ['only' => [
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin']);
 
-    Route::apiResource('activities', 'API\ActivityLogController', ['only' => [
+    Route::apiResource('activities', 'ActivityLogController', ['only' => [
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin']);
 
 });

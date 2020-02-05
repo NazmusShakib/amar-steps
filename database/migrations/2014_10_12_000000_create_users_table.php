@@ -22,7 +22,8 @@ class CreateUsersTable extends Migration
             $table->string('height', 50)->nullable();
             $table->string('weight', 50)->nullable();
             $table->string('headshot')->nullable();
-			$table->timestamp('email_verified_at')->nullable();
+            $table->string('verification_code')->unique()->nullable();
+            $table->timestamp('email_verified_at')->nullable();
 			$table->timestamp('phone_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

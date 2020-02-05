@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\API\BaseController as BaseController;
+use Illuminate\Validation\ValidationException;
 
 /**
  * @OA\Info(
@@ -107,10 +108,19 @@ class RegisterController extends BaseController
         $roleIDArr = Role::where('name', 'subscriber')->pluck('id');
         $user->roles()->attach($roleIDArr);
 
+        try {
+            $user->callToVerify();
+        } catch (\Exception $exception) {
+            $validator =  ValidationException::withMessages([
+                'phone' => $exception->getMessage(),
+            ]);
+            return $this->sendError('Validation Error.', $validator->errors(), 422);
+        }
+
         $success['token'] = $user->createToken('MyApp')->accessToken;
         $success['phone'] = $user->phone;
 
-        return $this->sendResponse($success, 'Account has been created successfully.');
+        return $this->sendResponse($success, 'Thanks for registering with our platform. We will text you to verify your phone number in a jiffy. Provide the code below.');
     }
 
     /**
