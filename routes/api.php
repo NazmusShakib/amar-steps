@@ -13,6 +13,11 @@
 
 Route::post('register', 'API\RegisterController@register');
 Route::post('login', 'API\RegisterController@login');
+
+Route::get('phone/verify', 'API\PhoneVerificationController@show')->name('phoneverification.notice');
+Route::post('phone/verify', 'API\PhoneVerificationController@verify')->name('phoneverification.verify');
+
+
 Route::get('unauthorized', function () {
     return response()->json([
         'success' => false,

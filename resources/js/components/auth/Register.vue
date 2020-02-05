@@ -2,36 +2,85 @@
     <div>
         <div class="login-box">
             <div class="white-box">
-                <form class="form-horizontal form-material" id="loginform" action="index.html">
-                    <h3 class="box-title m-b-20">Sign In</h3>
+                <form
+                    class="form-horizontal form-material"
+                    @submit.prevent="register()"
+                    method="post"
+                    novalidate
+                >
+                    <h3 class="box-title m-b-20">Sign Up</h3>
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <input class="form-control" type="text" required placeholder="Name" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <input class="form-control" type="text" required placeholder="Email" />
+                            <input
+                                type="phone"
+                                v-model.trim="user.phone"
+                                autofocus
+                                class="form-control"
+                                name="phone"
+                                placeholder="Phone"
+                                v-bind:class="{'has-error' : errors.has('phone')}"
+                                v-validate="'required'"
+                            />
+                            <div
+                                v-show="errors.has('phone')"
+                                class="help text-danger"
+                            >{{ errors.first('phone') }}</div>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-12">
                             <input
+                                type="email"
+                                v-model.trim="user.email"
+                                autocomplete="email"
+                                autofocus
                                 class="form-control"
+                                name="email"
+                                placeholder="Email"
+                                v-bind:class="{'has-error' : errors.has('email')}"
+                                v-validate="'required|email'"
+                            />
+                            <div
+                                v-show="errors.has('email')"
+                                class="help text-danger"
+                            >{{ errors.first('email') }}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <input
                                 type="password"
-                                required
+                                v-model.trim="user.password"
+                                class="form-control"
+                                name="password"
                                 placeholder="Password"
+                                v-bind:class="{'has-error' : errors.has('password')}"
+                                v-validate="'required'"
                             />
+                            <div v-show="errors.has('password')" class="help text-danger">
+                                {{ errors.first('password')
+                                }}
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-12">
                             <input
-                                class="form-control"
                                 type="password"
-                                required
-                                placeholder="Confirm Password"
+                                v-model.trim="user.password_confirmation"
+                                class="form-control"
+                                name="password_confirmation"
+                                placeholder="Password confirmation"
+                                v-bind:class="{'has-error' : errors.has('password_confirmation')}"
+                                v-validate="'required'"
                             />
+                            <div
+                                v-show="errors.has('password_confirmation')"
+                                class="help text-danger"
+                            >
+                                {{ errors.first('password_confirmation')
+                                }}
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -57,12 +106,9 @@
                         <div class="col-sm-12 text-center">
                             <p>
                                 Already have an account?
-                                <a
-                                    href="login.html"
-                                    class="text-primary m-l-5"
-                                >
+                                <router-link :to="{name:'Login'}" class="text-primary m-l-5">
                                     <b>Sign In</b>
-                                </a>
+                                </router-link>
                             </p>
                         </div>
                     </div>
@@ -77,8 +123,41 @@ import GuestLayout from "../layouts/GuestLayoutComponent.vue";
 
 export default {
     data: () => ({
-        //
+        user: {}
     }),
+    methods: {
+        register() {
+            this.$validator.validateAll().then(result => {
+                if (result) {
+                    axios
+                        .post(this.$baseURL + "register", this.user)
+                        .then(response => {
+                            var data = response.data.data;
+                            localStorage.setItem("token", data.token);
+                            localStorage.setItem(
+                                "auth",
+                                JSON.stringify(data.auth)
+                            );
+                            this.$store.dispatch("authStore", data.auth);
+                            this.$router.push("/dashboard");
+                        })
+                        .catch(error => {
+                            this.$notification.error(
+                                error.response.data.data.error
+                            );
+                            // this.$router.push('/login')
+                        });
+                } else {
+                    return this.focusOnInvalidField();
+                }
+            });
+        },
+
+        focusOnInvalidField() {
+            const firstField = Object.keys(this.errors.collect())[0];
+            this.$refs[`${firstField}Input`].focus();
+        }
+    },
     mounted: function() {
         console.log("Register component mounted.");
     },

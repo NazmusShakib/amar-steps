@@ -19,7 +19,7 @@ const baseRoutes = [{
         component: Login,
         name: 'Login',
         meta: {
-            title: 'Login Page - App',
+            title: 'Login - App',
             guest: true
         }
     },
@@ -28,7 +28,7 @@ const baseRoutes = [{
         component: Register,
         name: 'Register',
         meta: {
-            title: 'Register Page - App',
+            title: 'Register - App',
             guest: true
         }
     },
@@ -37,7 +37,7 @@ const baseRoutes = [{
         component: Blank,
         name: 'Blank',
         meta: {
-            title: 'Blank Page - App',
+            title: 'Blank - App',
             guest: true
         }
     },
