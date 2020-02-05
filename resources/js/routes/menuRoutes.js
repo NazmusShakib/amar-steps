@@ -46,6 +46,7 @@ const baseRoutes = [{
         component: Error404,
         name: '404',
         meta: {
+            requireAuth: true,
             title: 'Not Found - App'
         }
     },
