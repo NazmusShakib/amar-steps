@@ -9,6 +9,7 @@ use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Validation\ValidationException;
@@ -23,14 +24,14 @@ use Illuminate\Validation\ValidationException;
  *      )
  * )
  */
+
 /**
- *  @OA\Server(
+ * @OA\Server(
  *      url=L5_SWAGGER_CONST_HOST,
  *      description="Sandbox OpenApi dynamic host server"
  *  )
  *
  */
-
 class RegisterController extends BaseController
 {
     /**
@@ -93,7 +94,7 @@ class RegisterController extends BaseController
         $validator = Validator::make($request->all(), [
             'name' => 'nullable',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required|unique:users,phone',
+            'phone' => 'required|regex:/[0-9]{11}/|digits:11|unique:users,phone',
             'password' => 'required',
             'password_confirmation' => 'required|same:password',
         ]);
@@ -101,6 +102,7 @@ class RegisterController extends BaseController
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors(), 422);
         }
+
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
@@ -111,9 +113,12 @@ class RegisterController extends BaseController
         try {
             $user->callToVerify();
         } catch (\Exception $exception) {
-            $validator =  ValidationException::withMessages([
+            $validator = ValidationException::withMessages([
                 'phone' => $exception->getMessage(),
             ]);
+            $user->delete();
+            $user->logout();
+            Session::flush();
             return $this->sendError('Validation Error.', $validator->errors(), 422);
         }
 
@@ -131,8 +136,8 @@ class RegisterController extends BaseController
      *      summary="Login Users!",
      *      description="Returns user details with token",
      *      @OA\Parameter(
-     *          name="email",
-     *          description="User Email",
+     *          name="phone",
+     *          description="User Phone",
      *          required=true,
      *          in="query",
      *          @OA\Schema(
@@ -162,12 +167,13 @@ class RegisterController extends BaseController
      */
     public function login(Request $request)
     {
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        $remember_me = $request->has('remember') ? true : false;
+        if (Auth::attempt(['phone' => $request->phone, 'password' => $request->password], $remember_me)) {
             $user = Auth::user();
             $success['token'] = $user->createToken('MyApp')->accessToken;
             $success['auth'] = new UserResource($user);
 
-            return $this->sendResponse($success, 'User login successfully.');
+            return $this->sendResponse($success, 'I have logged in successfully.');
         } else {
             return $this->sendError('Unauthorised.', ['error' => 'Invalid credential.'], 401);
         }
@@ -215,8 +221,8 @@ class RegisterController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            //'email' => 'required|email|unique:users,email',
-            'phone' => 'required',
+            'email' => 'required|email|unique:users,email, ' . auth::id(),
+            // 'phone' => 'required|regex:/[0-9]{11}/|digits:11|unique:users,phone,'. auth::id(),
             'gender' => 'required|in:male,female',
             'address' => 'string|nullable',
             'bio' => 'string|nullable',

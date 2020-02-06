@@ -12,20 +12,19 @@
                     <div class="form-group">
                         <div class="col-xs-12">
                             <input
-                                type="email"
-                                v-model.trim="user.email"
-                                autocomplete="email"
+                                type="text"
+                                v-model.trim="user.phone"
                                 autofocus
                                 class="form-control"
-                                name="email"
-                                placeholder="Email"
-                                v-bind:class="{'has-error' : errors.has('email')}"
-                                v-validate="'required|email'"
+                                name="phone"
+                                placeholder="Phone"
+                                v-bind:class="{'has-error' : errors.has('phone')}"
+                                v-validate="'required'"
                             />
                             <div
-                                v-show="errors.has('email')"
+                                v-show="errors.has('phone')"
                                 class="help text-danger"
-                            >{{ errors.first('email') }}</div>
+                            >{{ errors.first('phone') }}</div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -49,7 +48,7 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <div class="checkbox checkbox-primary pull-left p-t-0">
-                                <input id="checkbox-signup" type="checkbox" />
+                                <input id="checkbox-signup" type="checkbox" v-model="user.remember"/>
                                 <label for="checkbox-signup">Remember me</label>
                             </div>
                             <a
@@ -57,7 +56,7 @@
                                 id="to-recover"
                                 class="text-dark pull-right"
                             >
-                                <i class="fa fa-lock m-r-5"></i> Forgot pwd?
+                                <i class="fa fa-lock m-r-5"> </i> Forgot pwd?
                             </a>
                         </div>
                     </div>
@@ -115,20 +114,13 @@ export default {
                         })
                         .catch(error => {
                             this.$notification.error(
-                                error.response.data.data.error
+                                error.response.data.errors.error
                             );
                             // this.$router.push('/login')
                         });
-                } else {
-                    return this.focusOnInvalidField();
                 }
             });
         },
-
-        focusOnInvalidField() {
-            const firstField = Object.keys(this.errors.collect())[0];
-            this.$refs[`${firstField}Input`].focus();
-        }
     },
     mounted: function() {
         //

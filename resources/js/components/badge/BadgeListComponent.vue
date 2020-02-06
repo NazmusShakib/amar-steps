@@ -85,13 +85,13 @@
                             v-if="badges.total >= 11"
                             @paginate="getBadges()"
                             :offset="4"
-                        ></vue-pagination>
+                        > </vue-pagination>
                     </div>
                 </div>
             </div>
         </div>
         <!-- /.row -->
-        <badge-modal :show-dialog.sync="showDialog" :dialog-title.sync="dialogTitle"></badge-modal>
+        <badge-modal :show-dialog.sync="showDialog" :dialog-title.sync="dialogTitle"> </badge-modal>
     </div>
 </template>
 
@@ -118,7 +118,7 @@ export default {
         },
         offset: 4,
         searchText: "",
-        dialogTitle: "Add a new unit",
+        dialogTitle: "Add a new badge",
         showDialog: false
     }),
     mounted: function() {
@@ -156,7 +156,7 @@ export default {
                             this.$notification.success(response.data.message);
                         })
                         .catch(error => {
-                            console.log("Could not delete this export.");
+                            console.log("Could not delete this badge.");
                         });
                 })
                 .catch(() => {

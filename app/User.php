@@ -89,7 +89,7 @@ class User extends Authenticatable
         $message = $client->messages->create(
             '+88'.$this->phone,
             [
-                "body" => "The Robots are coming! Head for the hills!:: {$code}",
+                "body" => "Hi, thanks for Joining. This is your verification code::{$code}.",
                 "from" => "+16038997505",
                 "statusCallback" => "http://127.0.0.1:8000/api/v1/build-twiml/{$code}"]
         );

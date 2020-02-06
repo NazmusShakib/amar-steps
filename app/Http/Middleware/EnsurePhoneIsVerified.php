@@ -16,7 +16,7 @@ class EnsurePhoneIsVerified
     public function handle($request, Closure $next)
     {
 		if (! $request->user()->hasVerifiedPhone()) {
-            return redirect()->route('phoneverification.notice');
+            return redirect()->route('phoneVerification.notice');
         }
         return $next($request);
     }

@@ -2,6 +2,7 @@
 import Register from '~/components/auth/Register';
 import Login from '~/components/auth/Login';
 import Error404 from '~/components/errors/404';
+import VerifyPhone from '~/components/auth/VerifyPhone';
 
 // Authenticated
 import Dashboard from '~/components/DashboardComponent';
@@ -29,6 +30,15 @@ const baseRoutes = [{
         name: 'Register',
         meta: {
             title: 'Register - App',
+            guest: true
+        }
+    },
+    {
+        path: '/verify',
+        component: VerifyPhone,
+        name: 'VerifyPhone',
+        meta: {
+            title: 'Verify Phone - App',
             guest: true
         }
     },

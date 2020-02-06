@@ -33,7 +33,7 @@ class PhoneVerificationController extends BaseController
     {
         if ($request->user()->verification_code !== $request->code) {
             $validator = ValidationException::withMessages([
-                'code' => ['The code your provided is wrong. Please try again or request another call.'],
+                'code' => ['The code your provided is wrong. Please try again or request another text.'],
             ]);
 
             return $this->sendError('Validation Error.', $validator->errors(), 422);

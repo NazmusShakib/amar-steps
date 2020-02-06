@@ -14,10 +14,10 @@
 Route::post('register', 'RegisterController@register');
 Route::post('login', 'RegisterController@login');
 
-Route::get('phone/verify', 'PhoneVerificationController@show')->name('phoneverification.notice');
-Route::post('phone/verify', 'PhoneVerificationController@verify')->name('phoneverification.verify');
+Route::get('phone/verify', 'PhoneVerificationController@show')->name('phoneVerification.notice');
+Route::post('phone/verify', 'PhoneVerificationController@verify')->name('phoneVerification.verify');
 
-Route::post('build-twiml/{code}', 'PhoneVerificationController@buildTwiMl')->name('phoneverification.build');
+Route::post('build-twiml/{code}', 'PhoneVerificationController@buildTwiMl')->name('phoneVerification.build');
 
 Route::get('unauthorized', function () {
     return response()->json([

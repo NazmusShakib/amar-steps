@@ -59,10 +59,14 @@ router.beforeEach((to, from, next) => {
     const token = localStorage.get('token');
 
     if (to.meta.requireAuth) {
+        let user = localStorage.get('auth');
         // const token = localStorage.get('token');
-        let user = localStorage.get('user');
+        console.log(user);
         if (!token) {
             next({ path: '/login' });
+            return false;
+        } else if(typeof(user.phone_verified_at) == 'undefined' || user.phone_verified_at === null) {
+            next({ path: '/verify' });
             return false;
         } else {
             next();

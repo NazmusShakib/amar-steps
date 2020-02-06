@@ -24,7 +24,8 @@
                             <div
                                 v-show="errors.has('phone')"
                                 class="help text-danger"
-                            >{{ errors.first('phone') }}</div>
+                            >{{ errors.first('phone') }}
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -43,7 +44,8 @@
                             <div
                                 v-show="errors.has('email')"
                                 class="help text-danger"
-                            >{{ errors.first('email') }}</div>
+                            >{{ errors.first('email') }}
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -55,6 +57,7 @@
                                 name="password"
                                 placeholder="Password"
                                 v-bind:class="{'has-error' : errors.has('password')}"
+                                ref="password"
                                 v-validate="'required'"
                             />
                             <div v-show="errors.has('password')" class="help text-danger">
@@ -69,28 +72,31 @@
                                 type="password"
                                 v-model.trim="user.password_confirmation"
                                 class="form-control"
-                                name="password_confirmation"
+                                name="password confirmation"
                                 placeholder="Password confirmation"
-                                v-bind:class="{'has-error' : errors.has('password_confirmation')}"
-                                v-validate="'required'"
+                                v-bind:class="{'has-error' : errors.has('password confirmation')}"
+                                v-validate="'required|confirmed:password'"
                             />
                             <div
-                                v-show="errors.has('password_confirmation')"
+                                v-show="errors.has('password confirmation')"
                                 class="help text-danger"
                             >
-                                {{ errors.first('password_confirmation')
+                                {{ errors.first('password confirmation')
                                 }}
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-12">
+                        <div class="col-md-12" v-bind:class="{'has-error' : errors.has('agreement')}">
                             <div class="checkbox checkbox-primary p-t-0">
-                                <input id="checkbox-signup" type="checkbox" />
+                                <input id="checkbox-signup" type="checkbox" name="agreement" v-validate="'required'"/>
                                 <label for="checkbox-signup">
                                     I agree to all
                                     <a href="#">Terms</a>
                                 </label>
+                            </div>
+                            <div v-show="errors.has('agreement')" class="help text-danger" >
+                                {{ errors.first('agreement') }}
                             </div>
                         </div>
                     </div>
@@ -99,7 +105,8 @@
                             <button
                                 class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light"
                                 type="submit"
-                            >Sign Up</button>
+                            >Sign Up
+                            </button>
                         </div>
                     </div>
                     <div class="form-group m-b-0">
@@ -119,123 +126,117 @@
 </template>
 
 <script>
-import GuestLayout from "../layouts/GuestLayoutComponent.vue";
+    import GuestLayout from "~/components/layouts/GuestLayoutComponent.vue";
 
-export default {
-    data: () => ({
-        user: {}
-    }),
-    methods: {
-        register() {
-            this.$validator.validateAll().then(result => {
-                if (result) {
-                    axios
-                        .post(this.$baseURL + "register", this.user)
-                        .then(response => {
-                            var data = response.data.data;
-                            localStorage.setItem("token", data.token);
-                            localStorage.setItem(
-                                "auth",
-                                JSON.stringify(data.auth)
-                            );
-                            this.$store.dispatch("authStore", data.auth);
-                            this.$router.push("/dashboard");
-                        })
-                        .catch(error => {
-                            this.$notification.error(
-                                error.response.data.data.error
-                            );
-                            // this.$router.push('/login')
-                        });
-                } else {
-                    return this.focusOnInvalidField();
-                }
-            });
+    export default {
+        data: () => ({
+            user: {}
+        }),
+        methods: {
+            register() {
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        axios
+                            .post(this.$baseURL + "register", this.user)
+                            .then(response => {
+                                var data = response.data.data;
+                                localStorage.setItem("token", data.token);
+                                localStorage.setItem(
+                                    "auth",
+                                    JSON.stringify(data.auth)
+                                );
+                                this.$store.dispatch("authStore", data.auth);
+                                this.$router.push("/verify");
+                                this.$notification.success(data.message);
+                            })
+                            .catch(error => {
+                                this.$setErrorsFromResponse(error.response.data);
+                                this.$notification.error(
+                                    error.response.data.message
+                                );
+                            });
+                    }
+                });
+            }
         },
-
-        focusOnInvalidField() {
-            const firstField = Object.keys(this.errors.collect())[0];
-            this.$refs[`${firstField}Input`].focus();
+        mounted: function () {
+            console.log("Register component mounted.");
+        },
+        created() {
+            this.$emit("update:layout", GuestLayout);
         }
-    },
-    mounted: function() {
-        console.log("Register component mounted.");
-    },
-    created() {
-        this.$emit("update:layout", GuestLayout);
-    }
-};
+    };
 </script>
 
 
 <style type="text/css">
-.panel-title {
-    display: inline;
-    font-weight: bold;
-}
-
-.display-table {
-    display: table;
-}
-
-.display-tr {
-    display: table-row;
-}
-
-.display-td {
-    display: table-cell;
-    vertical-align: middle;
-    width: 61%;
-}
-
-.login-box {
-    background: #fff;
-    width: 400px;
-    margin: auto;
-    margin-top: 50px;
-}
-
-.over-flow-auto {
-    overflow: auto;
-}
-
-.box-width-loging {
-    width: 500px;
-}
-
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-    .box-width-loging {
-        width: 100%;
+    .panel-title {
+        display: inline;
+        font-weight: bold;
     }
-}
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
-    .box-width-loging {
-        width: 100%;
+    .display-table {
+        display: table;
     }
-}
 
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
+    .display-tr {
+        display: table-row;
+    }
+
+    .display-td {
+        display: table-cell;
+        vertical-align: middle;
+        width: 61%;
+    }
+
+    .login-box {
+        background: #fff;
+        width: 400px;
+        margin: auto;
+        margin-top: 50px;
+    }
+
+    .over-flow-auto {
+        overflow: auto;
+    }
+
     .box-width-loging {
         width: 500px;
     }
-}
 
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) {
-    .box-width-loging {
-        width: 500px;
+    /* Extra small devices (phones, 600px and down) */
+    @media only screen and (max-width: 600px) {
+        .box-width-loging {
+            width: 100%;
+        }
     }
-}
 
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
-    .box-width-loging {
-        width: 500px;
+    /* Small devices (portrait tablets and large phones, 600px and up) */
+    @media only screen and (min-width: 600px) {
+        .box-width-loging {
+            width: 100%;
+        }
     }
-}
+
+    /* Medium devices (landscape tablets, 768px and up) */
+    @media only screen and (min-width: 768px) {
+        .box-width-loging {
+            width: 500px;
+        }
+    }
+
+    /* Large devices (laptops/desktops, 992px and up) */
+    @media only screen and (min-width: 992px) {
+        .box-width-loging {
+            width: 500px;
+        }
+    }
+
+    /* Extra large devices (large laptops and desktops, 1200px and up) */
+    @media only screen and (min-width: 1200px) {
+        .box-width-loging {
+            width: 500px;
+        }
+    }
 </style>
 

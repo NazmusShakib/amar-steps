@@ -85,7 +85,7 @@ export default {
                 //
             }
 
-            /*axios.post(this.$baseURL + 'units', this.unit).then(response => {
+            /*axios.post(this.$baseURL + 'badges', this.badge).then(response => {
                     this.$notification.success(response.data.message);
                     this.onClose();
                 }).catch(error => {
@@ -98,7 +98,7 @@ export default {
             axios
                 .get(this.$baseURL + "badges/" + id)
                 .then(response => {
-                    this.unit = response.data.data;
+                    this.badge = response.data.data;
                     this.$emit("update:showDialog", true);
                 })
                 .catch(() => {
@@ -106,10 +106,10 @@ export default {
                 });
         },
 
-        /*updateUnit() {
+        /*updateBadge() {
                 this.$validator.validateAll().then((result) => {
                     if (result) {
-                        axios.put(this.$baseURL + 'units/' + this.unit.id, this.unit)
+                        axios.put(this.$baseURL + 'badges/' + this.badge.id, this.badge)
                             .then(response => {
                                 this.$notification.success(response.data.message);
                                 this.onClose();
@@ -123,7 +123,7 @@ export default {
 
         onClose() {
             this.$validator.reset();
-            this.unit = {};
+            this.badge = {};
             this.formType = "create";
             this.$emit("update:showDialog", false).$emit(
                 "update:dialogTitle",
@@ -135,7 +135,7 @@ export default {
         // We listen for the event on the eventBus
         this.$eventBus.$on("editBadge", id => {
             this.formType = "update";
-            this.showUnit(id);
+            this.showBadge(id);
         });
     },
     computed: {
