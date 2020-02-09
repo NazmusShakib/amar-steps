@@ -1,15 +1,17 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
+import store from '~/store'
+import localStorage from '../services/localStorage';
+
+import middlewarePipeline from './middlewarePipeline'
 
 import MenuRoutes from './menuRoutes';
 
 
-import localStorage from '../services/localStorage';
-
-
 const router = new VueRouter({
     mode: 'history',
+    // base: process.env.MIX_API_URL,
     routes: [
         ...MenuRoutes
     ], // you may use only 'routes' short for routes: routes
@@ -56,30 +58,39 @@ router.beforeEach((to, from, next) => {
             .forEach(tag => document.head.appendChild(tag));
     }
 
-    const token = localStorage.get('token');
-
+    /*const token = localStorage.get('token');
     if (to.meta.requireAuth) {
         let user = localStorage.get('auth');
-        // const token = localStorage.get('token');
-        console.log(user);
+        const token = localStorage.get('token');
         if (!token) {
             next({ path: '/login' });
-            return false;
-        } else if(typeof(user.phone_verified_at) == 'undefined' || user.phone_verified_at === null) {
-            next({ path: '/verify' });
             return false;
         } else {
             next();
         }
-    }
+    }*/
 
-    next();
+    if (!to.meta.middleware) {
+        return next()
+    }
+    const middleware = to.meta.middleware;
+
+    const context = {
+        to,
+        from,
+        next,
+        store
+    };
+
+    return middleware[0]({
+        ...context,
+        next: middlewarePipeline(context, middleware, 1)
+    })
 });
 
 router.afterEach((to, from) => {
     setTimeout(() => NProgress.done(), 500);
 });
-
 
 router.beforeResolve((to, from, next) => {
     // If this isn't an initial page load.

@@ -94,15 +94,13 @@
 
 
 <script>
-import { mapActions } from "vuex";
-import { mapGetters } from "vuex";
+    import {createNamespacedHelpers} from "vuex";
+    const {mapState, mapGetters, mapMutations, mapActions} = createNamespacedHelpers('profile');
 
 export default {
     props: [],
     computed: {
-        profile() {
-            return this.$store.getters.profile;
-        }
+        ...mapGetters(['profile']),
     },
     methods: {
         logout() {

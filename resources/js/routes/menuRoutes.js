@@ -10,6 +10,10 @@ import Profile from '~/components/ProfileComponent';
 import Blank from '~/components/BlankComponent';
 
 
+// Middleware
+import verifiedPhone from '~/routes/middleware/ensurePhoneIsVerified'
+import requireAuth from '~/routes/middleware/requireAuthCheck'
+
 // Import Module Routes
 import userRoutes from './userRoutes';
 import badgeRoutes from './badgeRoutes';
@@ -21,7 +25,7 @@ const baseRoutes = [{
         name: 'Login',
         meta: {
             title: 'Login - App',
-            guest: true
+            guest: true,
         }
     },
     {
@@ -30,16 +34,16 @@ const baseRoutes = [{
         name: 'Register',
         meta: {
             title: 'Register - App',
-            guest: true
+            guest: true,
         }
     },
     {
         path: '/verify',
-        component: VerifyPhone,
+        component: verifiedPhone,
         name: 'VerifyPhone',
         meta: {
             title: 'Verify Phone - App',
-            guest: true
+            guest: true,
         }
     },
     {
@@ -57,6 +61,7 @@ const baseRoutes = [{
         name: '404',
         meta: {
             requireAuth: true,
+            middleware: [requireAuth, verifiedPhone],
             title: 'Not Found - App'
         }
     },
@@ -66,6 +71,7 @@ const baseRoutes = [{
         name: 'Dashboard',
         meta: {
             requireAuth: true,
+            middleware: [requireAuth, verifiedPhone],
             title: 'Dashboard - App',
             metaTags: [{
                     name: 'description',
@@ -84,6 +90,7 @@ const baseRoutes = [{
         component: Profile,
         meta: {
             requireAuth: true,
+            middleware: [requireAuth, verifiedPhone],
             title: 'Profile - App',
             metaTags: [{
                     name: 'description',

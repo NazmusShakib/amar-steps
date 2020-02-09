@@ -123,7 +123,7 @@ class RegisterController extends BaseController
         }
 
         $success['token'] = $user->createToken('MyApp')->accessToken;
-        $success['phone'] = $user->phone;
+        $success['auth'] = new UserResource($user);
 
         return $this->sendResponse($success, 'Thanks for registering with our platform. We will text you to verify your phone number in a jiffy. Provide the code below.');
     }
@@ -170,6 +170,10 @@ class RegisterController extends BaseController
         $remember_me = $request->has('remember') ? true : false;
         if (Auth::attempt(['phone' => $request->phone, 'password' => $request->password], $remember_me)) {
             $user = Auth::user();
+
+            if(!$user->phone_verified_at)
+                $user->callToVerify();
+
             $success['token'] = $user->createToken('MyApp')->accessToken;
             $success['auth'] = new UserResource($user);
 

@@ -74,12 +74,8 @@
                         console.log(error);
                     });
             },
-            updateProfile() {
-                let user = {
-                    'name' : 'Tanvir Ahmed',
-                    'email' :'tanvier@example.com'
-                };
-                this.$store.dispatch('authStore', user);
+            updateProfile(user) {
+                this.$store.dispatch('profile/authStore', user);
             }
         }
     }

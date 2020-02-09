@@ -141,13 +141,10 @@
                             .then(response => {
                                 var data = response.data.data;
                                 localStorage.setItem("token", data.token);
-                                localStorage.setItem(
-                                    "auth",
-                                    JSON.stringify(data.auth)
-                                );
-                                this.$store.dispatch("authStore", data.auth);
+                                localStorage.setItem("auth",JSON.stringify(data.auth));
+                                this.$store.dispatch("profile/authStore", data.auth);
                                 this.$router.push("/verify");
-                                this.$notification.success(data.message);
+                                this.$notification.success(response.data.message);
                             })
                             .catch(error => {
                                 this.$setErrorsFromResponse(error.response.data);

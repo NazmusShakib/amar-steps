@@ -35,7 +35,7 @@
         }),
         methods: {
             authStore() {
-                this.$store.dispatch('authStore', this.$localStorage.get('auth'));
+                this.$store.dispatch('profile/authStore', this.$localStorage.get('auth'));
             }
         },
         mounted: function () {

@@ -1,30 +1,26 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-Vue.use(Vuex);
-
 const profile = {
+    namespaced: true,
     state: {
-        profile: {}
+        profile: localStorage.getItem('auth')
     },
     mutations: {
-        updateAuth: (state, payload) => {
+        UPDATE_AUTH: (state, payload) => {
             state.profile = payload;
+        },
+        LOGOUT: (state) => {
+            state.profile = [];
         }
     },
     actions: {
-        authStore:(context, payload) => {
+        authStore: (context, payload) => {
             return new Promise((resolve, reject) => {
-                context.commit('updateAuth', payload);
+                context.commit('UPDATE_AUTH', payload);
                 resolve()
             });
         },
 
-        logout({commit}) {
-            return new Promise((resolve, reject) => {
-                commit('logout');
-                resolve()
-            })
+        storeLogout({commit}) {
+            commit('LOGOUT');
         }
     },
     getters: {

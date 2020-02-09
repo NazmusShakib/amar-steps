@@ -18,14 +18,17 @@ class UsersTableSeeder extends Seeder
             [
                 'email' => 'admin@example.com',
                 'name' => 'Admin User',
+                'phone' => '0111',
             ],
             [
                 'email' => 'staff@example.com',
                 'name' => 'Staff Account',
+                'phone' => '0222',
             ],
             [
                 'email' => 'subscriber@example.com',
                 'name' => 'Subscriber Account',
+                'phone' => '0333',
             ],
         ];
 
@@ -34,8 +37,9 @@ class UsersTableSeeder extends Seeder
                 'email' => $user['email']
             ], [
                 'name' => $user['name'],
-                'phone' => $faker->e164PhoneNumber,
+                'phone' => $user['phone'],
                 'password' => bcrypt('123456'),
+                'phone_verified_at' => now(),
             ]);
 
             $profile = new Profile();

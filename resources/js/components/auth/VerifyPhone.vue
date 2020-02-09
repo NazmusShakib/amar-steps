@@ -8,10 +8,9 @@
                     class="form-horizontal form-material"
                     novalidate
                 >
-                    <h3 class="box-title m-b-20">Verify your phone</h3>
+                    <h3 class="box-title m-b-20">Confirmation Code</h3>
 
-                    <p>Thanks for registering with our platform. We will text you to verify code in a jiffy. Provide the
-                        code below.</p>
+                    <p>Enter the confirmation code sent to <b>{{ profile.phone }}</b> code will expire in 30 min.</p>
 
                     <div class="form-group">
                         <div class="col-xs-12">
@@ -42,12 +41,9 @@
                     </div>
                     <div class="form-group m-b-0">
                         <div class="col-sm-12 text-center">
-                            <p>
-                                Don't have an account?
-                                <router-link :to="{name:'Register'}" class="text-primary m-l-5">
-                                    <b>Sign Up</b>
-                                </router-link>
-                            </p>
+                            <a href="javascript:void(0)" @click.prevent="logout">
+                                <b>Logout</b>
+                            </a>
                         </div>
                     </div>
                 </form>
@@ -60,43 +56,47 @@
 <script>
     import GuestLayout from "~/components/layouts/GuestLayoutComponent.vue";
 
+    import {createNamespacedHelpers} from "vuex";
+    const {mapState, mapGetters, mapMutations, mapActions} = createNamespacedHelpers('profile');
+
     export default {
-        components: {
-            //
-        },
         data: () => ({
             user: {}
         }),
+        computed: {
+            ...mapGetters(['profile']),
+        },
         methods: {
+            ...mapActions(['storeLogout']),
             verify() {
                 this.$validator.validateAll().then(result => {
                     if (result) {
-                        axios
-                            .post(this.$baseURL + "phone/verify", this.user)
+                        axios.post(this.$baseURL + "phone/verify", this.user)
                             .then(response => {
-                                var data = response.data.data;
-                                this.$notification.success(data.message);
-
-                                setTimeout(() => {
-                                    this.$router.push("/dashboard");
-                                }, 2000);
+                                this.$notification.success(response.data.message);
+                                this.$router.push("/dashboard");
                             })
                             .catch(error => {
                                 this.$setErrorsFromResponse(error.response.data);
-                                this.$notification.error(
-                                    error.response.data.message
-                                );
+                                this.$notification.error(error.response.data.message);
                             });
                     }
                 });
             },
+
+            logout() {
+                this.$localStorage.clear();
+                this.storeLogout();
+                this.$router.push({name: "Login"});
+
+            }
         },
         mounted: function () {
             //
         },
         created() {
             this.$emit("update:layout", GuestLayout);
-        }
+        },
     };
 </script>
 

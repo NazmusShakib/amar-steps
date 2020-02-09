@@ -24,7 +24,8 @@
                             <div
                                 v-show="errors.has('phone')"
                                 class="help text-danger"
-                            >{{ errors.first('phone') }}</div>
+                            >{{ errors.first('phone') }}
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -66,7 +67,8 @@
                                 class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light"
                                 type="submit"
                                 :disabled="errors.any()"
-                            >Log In</button>
+                            >Log In
+                            </button>
                         </div>
                     </div>
                     <div class="form-group m-b-0">
@@ -87,117 +89,108 @@
 
 
 <script>
-import GuestLayout from "../layouts/GuestLayoutComponent.vue";
+    import GuestLayout from "../layouts/GuestLayoutComponent.vue";
 
-export default {
-    components: {
-        //
-    },
-    data: () => ({
-        user: {}
-    }),
-    methods: {
-        login() {
-            this.$validator.validateAll().then(result => {
-                if (result) {
-                    axios
-                        .post(this.$baseURL + "login", this.user)
-                        .then(response => {
-                            var data = response.data.data;
-                            localStorage.setItem("token", data.token);
-                            localStorage.setItem(
-                                "auth",
-                                JSON.stringify(data.auth)
-                            );
-                            this.$store.dispatch("authStore", data.auth);
-                            this.$router.push("/dashboard");
-                        })
-                        .catch(error => {
-                            this.$notification.error(
-                                error.response.data.errors.error
-                            );
-                            // this.$router.push('/login')
-                        });
-                }
-            });
+    export default {
+        data: () => ({
+            user: {}
+        }),
+        methods: {
+            login() {
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        axios.post(this.$baseURL + "login", this.user)
+                            .then(response => {
+                                var data = response.data.data;
+                                localStorage.setItem("token", data.token);
+                                localStorage.setItem("auth", JSON.stringify(data.auth)
+                                );
+                                this.$store.dispatch("profile/authStore", data.auth);
+                                this.$router.push("/dashboard");
+                            })
+                            .catch(error => {
+                                this.$notification.error(error.response.data.errors.error);
+                            });
+                    }
+                });
+            },
         },
-    },
-    mounted: function() {
-        //
-    },
-    created() {
-        this.$emit("update:layout", GuestLayout);
-    }
-};
+        mounted: function () {
+            //
+        },
+        created() {
+            this.$emit("update:layout", GuestLayout);
+        }
+    };
 </script>
 
 <style type="text/css">
-.panel-title {
-    display: inline;
-    font-weight: bold;
-}
-
-.display-table {
-    display: table;
-}
-
-.display-tr {
-    display: table-row;
-}
-
-.display-td {
-    display: table-cell;
-    vertical-align: middle;
-    width: 61%;
-}
-
-.login-box {
-    background: #fff;
-    width: 400px;
-    margin: auto;
-    margin-top: 70px;
-}
-
-.over-flow-auto {
-    overflow: auto;
-}
-
-.box-width-loging {
-    width: 500px;
-}
-
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-    .box-width-loging {
-        width: 100%;
+    .panel-title {
+        display: inline;
+        font-weight: bold;
     }
-}
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
-    .box-width-loging {
-        width: 100%;
+    .display-table {
+        display: table;
     }
-}
 
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
+    .display-tr {
+        display: table-row;
+    }
+
+    .display-td {
+        display: table-cell;
+        vertical-align: middle;
+        width: 61%;
+    }
+
+    .login-box {
+        background: #fff;
+        width: 400px;
+        margin: auto;
+        margin-top: 70px;
+    }
+
+    .over-flow-auto {
+        overflow: auto;
+    }
+
     .box-width-loging {
         width: 500px;
     }
-}
 
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) {
-    .box-width-loging {
-        width: 500px;
+    /* Extra small devices (phones, 600px and down) */
+    @media only screen and (max-width: 600px) {
+        .box-width-loging {
+            width: 100%;
+        }
     }
-}
 
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
-    .box-width-loging {
-        width: 500px;
+    /* Small devices (portrait tablets and large phones, 600px and up) */
+    @media only screen and (min-width: 600px) {
+        .box-width-loging {
+            width: 100%;
+        }
     }
-}
+
+    /* Medium devices (landscape tablets, 768px and up) */
+    @media only screen and (min-width: 768px) {
+        .box-width-loging {
+            width: 500px;
+        }
+    }
+
+    /* Large devices (laptops/desktops, 992px and up) */
+    @media only screen and (min-width: 992px) {
+        .box-width-loging {
+            width: 500px;
+        }
+    }
+
+    /* Extra large devices (large laptops and desktops, 1200px and up) */
+    @media only screen and (min-width: 1200px) {
+        .box-width-loging {
+            width: 500px;
+        }
+    }
 </style>

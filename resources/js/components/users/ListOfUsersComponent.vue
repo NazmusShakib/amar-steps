@@ -33,7 +33,7 @@
                                 <tr class="text-center" v-if="users.total === 0">
                                     <td colspan="6">No data to display.</td>
                                 </tr>
-                                <tr v-else v-for="(user, index) in users.data" v-bind:key="user">
+                                <tr v-else v-for="(user, index) in users.data" v-bind:key="index">
                                     <td>{{ index + 1}}</td>
                                     <td>{{ user.name }}</td>
                                     <td>{{ user.email }}</td>

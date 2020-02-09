@@ -3,6 +3,9 @@ import ListOfUsers from '~/components/users/ListOfUsersComponent';
 import UserCreate from '~/components/users/UserCreateComponent';
 import UserEdit from '~/components/users/UserEditComponent';
 
+// Middleware
+import verifiedPhone from '~/routes/middleware/ensurePhoneIsVerified'
+import requireAuth from '~/routes/middleware/requireAuthCheck'
 
 const index = [
     {
@@ -11,6 +14,7 @@ const index = [
         meta: {
             requireAuth: true,
             title: 'Users - App',
+            middleware: [requireAuth, verifiedPhone],
             metaTags: [
                 {
                     name: 'description',
@@ -30,6 +34,7 @@ const index = [
         meta: {
             requireAuth: true,
             title: 'User Create - App',
+            middleware: [requireAuth, verifiedPhone],
             metaTags: [
                 {
                     name: 'description',
