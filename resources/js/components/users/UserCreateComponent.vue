@@ -61,7 +61,7 @@
                                 <label class="control-label" for="phone">Phone*</label>
                                 <input type="text" autocomplete="off" class="form-control" id="phone"
                                        name="phone" placeholder="Phone"
-                                       v-validate="'required'"
+                                       v-validate="'required|digits:11'"
                                        v-model="user.phone">
                                 <div class="help text-danger" v-show="errors.has('phone')">
                                     {{ errors.first('phone') }}

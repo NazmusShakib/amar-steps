@@ -2,7 +2,7 @@
 import Register from '~/components/auth/Register';
 import Login from '~/components/auth/Login';
 import Error404 from '~/components/errors/404';
-import VerifyPhone from '~/components/auth/VerifyPhone';
+import VerifiedForm from '~/components/auth/VerifyPhone';
 
 // Authenticated
 import Dashboard from '~/components/DashboardComponent';
@@ -11,7 +11,6 @@ import Blank from '~/components/BlankComponent';
 
 
 // Middleware
-import verifiedPhone from '~/routes/middleware/ensurePhoneIsVerified'
 import requireAuth from '~/routes/middleware/requireAuthCheck'
 
 // Import Module Routes
@@ -39,11 +38,11 @@ const baseRoutes = [{
     },
     {
         path: '/verify',
-        component: verifiedPhone,
-        name: 'VerifyPhone',
+        component: VerifiedForm,
+        name: 'VerifiedForm',
         meta: {
-            title: 'Verify Phone - App',
             guest: true,
+            title: 'Verify Phone - App',
         }
     },
     {
@@ -51,6 +50,7 @@ const baseRoutes = [{
         component: Blank,
         name: 'Blank',
         meta: {
+            middleware: [requireAuth],
             title: 'Blank - App',
             guest: true
         }
@@ -60,8 +60,7 @@ const baseRoutes = [{
         component: Error404,
         name: '404',
         meta: {
-            requireAuth: true,
-            middleware: [requireAuth, verifiedPhone],
+            middleware: [requireAuth],
             title: 'Not Found - App'
         }
     },
@@ -70,8 +69,7 @@ const baseRoutes = [{
         component: Dashboard,
         name: 'Dashboard',
         meta: {
-            requireAuth: true,
-            middleware: [requireAuth, verifiedPhone],
+            middleware: [requireAuth],
             title: 'Dashboard - App',
             metaTags: [{
                     name: 'description',
@@ -89,8 +87,7 @@ const baseRoutes = [{
         name: 'Profile',
         component: Profile,
         meta: {
-            requireAuth: true,
-            middleware: [requireAuth, verifiedPhone],
+            middleware: [requireAuth],
             title: 'Profile - App',
             metaTags: [{
                     name: 'description',

@@ -148,9 +148,7 @@
                             })
                             .catch(error => {
                                 this.$setErrorsFromResponse(error.response.data);
-                                this.$notification.error(
-                                    error.response.data.message
-                                );
+                                this.$notification.error(error.response.data.message);
                             });
                     }
                 });

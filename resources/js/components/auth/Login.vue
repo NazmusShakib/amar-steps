@@ -21,10 +21,8 @@
                                 v-bind:class="{'has-error' : errors.has('phone')}"
                                 v-validate="'required'"
                             />
-                            <div
-                                v-show="errors.has('phone')"
-                                class="help text-danger"
-                            >{{ errors.first('phone') }}
+                            <div v-show="errors.has('phone')" class="help text-danger">
+                                {{ errors.first('phone') }}
                             </div>
                         </div>
                     </div>
@@ -65,9 +63,8 @@
                         <div class="col-xs-12">
                             <button
                                 class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light"
-                                type="submit"
-                                :disabled="errors.any()"
-                            >Log In
+                                type="submit">
+                                Log In
                             </button>
                         </div>
                     </div>
@@ -103,13 +100,14 @@
                             .then(response => {
                                 var data = response.data.data;
                                 localStorage.setItem("token", data.token);
-                                localStorage.setItem("auth", JSON.stringify(data.auth)
-                                );
+                                localStorage.setItem("auth", JSON.stringify(data.auth));
                                 this.$store.dispatch("profile/authStore", data.auth);
+                                this.$store.dispatch("setGlobalAuth", data.auth);
                                 this.$router.push("/dashboard");
                             })
                             .catch(error => {
-                                this.$notification.error(error.response.data.errors.error);
+                                this.$setErrorsFromResponse(error.response.data);
+                                this.$notification.error(error.response.data.message);
                             });
                     }
                 });

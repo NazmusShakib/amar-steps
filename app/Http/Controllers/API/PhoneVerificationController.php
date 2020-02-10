@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Twilio\TwiML\VoiceResponse;
@@ -23,7 +24,7 @@ class PhoneVerificationController extends BaseController
                 $validator = ValidationException::withMessages([
                     'phone' => $exception->getMessage(),
                 ]);
-                return $this->sendError('Validation Error.', $validator->errors(), 422);
+                return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
             }
         }
         return $this->sendResponse($request->user(), 'Thanks for registering with our platform. We will text you to verify your phone number in a jiffy. Provide the code below.');
@@ -36,15 +37,16 @@ class PhoneVerificationController extends BaseController
                 'code' => ['The code your provided is wrong. Please try again or request another text.'],
             ]);
 
-            return $this->sendError('Validation Error.', $validator->errors(), 422);
+            return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
         }
 
         if ($request->user()->hasVerifiedPhone()) {
-            return $this->sendResponse($request->user(), 'Your phone is verified already!');
+            return $this->sendResponse($request->user(), 'Your phone is verified already.');
+        } elseif ($request->user()->markPhoneAsVerified()) {
+            return $this->sendResponse($request->user(), 'Your phone was successfully verified.');
         }
 
-        $request->user()->markPhoneAsVerified();
-        return $this->sendResponse($request->user(), 'Your phone was successfully verified!');
+        return $this->sendError('Session has been expired; you must log in again.', [], 440);
     }
 
     public function buildTwiML($code)

@@ -23,8 +23,10 @@ class CreateUsersTable extends Migration
             $table->string('weight', 50)->nullable();
             $table->string('headshot')->nullable();
             $table->string('verification_code')->unique()->nullable();
+            $table->timestamp('phone_verified_at')->nullable();
+            $table->datetime('verification_code_expiry')->nullable();
+
             $table->timestamp('email_verified_at')->nullable();
-			$table->timestamp('phone_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

@@ -10,7 +10,7 @@
                 >
                     <h3 class="box-title m-b-20">Confirmation Code</h3>
 
-                    <p>Enter the confirmation code sent to <b>{{ profile.phone }}</b> code will expire in 30 min.</p>
+                    <p>Enter the confirmation code sent to <b>{{ globalAuth.phone }}</b> code will expire in 30 min.</p>
 
                     <div class="form-group">
                         <div class="col-xs-12">
@@ -56,24 +56,25 @@
 <script>
     import GuestLayout from "~/components/layouts/GuestLayoutComponent.vue";
 
-    import {createNamespacedHelpers} from "vuex";
-    const {mapState, mapGetters, mapMutations, mapActions} = createNamespacedHelpers('profile');
+    import {mapState, mapGetters, mapMutations, mapActions} from "vuex";
 
     export default {
         data: () => ({
             user: {}
         }),
         computed: {
-            ...mapGetters(['profile']),
+            ...mapGetters(['globalAuth']),
         },
         methods: {
-            ...mapActions(['storeLogout']),
+            ...mapActions(['globalLogout']),
             verify() {
                 this.$validator.validateAll().then(result => {
                     if (result) {
                         axios.post(this.$baseURL + "phone/verify", this.user)
                             .then(response => {
+                                console.log(response.data);
                                 this.$notification.success(response.data.message);
+                                localStorage.setItem("auth", JSON.stringify(response.data.data));
                                 this.$router.push("/dashboard");
                             })
                             .catch(error => {
@@ -85,10 +86,8 @@
             },
 
             logout() {
-                this.$localStorage.clear();
-                this.storeLogout();
+                this.globalLogout();
                 this.$router.push({name: "Login"});
-
             }
         },
         mounted: function () {

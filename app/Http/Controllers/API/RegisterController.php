@@ -117,15 +117,14 @@ class RegisterController extends BaseController
                 'phone' => $exception->getMessage(),
             ]);
             $user->delete();
-            $user->logout();
             Session::flush();
-            return $this->sendError('Validation Error.', $validator->errors(), 422);
+            return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
         }
 
         $success['token'] = $user->createToken('MyApp')->accessToken;
         $success['auth'] = new UserResource($user);
 
-        return $this->sendResponse($success, 'Thanks for registering with our platform. We will text you to verify your phone number in a jiffy. Provide the code below.');
+        return $this->sendResponse($success, 'Thanks for registering with our platform. We will text a verification code the given number in a jiffy. Provide the code below.');
     }
 
     /**
@@ -172,14 +171,21 @@ class RegisterController extends BaseController
             $user = Auth::user();
 
             if(!$user->phone_verified_at)
-                $user->callToVerify();
+                try {
+                    $user->callToVerify();
+                } catch (\Exception $exception) {
+                    $validator = ValidationException::withMessages([
+                        'phone' => $exception->getMessage(),
+                    ]);
+                    return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
+                }
 
             $success['token'] = $user->createToken('MyApp')->accessToken;
             $success['auth'] = new UserResource($user);
 
             return $this->sendResponse($success, 'I have logged in successfully.');
         } else {
-            return $this->sendError('Unauthorised.', ['error' => 'Invalid credential.'], 401);
+            return $this->sendError('Invalid credential.', ['error' => ['Invalid credential.']], 401);
         }
     }
 
@@ -233,7 +239,7 @@ class RegisterController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors(), 422);
+            return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
         }
     }
 }

@@ -2,9 +2,12 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Twilio\Exceptions\RestException;
 use Twilio\Rest\Client;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
@@ -28,7 +31,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'email_verified_at'
+        'password', 'remember_token', 'verification_code', 'email_verified_at'
     ];
 
     /**
@@ -48,9 +51,12 @@ class User extends Authenticatable
 
     public function markPhoneAsVerified()
     {
-        return $this->forceFill([
-            'phone_verified_at' => $this->freshTimestamp(),
-        ])->save();
+        if ($this->verification_code_expiry > Carbon::now()) {
+            return $this->forceFill([
+                'phone_verified_at' => $this->freshTimestamp(),
+            ])->save();
+        } else
+            return false;
     }
 
     /*Standard methods removed for brevity*/
@@ -81,18 +87,18 @@ class User extends Authenticatable
         $code = random_int(100000, 999999);
 
         $this->forceFill([
-            'verification_code' => $code
+            'verification_code' => $code,
+            'verification_code_expiry' => Carbon::now()->addMinutes(30)
         ])->save();
 
-        $client = new Client(env('TWILIO_SID'), env('TWILIO_AUTH_TOKEN'));
-
-        $message = $client->messages->create(
-            '+88'.$this->phone,
-            [
-                "body" => "Hi, thanks for Joining. This is your verification code::{$code}.",
-                "from" => "+16038997505",
-                "statusCallback" => "http://127.0.0.1:8000/api/v1/build-twiml/{$code}"]
-        );
+            $client = new Client(env('TWILIO_SID'), env('TWILIO_AUTH_TOKEN'));
+            $message = $client->messages->create(
+                '+88' . $this->phone,
+                [
+                    "body" => "Hi, thanks for Joining. This is your verification code::{$code}.",
+                    "from" => "+16038997505",
+                    "statusCallback" => "http://127.0.0.1:8000/api/v1/build-twiml/{$code}"]
+            );
 
         // print($message->sid);
     }
