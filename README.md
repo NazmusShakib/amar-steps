@@ -1,4 +1,4 @@
-# AmarSteps
+# AmarSteps quick start
 Amar Step is principally a fitness App. It will record and analyze daily activities and habits to help maintain successful diet and lead healthy lifestyle.
 ##
 
