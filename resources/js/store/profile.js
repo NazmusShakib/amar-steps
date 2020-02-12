@@ -1,7 +1,7 @@
 const profile = {
     namespaced: true,
     state: {
-        profile: localStorage.getItem('auth')
+        profile: {}
     },
     mutations: {
         UPDATE_AUTH: (state, payload) => {

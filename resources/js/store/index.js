@@ -17,7 +17,8 @@ export default new Vuex.Store({
         }
     },
     mutations: {
-        SET_GLOBAL_AUTH: (state) => {
+        SET_GLOBAL_AUTH: (state, payload) => {
+            localStorage.set('auth', JSON.stringify(payload));
             state.globalUser = localStorage.get('auth');
         },
         GLOBAL_LOGOUT: (state) => {
@@ -26,8 +27,16 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        setGlobalAuth({commit}) {
-            commit('SET_GLOBAL_AUTH');
+        setGlobalAuth({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                commit('SET_GLOBAL_AUTH', payload);
+                resolve();
+            }).then(() => {
+                // console.log('Yay! updateAuth')
+            }).catch((error) => {
+                // console.log(error.response);
+                reject();
+            });
         },
         globalLogout({commit}) {
             commit('GLOBAL_LOGOUT');

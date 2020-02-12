@@ -34,6 +34,8 @@ Route::get('unauthorized', function () {
 Route::group(['middleware' => ['auth:api', 'verifiedPhone']], function () {
 
     Route::get('profile', 'RegisterController@profile');
+    Route::post('profile', 'RegisterController@updateProfile');
+    Route::post('profile/change-password', 'RegisterController@changePassword');
 
     Route::apiResource('users', 'UserController', ['only' => [
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin']);

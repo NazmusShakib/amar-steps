@@ -117,8 +117,8 @@ export default {
     },
     methods: {
         logout() {
-            this.$localStorage.clear();
-            this.$router.push({ name: "Login" });
+            this.$store.dispatch("globalLogout");
+            this.$router.push({name: 'Login'});
         }
     }
 };

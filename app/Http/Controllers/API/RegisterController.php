@@ -9,6 +9,7 @@ use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\API\BaseController as BaseController;
@@ -122,7 +123,7 @@ class RegisterController extends BaseController
         }
 
         $success['token'] = $user->createToken('MyApp')->accessToken;
-        $success['auth'] = new UserResource($user);
+        $success['auth'] = new ProfileResource($user);
 
         return $this->sendResponse($success, 'Thanks for registering with our platform. We will text a verification code the given number in a jiffy. Provide the code below.');
     }
@@ -181,7 +182,7 @@ class RegisterController extends BaseController
                 }
 
             $success['token'] = $user->createToken('MyApp')->accessToken;
-            $success['auth'] = new UserResource($user);
+            $success['auth'] = new ProfileResource($user);
 
             return $this->sendResponse($success, 'I have logged in successfully.');
         } else {
@@ -231,15 +232,83 @@ class RegisterController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email, ' . auth::id(),
-            // 'phone' => 'required|regex:/[0-9]{11}/|digits:11|unique:users,phone,'. auth::id(),
-            'gender' => 'required|in:male,female',
+            'email' => 'required|email|unique:users,email,' . $request->user()->id,
+            'height' => 'required',
+            'weight' => 'required',
+            'gender' => 'nullable|in:male,female',
             'address' => 'string|nullable',
             'bio' => 'string|nullable',
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
+            return $this->sendError('Validation failed.', $validator->errors(), 422);
         }
+
+        $userOnly = $request->only('name', 'email', 'height', 'weight');
+        $request->user()->update($userOnly);
+
+        $profileOnly = $request->only('gender', 'bio', 'address');
+        $request->user()->profile()->update($profileOnly);
+
+        $profile = new ProfileResource($request->user());
+
+        return $this->sendResponse($profile, 'Profile has been updated successfully.');
+    }
+
+    /**
+     * @OA\Post(
+     *      path="/api/v1/profile/change-password",
+     *      operationId="change-password",
+     *      tags={"Profile"},
+     *      summary="Auth password changed.",
+     *      description="Returns updated details.",
+     *      @OA\Parameter(
+     *          name="Change password",
+     *          description="application/json",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(type="object",example = {"old_password":"123456","password":"123abc","password_confirmation":"123abcd"}),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Password has been changed successfully.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":{"id":1,"name":"Admin User","email":"admin@example.com","phone":"+2992233690457","role":"Administrator","profile":{"gender":"male","dob":"1970-07-11","bio":"Duchess, 'chop off her knowledge, as there was no more to do that,' said the Cat, and vanished. Alice was soon submitted to by all three dates on.","address":"7749 Dana Trail Suite 868\nGibsonmouth, HI 32195-3665"}},"message":"Password has been changed successfully."})
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Validation failed.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":false,"message":"Validation failed.","errors": {}})
+     *          )
+     *      )
+     * )
+     */
+    public function changePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password' => ['required', function ($attribute, $value, $fail) use ($request) {
+                if (!Hash::check($value, $request->user()->password)) {
+                    $fail('Old Password didn\'t match.');
+                }
+            }],
+            'password' => 'required|min:6|confirmed|different:old_password',
+            // 'password_confirmation' => 'required|same:password|different:old_password',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation failed.', $validator->errors(), 422);
+        }
+
+        $request->user()->fill([
+            'password' => Hash::make($request->password)
+        ])->save();
+
+        $profile = new ProfileResource($request->user());
+
+        return $this->sendResponse($profile, 'Password has been changed successfully.');
     }
 }

@@ -5,8 +5,8 @@
                 <div class="user-content">
                     <a href="javascript:void(0)"><img :src="'plugins/images/users/blank-profile-picture.png'"
                                                       class="thumb-lg img-circle" alt="img"></a>
-                    <h4 class="text-white">User Name</h4>
-                    <h5 class="text-white">info@myadmin.com</h5>
+                    <h4 class="text-white"> {{ auth.name }}</h4>
+                    <h5 class="text-white"> {{ auth.email }}</h5>
                 </div>
             </div>
         </div>
@@ -34,7 +34,9 @@
 <script>
     export default {
         props: {
-            //
+            auth: {
+                type: Object,
+            }
         },
         data: () => ({
             //

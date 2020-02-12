@@ -94,18 +94,18 @@
 
 
 <script>
-    import {createNamespacedHelpers} from "vuex";
-    const {mapState, mapGetters, mapMutations, mapActions} = createNamespacedHelpers('profile');
 
 export default {
     props: [],
     computed: {
-        ...mapGetters(['profile']),
+        profile() {
+            return this.$store.getters.globalAuth;
+        }
     },
     methods: {
         logout() {
-            this.$localStorage.clear();
-            this.$router.push({ name: "Login" });
+            this.$store.dispatch("globalLogout");
+            this.$router.push({name: 'Login'});
         }
     },
     created: function() {
