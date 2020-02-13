@@ -9,6 +9,7 @@ use App\Profile;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserResource;
 
@@ -59,8 +60,8 @@ class UserController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
@@ -76,9 +77,9 @@ class UserController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Profile $profile
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Profile $profile)
     {
@@ -99,14 +100,43 @@ class UserController extends BaseController
     }
 
     /**
-     * Remove the specified resource from storage.
-     * @param User $user
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
+     * @OA\Delete(
+     *      path="/api/v1/users/{id}",
+     *      operationId="destroy-user",
+     *      tags={"Profile"},
+     *      summary="Delete user.",
+     *      description="User has been deleted successfully.",
+     *      @OA\Parameter(
+     *          name="token",
+     *          description="application/json",
+     *          required=true,
+     *          in="header",
+     *          @OA\Schema(type="object",example = {"tokan"}),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Password has been changed successfully.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":{"id":1,"name":"Admin User","email":"admin@example.com","phone":"+2992233690457","role":"Administrator","profile":{"gender":"male","dob":"1970-07-11","bio":"Duchess, 'chop off her knowledge, as there was no more to do that,' said the Cat, and vanished. Alice was soon submitted to by all three dates on.","address":"7749 Dana Trail Suite 868\nGibsonmouth, HI 32195-3665"}},"message":"Password has been changed successfully."})
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Validation failed.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":false,"message":"Validation failed.","errors": {"password": "Doesn't match."}})
+     *          )
+     *      )
+     * )
      */
     public function destroy(User $user)
     {
-        $user->delete();
-        return $this->sendResponse([], 'User has been deleted successfully.');
+        if(Auth::id() != $user->id) {
+            $user->delete();
+            return $this->sendResponse([], 'User has been deleted successfully.');
+        }
+        return $this->sendError('Failed to delete.', []);
     }
 }

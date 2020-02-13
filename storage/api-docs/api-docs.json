@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "L5 Swagger API",
-        "description": "L5 Swagger OpenApi description",
+        "title": "Amar Steps - Swagger DOC ",
+        "description": "L6 Swagger OpenApi description",
         "contact": {
             "email": "nshakib.se@gmail.com"
         },
@@ -25,9 +25,9 @@
                 "operationId": "register",
                 "parameters": [
                     {
-                        "name": "name",
+                        "name": "phone",
                         "in": "query",
-                        "description": "User Name",
+                        "description": "Phone Number",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -63,7 +63,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User register successfully.",
+                        "description": "Account has been created successfully.",
                         "content": {
                             "application/json": {}
                         }
@@ -84,9 +84,9 @@
                 "operationId": "login",
                 "parameters": [
                     {
-                        "name": "email",
+                        "name": "phone",
                         "in": "query",
-                        "description": "User Email",
+                        "description": "User Phone",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -153,6 +153,148 @@
                         ]
                     }
                 ]
+            }
+        },
+        "/api/v1/profile/change-password": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Auth password changed.",
+                "description": "Returns updated details.",
+                "operationId": "change-password",
+                "parameters": [
+                    {
+                        "name": "Change password",
+                        "in": "query",
+                        "description": "application/json",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "old_password": "123456",
+                                "password": "123abc",
+                                "password_confirmation": "123abcd"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password has been changed successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": {
+                                            "id": 1,
+                                            "name": "Admin User",
+                                            "email": "admin@example.com",
+                                            "phone": "+2992233690457",
+                                            "role": "Administrator",
+                                            "profile": {
+                                                "gender": "male",
+                                                "dob": "1970-07-11",
+                                                "bio": "Duchess, 'chop off her knowledge, as there was no more to do that,' said the Cat, and vanished. Alice was soon submitted to by all three dates on.",
+                                                "address": "7749 Dana Trail Suite 868\\nGibsonmouth, HI 32195-3665"
+                                            }
+                                        },
+                                        "message": "Password has been changed successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "message": "Validation failed.",
+                                        "errors": {
+                                            "password": "Doesn't match."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}": {
+            "delete": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Delete user.",
+                "description": "User has been deleted successfully.",
+                "operationId": "destroy-user",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "application/json",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "example": [
+                                "tokan"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password has been changed successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": {
+                                            "id": 1,
+                                            "name": "Admin User",
+                                            "email": "admin@example.com",
+                                            "phone": "+2992233690457",
+                                            "role": "Administrator",
+                                            "profile": {
+                                                "gender": "male",
+                                                "dob": "1970-07-11",
+                                                "bio": "Duchess, 'chop off her knowledge, as there was no more to do that,' said the Cat, and vanished. Alice was soon submitted to by all three dates on.",
+                                                "address": "7749 Dana Trail Suite 868\\nGibsonmouth, HI 32195-3665"
+                                            }
+                                        },
+                                        "message": "Password has been changed successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "message": "Validation failed.",
+                                        "errors": {
+                                            "password": "Doesn't match."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
