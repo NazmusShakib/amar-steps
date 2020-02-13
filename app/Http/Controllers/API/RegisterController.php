@@ -18,7 +18,7 @@ use Illuminate\Validation\ValidationException;
 /**
  * @OA\Info(
  *      version="1.0.0",
- *      title="Amar Steps - Swagger API ",
+ *      title="Amar Steps - Swagger DOC ",
  *      description="L6 Swagger OpenApi description",
  *      @OA\Contact(
  *          email="nshakib.se@gmail.com"
@@ -282,7 +282,7 @@ class RegisterController extends BaseController
      *          description="Validation failed.",
      *          @OA\MediaType(
      *              mediaType="application/json",
-     *              @OA\JsonContent(type="object",example = {"success":false,"message":"Validation failed.","errors": {}})
+     *              @OA\JsonContent(type="object",example = {"success":false,"message":"Validation failed.","errors": {"password": "Doesn't match."}})
      *          )
      *      )
      * )

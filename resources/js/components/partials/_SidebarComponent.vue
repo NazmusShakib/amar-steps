@@ -71,7 +71,7 @@
                                 </router-link>
                             </li>
                             <li>
-                                <router-link :to="{ name: 'ListOfUsers'}" class="waves-effect">
+                                <router-link :to="{ name: 'UserList'}" class="waves-effect">
                                     <i class="fa fa-th-list" data-icon="v"></i>
                                     <span class="hide-menu">List</span>
                                 </router-link>

@@ -1,5 +1,5 @@
 // Authenticated
-import ListOfUsers from '~/components/users/ListOfUsersComponent';
+import UserList from '~/components/users/UserListComponent';
 import UserCreate from '~/components/users/UserCreateComponent';
 import UserEdit from '~/components/users/UserEditComponent';
 
@@ -8,8 +8,8 @@ import requireAuth from '~/routes/middleware/requireAuthCheck'
 
 const index = [
     {
-        path: '/users', component: ListOfUsers,
-        name: 'ListOfUsers',
+        path: '/users', component: UserList,
+        name: 'UserList',
         meta: {
             title: 'Users - App',
             middleware: [requireAuth],
