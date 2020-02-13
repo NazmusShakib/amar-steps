@@ -251,7 +251,33 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User has been deleted successfully.."
+                        "description": "User has been deleted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": "",
+                                        "message": "User has been deleted successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Failed to delete.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "message": "Failed to delete."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }

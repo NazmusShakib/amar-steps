@@ -115,7 +115,19 @@ class UserController extends BaseController
      *      ),
      *      @OA\Response(
      *          response=200,
-     *          description="User has been deleted successfully.."
+     *          description="User has been deleted successfully.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":"","message":"User has been deleted successfully."})
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Failed to delete.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":false,"message":"Failed to delete."})
+     *          )
      *      ),
      * )
      */
@@ -125,6 +137,6 @@ class UserController extends BaseController
             $user->delete();
             return $this->sendResponse([], 'User has been deleted successfully.');
         }
-        return $this->sendError('Failed to delete.', []);
+        return $this->sendError('Failed to delete.', [], 403);
     }
 }
