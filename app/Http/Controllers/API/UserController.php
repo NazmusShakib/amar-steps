@@ -115,8 +115,8 @@ class UserController extends BaseController
      *      ),
      *      @OA\Response(
      *          response=200,
-     *          description="User has been deleted successfully."
-     *      )
+     *          description="User has been deleted successfully.."
+     *      ),
      * )
      */
     public function destroy(User $user)

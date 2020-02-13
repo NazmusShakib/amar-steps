@@ -251,7 +251,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User has been deleted successfully."
+                        "description": "User has been deleted successfully.."
                     }
                 }
             }
