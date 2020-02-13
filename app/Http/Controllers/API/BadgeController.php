@@ -12,24 +12,100 @@ use Illuminate\Support\Facades\Validator;
 class BadgeController extends BaseController
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *      path="/api/v1/badges",
+     *      operationId="badges-get",
+     *      tags={"Badges"},
+     *      summary="Get all badges",
+     *      description="Returns badges",
+     *      @OA\Parameter(
+     *          name="authorization",
+     *          description="Bearer token",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *          in="header"
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Retrieve badges.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *       ),
+     * )
      *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $badges = Badge::with('createdBy')->select(
             'id', 'name', 'display_name', 'description', 'created_by')
-            ->orderBy('created_at', 'DESC')->paginate(10);
+            ->orderBy('created_at', 'DESC')->get();
 
         return response()->json($badges, 200);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *      path="/api/v1/badges",
+     *      operationId="Badges-post",
+     *      tags={"Badges"},
+     *      summary="Create badge.",
+     *      description="Badge has been created successfully.",
+     *      @OA\Parameter(
+     *          name="Authorization",
+     *          description="Bearer token",
+     *          required=true,
+     *          in="header",
+     *          @OA\Schema(type="string"),
+     *      ),
+     *      @OA\Parameter(
+     *          name="name",
+     *          description="name",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *      ),
+     *      @OA\Parameter(
+     *          name="display_name",
+     *          description="display_name",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *      ),
+     *      @OA\Parameter(
+     *          name="description",
+     *          description="description",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Badge has been created successfully.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":{"saved data"},"message":"Badge has been created successfully."})
+     *          )
+     *       ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Prerequisite failed.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":false,"data":{"errors"},"message":"Prerequisite failed."})
+     *          )
+     *       ),
+     *     )
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * Returns with token
      */
     public function store(Request $request)
     {

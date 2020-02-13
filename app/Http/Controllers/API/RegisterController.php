@@ -40,7 +40,7 @@ class RegisterController extends BaseController
      *      path="/api/v1/register",
      *      operationId="register",
      *      tags={"Registration"},
-     *      summary="Register Users!",
+     *      summary="Register Users.",
      *      description="Returns user name email and token.",
      *      @OA\Parameter(
      *          name="phone",
@@ -85,7 +85,7 @@ class RegisterController extends BaseController
      *              mediaType="application/json",
      *          )
      *       ),
-     *       @OA\Response(response=400, description="Bad request"),
+     *       security={{"oauth2_security_example": {"write:auth", "read:auth"}}},
      *     )
      *
      * Returns with token
@@ -101,7 +101,7 @@ class RegisterController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors(), 422);
+            return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
         }
 
         $input = $request->all();
@@ -133,7 +133,7 @@ class RegisterController extends BaseController
      *      path="/api/v1/login",
      *      operationId="login",
      *      tags={"Registration"},
-     *      summary="Login Users!",
+     *      summary="Login Users.",
      *      description="Returns user details with token",
      *      @OA\Parameter(
      *          name="phone",
@@ -160,10 +160,9 @@ class RegisterController extends BaseController
      *              mediaType="application/json",
      *          )
      *       ),
-     *       @OA\Response(response=401, description="Unauthorised"),
+     *      security={{"oauth2_security_example": {"write:auth", "read:auth"}}},
      *     )
      *
-     * Returns with token
      */
     public function login(Request $request)
     {
@@ -212,15 +211,8 @@ class RegisterController extends BaseController
      *          @OA\MediaType(
      *              mediaType="application/json",
      *          )
-     *       ),
-     *      @OA\Response(response=404, description="Resource Not Found"),
-     *      security={
-     *         {
-     *             "oauth2_security_example": {"write:auth", "read:auth"}
-     *         }
-     *     },
+     *       )
      * )
-     *
      */
     public function profile()
     {
@@ -241,7 +233,7 @@ class RegisterController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation failed.', $validator->errors(), 422);
+            return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
         }
 
         $userOnly = $request->only('name', 'email', 'height', 'weight');
@@ -263,11 +255,18 @@ class RegisterController extends BaseController
      *      summary="Auth password changed.",
      *      description="Returns updated details.",
      *      @OA\Parameter(
-     *          name="Change password",
+     *          name="Authorization",
+     *          description="Bearer token",
+     *          required=true,
+     *          in="header",
+     *          @OA\Schema(type="string"),
+     *      ),
+     *      @OA\Parameter(
+     *          name="Accept",
      *          description="application/json",
      *          required=true,
      *          in="query",
-     *          @OA\Schema(type="object",example = {"old_password":"123456","password":"123abc","password_confirmation":"123abcd"}),
+     *          @OA\JsonContent(type="object",example = {"old_password":"123456","password":"123abc","password_confirmation":"123abcd"}),
      *      ),
      *      @OA\Response(
      *          response=200,
@@ -300,7 +299,7 @@ class RegisterController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation failed.', $validator->errors(), 422);
+            return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
         }
 
         $request->user()->fill([

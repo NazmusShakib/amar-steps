@@ -15,12 +15,321 @@
         }
     ],
     "paths": {
+        "/api/v1/activities": {
+            "get": {
+                "tags": [
+                    "Activities"
+                ],
+                "summary": "Get auth activities",
+                "description": "Returns auth data",
+                "operationId": "activities-get",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve auth activities.",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Activities"
+                ],
+                "summary": "Save activity log.",
+                "description": "Activity has been created successfully.",
+                "operationId": "activities-post",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "activity",
+                        "in": "query",
+                        "description": "activity json",
+                        "required": true,
+                        "schema": {
+                            "type": "json"
+                        }
+                    },
+                    {
+                        "name": "notes",
+                        "in": "query",
+                        "description": "notes",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Activity has been created successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [
+                                            "saved data"
+                                        ],
+                                        "message": "Activity has been created successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Prerequisite failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "data": [
+                                            "errors"
+                                        ],
+                                        "message": "Prerequisite failed."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorised"
+                    }
+                }
+            }
+        },
+        "/api/v1/activities/{id}": {
+            "delete": {
+                "tags": [
+                    "Activities"
+                ],
+                "summary": "Delete activity.",
+                "description": "Activity has been deleted successfully.",
+                "operationId": "destroy-activity",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Activity has been deleted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": "",
+                                        "message": "Activity has been deleted successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Failed to delete.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "message": "Failed to delete."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/badges": {
+            "get": {
+                "tags": [
+                    "Badges"
+                ],
+                "summary": "Get all badges",
+                "description": "Returns badges",
+                "operationId": "badges-get",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve badges.",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Badges"
+                ],
+                "summary": "Create badge.",
+                "description": "Badge has been created successfully.",
+                "operationId": "Badges-post",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "display_name",
+                        "in": "query",
+                        "description": "display_name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "description",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Badge has been created successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [
+                                            "saved data"
+                                        ],
+                                        "message": "Badge has been created successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Prerequisite failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "data": [
+                                            "errors"
+                                        ],
+                                        "message": "Prerequisite failed."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/phone/verify": {
+            "post": {
+                "tags": [
+                    "Registration"
+                ],
+                "summary": "Verify phone.",
+                "description": "Your phone was successfully verified.",
+                "operationId": "post-phone-verify",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "Verification code",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Your phone was successfully verified.",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorised"
+                    }
+                }
+            }
+        },
         "/api/v1/register": {
             "post": {
                 "tags": [
                     "Registration"
                 ],
-                "summary": "Register Users!",
+                "summary": "Register Users.",
                 "description": "Returns user name email and token.",
                 "operationId": "register",
                 "parameters": [
@@ -67,11 +376,16 @@
                         "content": {
                             "application/json": {}
                         }
-                    },
-                    "400": {
-                        "description": "Bad request"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "oauth2_security_example": [
+                            "write:auth",
+                            "read:auth"
+                        ]
+                    }
+                ]
             }
         },
         "/api/v1/login": {
@@ -79,7 +393,7 @@
                 "tags": [
                     "Registration"
                 ],
-                "summary": "Login Users!",
+                "summary": "Login Users.",
                 "description": "Returns user details with token",
                 "operationId": "login",
                 "parameters": [
@@ -108,11 +422,16 @@
                         "content": {
                             "application/json": {}
                         }
-                    },
-                    "401": {
-                        "description": "Unauthorised"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "oauth2_security_example": [
+                            "write:auth",
+                            "read:auth"
+                        ]
+                    }
+                ]
             }
         },
         "/api/v1/profile": {
@@ -140,19 +459,8 @@
                         "content": {
                             "application/json": {}
                         }
-                    },
-                    "404": {
-                        "description": "Resource Not Found"
                     }
-                },
-                "security": [
-                    {
-                        "oauth2_security_example": [
-                            "write:auth",
-                            "read:auth"
-                        ]
-                    }
-                ]
+                }
             }
         },
         "/api/v1/profile/change-password": {
@@ -165,17 +473,26 @@
                 "operationId": "change-password",
                 "parameters": [
                     {
-                        "name": "Change password",
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Accept",
                         "in": "query",
                         "description": "application/json",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "example": {
                                 "old_password": "123456",
                                 "password": "123abc",
                                 "password_confirmation": "123abcd"
-                            }
+                            },
+                            "type": "object"
                         }
                     }
                 ],
@@ -237,15 +554,12 @@
                 "operationId": "destroy-user",
                 "parameters": [
                     {
-                        "name": "token",
+                        "name": "Authorization",
                         "in": "header",
-                        "description": "application/json",
+                        "description": "Bearer token",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "example": [
-                                "tokan"
-                            ]
+                            "type": "string"
                         }
                     }
                 ],

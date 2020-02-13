@@ -30,6 +30,41 @@ class PhoneVerificationController extends BaseController
         return $this->sendResponse($request->user(), 'Thanks for registering with our platform. We will text you to verify your phone number in a jiffy. Provide the code below.');
     }
 
+    /**
+     * @OA\Post(
+     *      path="/api/v1/phone/verify",
+     *      operationId="post-phone-verify",
+     *      tags={"Registration"},
+     *      summary="Verify phone.",
+     *      description="Your phone was successfully verified.",
+     *      @OA\Parameter(
+     *          name="Authorization",
+     *          description="Bearer token",
+     *          required=true,
+     *          in="header",
+     *          @OA\Schema(type="string"),
+     *      ),
+     *      @OA\Parameter(
+     *          name="code",
+     *          description="Verification code",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Your phone was successfully verified.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *       ),
+     *       @OA\Response(response=401, description="Unauthorised"),
+     *     )
+     *
+     * Returns with token
+     */
     public function verify(Request $request)
     {
         if ($request->user()->verification_code !== $request->code) {

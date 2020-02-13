@@ -13,7 +13,7 @@ window.NProgress = require('nprogress');
 import App from './App';
 
 // router setup
-Vue.prototype.$baseURL = 'http://127.0.0.1:8000/api/v1/';
+Vue.prototype.$baseURL = process.env.MIX_API_URL;
 import routers from './routes';
 
 /**

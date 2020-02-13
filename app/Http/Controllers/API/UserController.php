@@ -5,13 +5,13 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Http\Resources\ProfileResource;
 use App\Http\Resources\UserCollection;
+use App\Http\Resources\UserResource;
 use App\Profile;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\UserResource;
 
 class UserController extends BaseController
 {
@@ -26,10 +26,11 @@ class UserController extends BaseController
 
         return new UserCollection($users);
     }
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -89,7 +90,7 @@ class UserController extends BaseController
             'bio' => 'required',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
@@ -107,11 +108,11 @@ class UserController extends BaseController
      *      summary="Delete user.",
      *      description="User has been deleted successfully.",
      *      @OA\Parameter(
-     *          name="token",
-     *          description="application/json",
+     *          name="Authorization",
+     *          description="Bearer token",
      *          required=true,
      *          in="header",
-     *          @OA\Schema(type="object",example = {"tokan"}),
+     *          @OA\Schema(type="string"),
      *      ),
      *      @OA\Response(
      *          response=200,
@@ -133,7 +134,7 @@ class UserController extends BaseController
      */
     public function destroy(User $user)
     {
-        if(Auth::id() != $user->id) {
+        if (Auth::id() != $user->id) {
             $user->delete();
             return $this->sendResponse([], 'User has been deleted successfully.');
         }
