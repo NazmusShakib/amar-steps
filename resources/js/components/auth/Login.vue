@@ -15,6 +15,7 @@
                                 type="text"
                                 v-model.trim="user.phone"
                                 autofocus
+                                autocomplete="on"
                                 class="form-control"
                                 name="phone"
                                 placeholder="Phone"

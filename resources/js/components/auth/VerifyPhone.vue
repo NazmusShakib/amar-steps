@@ -72,9 +72,8 @@
                     if (result) {
                         axios.post(this.$baseURL + "phone/verify", this.user)
                             .then(response => {
-                                console.log(response.data);
                                 this.$notification.success(response.data.message);
-                                localStorage.setItem("auth", JSON.stringify(response.data.data));
+                                this.$store.dispatch("setGlobalAuth", response.data.data);
                                 this.$router.push("/dashboard");
                             })
                             .catch(error => {

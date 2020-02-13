@@ -18,7 +18,7 @@ export default new Vuex.Store({
     },
     mutations: {
         SET_GLOBAL_AUTH: (state, payload) => {
-            localStorage.set('auth', JSON.stringify(payload));
+            localStorage.set('auth', payload);
             state.globalUser = localStorage.get('auth');
         },
         GLOBAL_LOGOUT: (state) => {

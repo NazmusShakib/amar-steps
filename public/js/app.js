@@ -96246,7 +96246,7 @@ var render = function() {
                 _c(
                   "label",
                   { staticClass: "col-md-12", attrs: { for: "height" } },
-                  [_vm._v("Height")]
+                  [_vm._v("Height (kg)")]
                 ),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-md-12" }, [
@@ -96268,7 +96268,8 @@ var render = function() {
                     ],
                     staticClass: "form-control form-control-line",
                     attrs: {
-                      type: "text",
+                      type: "number",
+                      min: "0",
                       placeholder: "Height",
                       name: "height",
                       id: "height"
@@ -96314,7 +96315,9 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-md-6" }, [
               _c("div", { staticClass: "form-group" }, [
-                _c("label", { staticClass: "col-sm-12" }, [_vm._v("Weight")]),
+                _c("label", { staticClass: "col-sm-12" }, [
+                  _vm._v("Weight (cm)")
+                ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-md-12" }, [
                   _c("input", {
@@ -96335,7 +96338,8 @@ var render = function() {
                     ],
                     staticClass: "form-control form-control-line",
                     attrs: {
-                      type: "text",
+                      type: "number",
+                      min: "0",
                       placeholder: "Weight",
                       name: "weight",
                       id: "weight"
@@ -116018,8 +116022,8 @@ var profile = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/html/amar-step/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/html/amar-step/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /var/www/html/steps/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /var/www/html/steps/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

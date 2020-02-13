@@ -55,6 +55,7 @@
                                 v-model.trim="user.password"
                                 class="form-control"
                                 name="password"
+                                autocomplete="off"
                                 placeholder="Password"
                                 v-bind:class="{'has-error' : errors.has('password')}"
                                 ref="password"
@@ -73,6 +74,7 @@
                                 v-model.trim="user.password_confirmation"
                                 class="form-control"
                                 name="password confirmation"
+                                autocomplete="off"
                                 placeholder="Password confirmation"
                                 v-bind:class="{'has-error' : errors.has('password confirmation')}"
                                 v-validate="'required|confirmed:password'"
@@ -141,8 +143,7 @@
                             .then(response => {
                                 var data = response.data.data;
                                 localStorage.setItem("token", data.token);
-                                localStorage.setItem("auth",JSON.stringify(data.auth));
-                                this.$store.dispatch("profile/authStore", data.auth);
+                                this.$store.dispatch("setGlobalAuth", data.auth);
                                 this.$router.push("/verify");
                                 this.$notification.success(response.data.message);
                             })
@@ -155,7 +156,7 @@
             }
         },
         mounted: function () {
-            console.log("Register component mounted.");
+            //
         },
         created() {
             this.$emit("update:layout", GuestLayout);

@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-3 col-xs-6 b-r"><strong>Full Name</strong>
                 <br>
-                <p class="text-muted">{{ auth.name }}</p>
+                <p class="text-muted">{{ auth.name || 'N/A' }}</p>
             </div>
             <div class="col-md-3 col-xs-6 b-r"><strong>Mobile</strong>
                 <br>
@@ -11,7 +11,7 @@
             </div>
             <div class="col-md-4 col-xs-6 b-r"><strong>Email</strong>
                 <br>
-                <p class="text-muted">{{ auth.email }}</p>
+                <p class="text-muted">{{ auth.email || 'N/A' }}</p>
             </div>
             <div class="col-md-2 col-xs-6"><strong>Gender</strong>
                 <br>
@@ -19,9 +19,9 @@
             </div>
         </div>
         <hr>
-        <p class="m-t-30">{{ auth.profile.bio }}</p>
+        <p class="m-t-30">{{ auth.profile.bio || 'N/A' }}</p>
         <b>Address: </b>
-        <p> {{ auth.profile.address }}</p>
+        <p> {{ auth.profile.address || 'N/A' }}</p>
         <h4 class="font-bold m-t-30">Skill Set</h4>
         <hr>
         <h5>Wordpress <span class="pull-right">80%</span></h5>
@@ -52,18 +52,8 @@
         props: {
             auth: {
                 type: Object,
+                required: false
             },
-            /*auth: {
-                name: {
-                    type: String,
-                    required: true
-                },
-                profile: {
-                    type: Object,
-                    required: true
-                }
-            }*/
-
         },
         data: () => ({
             //

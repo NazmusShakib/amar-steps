@@ -5,8 +5,9 @@
                 <div class="user-content">
                     <a href="javascript:void(0)"><img :src="'plugins/images/users/blank-profile-picture.png'"
                                                       class="thumb-lg img-circle" alt="img"></a>
-                    <h4 class="text-white"> {{ auth.name }}</h4>
-                    <h5 class="text-white"> {{ auth.email }}</h5>
+                    <h4 class="text-white"> {{ auth.name || 'N/A' }}</h4>
+                    <h5 class="text-white"> {{ auth.email || 'N/A' }}</h5>
+                    <h5 class="text-white"> {{ auth.phone || 'N/A' }}</h5>
                 </div>
             </div>
         </div>
@@ -36,7 +37,8 @@
         props: {
             auth: {
                 type: Object,
-            }
+                required: false
+            },
         },
         data: () => ({
             //
