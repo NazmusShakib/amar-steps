@@ -21,7 +21,7 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>Serial</th>
+                                <th>SN</th>
                                 <th>Full Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>

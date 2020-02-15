@@ -42,9 +42,10 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Serial</th>
+                                    <th>SN</th>
                                     <th>Name</th>
                                     <th>Display name</th>
+                                    <th>Target</th>
                                     <th>Description</th>
                                     <th class="text-nowrap">Action</th>
                                 </tr>
@@ -53,27 +54,28 @@
                                 <tr class="text-center" v-if="badges.total === 0">
                                     <td colspan="6">No data to display.</td>
                                 </tr>
-                                <tr v-else v-for="(badge, index) in badges.data" v-bind:key="badge">
+                                <tr v-else v-for="(badge, index) in badges.data" v-bind:key="index">
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ badge.name }}</td>
                                     <td>{{ badge.display_name }}</td>
+                                    <td>{{ badge.target }}</td>
                                     <td>{{ badge.description }}</td>
                                     <td>
                                         <router-link
                                             :to="{ name: 'BadgeUpdate', params: {id: badge.id } }"
                                             data-toggle="tooltip"
-                                            title="Edit!"
+                                            title="Edit"
                                         >
-                                            <button class="btn btn-success btn-xs m-r-5">Update</button>
+                                            <i class="fa fa-edit m-r-5"></i>
                                         </router-link>
                                         <span class="m-r-5">|</span>
                                         <a
                                             href="javascript:void(0)"
                                             data-toggle="tooltip"
-                                            title="Delete!"
-                                            @click="destroyBadge(badge.id, key)"
+                                            title="Delete"
+                                            @click="destroyBadge(badge.id, index)"
                                         >
-                                            <button class="btn btn-danger btn-xs">Delete</button>
+                                            <i class="fa fa-trash-o m-r-5"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -126,8 +128,7 @@ export default {
     },
     methods: {
         getBadges() {
-            axios
-                .get(this.$baseURL + "badges?page=" + this.badges.current_page)
+            axios.get(this.$baseURL + "badges?page=" + this.badges.current_page)
                 .then(response => {
                     this.badges = response.data;
                 })
@@ -149,8 +150,7 @@ export default {
                 }
             )
                 .then(() => {
-                    axios
-                        .delete(this.$baseURL + "badges/" + id)
+                    axios.delete(this.$baseURL + "badges/" + id)
                         .then(response => {
                             this.badges.data.splice(index, 1);
                             this.$notification.success(response.data.message);

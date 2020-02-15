@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBadgesTable extends Migration
+class CreateUnitsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,17 @@ class CreateBadgesTable extends Migration
      */
     public function up()
     {
-        Schema::create('badges', function (Blueprint $table) {
+        Schema::create('units', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->unique();
-            $table->string('display_name')->nullable();
-            $table->string('description')->nullable();
-            $table->bigInteger('created_by')->unsigned()->nullable();
+
+            $table->string('actual_name')->unique();
+            $table->string('short_name')->nullable();
+            $table->boolean('allow_decimal')->default(false);
+            $table->bigInteger('created_by')->unsigned();
             $table->foreign('created_by')->references('id')
                 ->on('users');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -32,6 +35,6 @@ class CreateBadgesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('badges');
+        Schema::dropIfExists('units');
     }
 }

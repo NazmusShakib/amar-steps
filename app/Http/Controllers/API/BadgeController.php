@@ -40,8 +40,8 @@ class BadgeController extends BaseController
     public function index()
     {
         $badges = Badge::with('createdBy')->select(
-            'id', 'name', 'display_name', 'description', 'created_by')
-            ->orderBy('created_at', 'DESC')->get();
+            'id', 'name', 'display_name', 'target', 'description')
+            ->orderBy('created_at', 'DESC')->paginate(15);
 
         return response()->json($badges, 200);
     }
@@ -79,6 +79,15 @@ class BadgeController extends BaseController
      *          ),
      *      ),
      *      @OA\Parameter(
+     *          name="target",
+     *          description="target",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="double",
+     *          ),
+     *      ),
+     *      @OA\Parameter(
      *          name="description",
      *          description="description",
      *          required=false,
@@ -110,16 +119,17 @@ class BadgeController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:badges,name',
+            'name' => 'required|unique:badges,name,NULL,id,deleted_at,NULL',
             'display_name' => 'nullable',
+            'target' => 'nullable|regex:/^\d+(\.\d{1,3})?$/',
             'description' => 'nullable',
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors(), 422);
+            return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
         }
 
-        $input = $request->only(['name', 'display_name', 'description']);
+        $input = $request->only(['name', 'display_name', 'target', 'description']);
         $input['created_by'] = Auth::id();
         $badge = Badge::create($input);
 
@@ -159,7 +169,7 @@ class BadgeController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors(), 422);
+            return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
         }
 
         // $badge = Badge::find($id);
