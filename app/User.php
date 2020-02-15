@@ -82,9 +82,17 @@ class User extends Authenticatable
             ->select('gender', 'dob', 'country', 'city', 'bio', 'address');
     }
 
+    #TODO:: need to modify for verifying phone
     public function callToVerify()
     {
-        $code = random_int(100000, 999999);
+        // auto phone verify while login or regis
+        $this->forceFill([
+            'phone_verified_at' => $this->freshTimestamp(),
+        ])->save();
+
+        // Uncomment below code if you want to verify by phone
+
+        /*$code = random_int(100000, 999999);
 
         $this->forceFill([
             'verification_code' => $code,
@@ -98,7 +106,7 @@ class User extends Authenticatable
                     "body" => "Hi, thanks for Joining. This is your verification code::{$code}.",
                     "from" => "+16038997505",
                     "statusCallback" => "http://127.0.0.1:8000/api/v1/build-twiml/{$code}"]
-            );
+            );*/
 
         // print($message->sid);
     }
