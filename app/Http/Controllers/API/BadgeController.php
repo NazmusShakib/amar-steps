@@ -130,17 +130,13 @@ class BadgeController extends BaseController
         }
 
         $input = $request->only(['name', 'display_name', 'target', 'description']);
-        $input['created_by'] = Auth::id();
         $badge = Badge::create($input);
-
         return $this->sendResponse($badge, 'Badge has been created successfully.');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
@@ -154,17 +150,16 @@ class BadgeController extends BaseController
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Badge $badge
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Badge $badge)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:badges,name,' . $badge->id,
             'display_name' => 'nullable',
+            'target' => 'nullable|regex:/^\d+(\.\d{1,3})?$/',
             'description' => 'nullable',
         ]);
 
@@ -172,10 +167,10 @@ class BadgeController extends BaseController
             return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
         }
 
-        // $badge = Badge::find($id);
         $badge->update([
             'name' => $request->name,
             'display_name' => $request->display_name,
+            'target' => $request->target,
             'description' => $request->description,
         ]);
 
@@ -183,10 +178,8 @@ class BadgeController extends BaseController
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {

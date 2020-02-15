@@ -1,5 +1,5 @@
 <template>
-    <el-dialog width="40%" top="5vh" :title="dialogTitle" :visible="showDialog" @close="onClose">
+    <el-dialog width="40%" top="5vh" :title="dialogTitle" :visible="dialogVisible" @close="onClose">
         <form method="POST" @submit.prevent="handleSubmit()" novalidate>
             <div class="row">
                 <div class="form-group col-md-12" v-bind:class="{'has-error' : errors.has('name')}">
@@ -65,8 +65,8 @@
                     class="form-group col-md-12"
                     v-bind:class="{'has-error' : errors.has('description')}"
                 >
-                    <label class="control-label">Description:</label>
-                    <textarea v-model="badge.description" rows="3" class="form-control"></textarea>
+                    <label class="control-label" for="description">Description:</label>
+                    <textarea v-model="badge.description" id="description" rows="3" class="form-control"/>
                     <div
                         v-show="errors.has('description')"
                         class="help text-danger"
@@ -86,7 +86,7 @@
 <script>
     export default {
         props: {
-            showDialog: {
+            dialogVisible: {
                 type: Boolean,
                 required: true
             },
@@ -97,68 +97,49 @@
         },
         data: () => ({
             badge: {},
-            formType: "create"
+            submitMethod: "create"
         }),
         watch: {
             //
         },
         methods: {
             handleSubmit() {
-                if (this.formType === "create") {
+                if (this.submitMethod === "create") {
                     axios.post(this.$baseURL + 'badges', this.badge).then(response => {
+                        this.$eventBus.$emit('add-badge', this.badge);
                         this.$notification.success(response.data.message);
                         this.onClose();
                     }).catch(error => {
                         this.$setErrorsFromResponse(error.response.data);
                         this.$notification.error(error.response.data.message);
                     });
-                } else if (this.formType === "update") {
-                    //
+                } else if (this.submitMethod === "update") {
+                    axios.put(this.$baseURL + 'badges/' + this.badge.id, this.badge)
+                        .then(response => {
+                            this.$notification.success(response.data.message);
+                            this.onClose();
+                        })
+                        .catch(error => {
+                            this.$notification.error(error.response.data.message);
+                        });
                 }
             },
-
-            showBadge(id) {
-                axios
-                    .get(this.$baseURL + "badges/" + id)
-                    .then(response => {
-                        this.badge = response.data.data;
-                        this.$emit("update:showDialog", true);
-                    })
-                    .catch(() => {
-                        console.log("handle server error from here.");
-                    });
-            },
-
-            /*updateBadge() {
-                    this.$validator.validateAll().then((result) => {
-                        if (result) {
-                            axios.put(this.$baseURL + 'badges/' + this.badge.id, this.badge)
-                                .then(response => {
-                                    this.$notification.success(response.data.message);
-                                    this.onClose();
-                                })
-                                .catch(error => {
-                                    this.$notification.error(error.response.data.message);
-                                });
-                        }
-                    })
-                },*/
 
             onClose() {
                 this.$validator.reset();
                 this.badge = {};
-                this.formType = "create";
-                this.$emit("update:showDialog", false).$emit(
-                    "update:dialogTitle",
-                    "Add a new badge"
-                );
+                this.submitMethod = "create";
+                this.$emit("update:dialogVisible", false);
             }
         },
+
         mounted: function () {
             // We listen for the event on the eventBus
-            this.$eventBus.$on("editBadge", id => {
-                this.formType = "update";
-                this.showBadge(id);
+            this.$eventBus.$on("edit-badge", badge => {
+                this.submitMethod = "update";
+                this.badge = badge;
+                this.$emit("update:dialogVisible", true)
+                    .$emit("update:dialogTitle", "Badge update");
             });
         },
         computed: {
@@ -168,7 +149,7 @@
             //
         },
         beforeDestroy() {
-            this.$eventBus.$off("editBadge");
+            this.$eventBus.$off("edit-badge");
         }
     };
 </script>
