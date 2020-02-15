@@ -236,6 +236,15 @@
                         }
                     },
                     {
+                        "name": "target",
+                        "in": "query",
+                        "description": "target",
+                        "required": false,
+                        "schema": {
+                            "type": "double"
+                        }
+                    },
+                    {
                         "name": "description",
                         "in": "query",
                         "description": "description",
@@ -274,6 +283,109 @@
                                             "errors"
                                         ],
                                         "message": "Prerequisite failed."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/badges/{id}": {
+            "get": {
+                "tags": [
+                    "Badges"
+                ],
+                "summary": "Singel badge",
+                "description": "Returns single badge",
+                "operationId": "badges-single",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve single badge by id.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": {
+                                            "id": 4,
+                                            "name": "Aspen Morse",
+                                            "display_name": "Alfreda Eaton",
+                                            "target": 50,
+                                            "description": "Aliquid veniam quo",
+                                            "deleted_at": null,
+                                            "created_at": "2020-02-16 01:30:13",
+                                            "updated_at": "2020-02-16 01:30:13",
+                                            "created_by": {
+                                                "id": 1,
+                                                "name": "Admin User",
+                                                "email": "admin@example.com",
+                                                "phone": "0111"
+                                            }
+                                        },
+                                        "message": "Badge retrieved successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Badges"
+                ],
+                "summary": "Delete badge.",
+                "description": "Badge has been deleted successfully.",
+                "operationId": "destroy-badge",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Badge has been deleted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": "",
+                                        "message": "Badge has been deleted successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Failed to delete.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "message": "Failed to delete."
                                     },
                                     "type": "object"
                                 }

@@ -135,8 +135,31 @@ class BadgeController extends BaseController
     }
 
     /**
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     * @OA\Get(
+     *      path="/api/v1/badges/{id}",
+     *      operationId="badges-single",
+     *      tags={"Badges"},
+     *      summary="Singel badge",
+     *      description="Returns single badge",
+     *      @OA\Parameter(
+     *          name="authorization",
+     *          description="Bearer token",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *          in="header"
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Retrieve single badge by id.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":{"id":4,"name":"Aspen Morse","display_name":"Alfreda Eaton","target":50,"description":"Aliquid veniam quo","deleted_at":null,"created_at":"2020-02-16 01:30:13","updated_at":"2020-02-16 01:30:13","created_by":{"id":1,"name":"Admin User","email":"admin@example.com","phone":"0111"}},"message":"Badge retrieved successfully."})
+     *          )
+     *       ),
+     * )
+     *
      */
     public function show($id)
     {
@@ -178,8 +201,36 @@ class BadgeController extends BaseController
     }
 
     /**
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     * @OA\Delete(
+     *      path="/api/v1/badges/{id}",
+     *      operationId="destroy-badge",
+     *      tags={"Badges"},
+     *      summary="Delete badge.",
+     *      description="Badge has been deleted successfully.",
+     *      @OA\Parameter(
+     *          name="Authorization",
+     *          description="Bearer token",
+     *          required=true,
+     *          in="header",
+     *          @OA\Schema(type="string"),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Badge has been deleted successfully.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":"","message":"Badge has been deleted successfully."})
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Failed to delete.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":false,"message":"Failed to delete."})
+     *          )
+     *      ),
+     * )
      */
     public function destroy($id)
     {

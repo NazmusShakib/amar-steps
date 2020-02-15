@@ -42,7 +42,7 @@ class Badge extends Model
      * @var array
      */
     protected $hidden = [
-        'created_by'
+        'created_by', 'unit_id'
     ];
 
     public static function boot()
