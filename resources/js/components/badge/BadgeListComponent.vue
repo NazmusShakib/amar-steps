@@ -154,6 +154,7 @@
                         axios.delete(this.$baseURL + "badges/" + id)
                             .then(response => {
                                 this.badges.data.splice(index, 1);
+                                this.badges.total--;
                                 this.$notification.success(response.data.message);
                             })
                             .catch(error => {
@@ -171,7 +172,7 @@
         created() {
             this.$emit("update:layout", MasterLayout);
             this.$eventBus.$on("add-badge", badge => {
-                console.log('add-badge');
+                this.badges.total++;
                 this.badges.data.unshift(badge);
             });
         }

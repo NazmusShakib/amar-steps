@@ -8011,9 +8011,11 @@ __webpack_require__.r(__webpack_exports__);
 
     this.$emit("update:layout", _components_layouts_MasterLayoutComponent__WEBPACK_IMPORTED_MODULE_0__["default"]);
     this.$eventBus.$on("add-badge", function (badge) {
-      console.log('add-badge');
-
-      _this3.badges.data.unshift(badge);
+      try {
+        _this3.badges.data.unshift(badge);
+      } catch (error) {
+        _this3.getBadges();
+      }
     });
   }
 });

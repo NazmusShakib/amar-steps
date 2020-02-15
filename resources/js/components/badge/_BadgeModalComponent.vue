@@ -106,7 +106,7 @@
             handleSubmit() {
                 if (this.submitMethod === "create") {
                     axios.post(this.$baseURL + 'badges', this.badge).then(response => {
-                        this.$eventBus.$emit('add-badge', this.badge);
+                        this.$eventBus.$emit('add-badge', response.data.data);
                         this.$notification.success(response.data.message);
                         this.onClose();
                     }).catch(error => {
