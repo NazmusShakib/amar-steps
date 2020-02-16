@@ -41,10 +41,10 @@ Route::group(['middleware' => ['auth:api', 'verifiedPhone']], function () {
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin']);
 
     Route::apiResource('badges', 'BadgeController', ['only' => [
-        'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin']);
+        'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin|staff|subscriber']);
 
     Route::apiResource('activities', 'ActivityLogController', ['only' => [
-        'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin']);
+        'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin|staff|subscriber']);
 
 });
 
