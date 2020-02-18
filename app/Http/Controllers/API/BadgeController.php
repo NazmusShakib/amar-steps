@@ -40,7 +40,7 @@ class BadgeController extends BaseController
     public function index()
     {
         $badges = Badge::with('createdBy')->select(
-            'id', 'name', 'display_name', 'target', 'description')
+            'id', 'name', 'display_name', 'target', 'description', 'created_at', 'updated_at')
             ->orderBy('created_at', 'DESC')->paginate(15);
 
         return response()->json($badges, 200);

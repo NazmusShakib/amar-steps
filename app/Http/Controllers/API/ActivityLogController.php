@@ -40,7 +40,7 @@ class ActivityLogController extends BaseController
     public function index()
     {
         $activityLogs = ActivityLog::with('user')->select(
-            'id', 'activity')->where('user_id', Auth::id())
+            'id', 'activity', 'created_at', 'updated_at')->where('user_id', Auth::id())
             ->orderBy('created_at', 'DESC')->get();
 
         return response()->json($activityLogs, 200);
