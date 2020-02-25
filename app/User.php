@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Badge;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -109,5 +110,13 @@ class User extends Authenticatable
             );*/
 
         // print($message->sid);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function badges()
+    {
+        return $this->belongsToMany(Badge::class);
     }
 }

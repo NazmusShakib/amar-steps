@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\ActivityLogCreated;
 use App\Helpers\Helper;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\ActivityLog;
@@ -111,8 +112,10 @@ class ActivityLogController extends BaseController
         }
 
         $input = $request->only(['activity', 'notes']);
-        $input['user_id'] = Auth::id();
         $activityLog = ActivityLog::create($input);
+
+        // Event dispatcher to create badge
+        event(new ActivityLogCreated($activityLog));
 
         return $this->sendResponse($activityLog, 'Activity has been created successfully.');
     }
@@ -120,8 +123,8 @@ class ActivityLogController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {

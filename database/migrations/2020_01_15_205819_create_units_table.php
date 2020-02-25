@@ -19,7 +19,7 @@ class CreateUnitsTable extends Migration
             $table->string('actual_name')->unique();
             $table->string('short_name')->nullable();
             $table->boolean('allow_decimal')->default(false);
-            $table->bigInteger('created_by')->unsigned();
+            $table->bigInteger('created_by')->unsigned()->nullable();
             $table->foreign('created_by')->references('id')
                 ->on('users');
 

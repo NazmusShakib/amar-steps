@@ -17,6 +17,11 @@ class DatabaseSeeder extends Seeder
             RolesPermissionsTableSeeder::class,
         ]);
 
+        \App\Models\Units::updateOrCreate([
+            'actual_name' => 'Walk steps'
+        ], [
+            'short_name' => 'Steps',
+        ]);
 
 
         Artisan::call('passport:install', ['--force' => true]);

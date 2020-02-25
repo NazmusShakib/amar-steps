@@ -19,7 +19,7 @@ class Badge extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'display_name', 'target', 'description'
+        'name', 'display_name', 'target', 'description', 'unit_id'
     ];
 
     /**
@@ -61,6 +61,14 @@ class Badge extends Model
     {
         return $this->belongsTo(User::class, 'created_by', 'id')
             ->select('id', 'name', 'email', 'phone');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 
 }

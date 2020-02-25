@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Helpers\Helper;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Badge;
+use App\Models\Units;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -39,8 +40,8 @@ class BadgeController extends BaseController
      */
     public function index()
     {
-        $badges = Badge::with('createdBy')->select(
-            'id', 'name', 'display_name', 'target', 'description', 'created_at', 'updated_at')
+        $badges = Badge::select(
+            'id', 'name', 'display_name','target', 'description', 'created_at', 'updated_at')
             ->orderBy('created_at', 'DESC')->paginate(15);
 
         return response()->json($badges, 200);
@@ -119,10 +120,10 @@ class BadgeController extends BaseController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:badges,name,NULL,id,deleted_at,NULL',
-            'display_name' => 'nullable',
+            'name' => 'required|max:30|unique:badges,name,NULL,id,deleted_at,NULL',
+            'display_name' => 'nullable|max:30',
             'target' => 'nullable|regex:/^\d+(\.\d{1,3})?$/',
-            'description' => 'nullable',
+            'description' => 'nullable|max:200',
         ]);
 
         if ($validator->fails()) {
@@ -130,7 +131,9 @@ class BadgeController extends BaseController
         }
 
         $input = $request->only(['name', 'display_name', 'target', 'description']);
+        $input['unit_id'] = Units::first()->id;;
         $badge = Badge::create($input);
+
         return $this->sendResponse($badge, 'Badge has been created successfully.');
     }
 
@@ -180,10 +183,10 @@ class BadgeController extends BaseController
     public function update(Request $request, Badge $badge)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:badges,name,' . $badge->id,
-            'display_name' => 'nullable',
+            'name' => 'required|max:30|unique:badges,name,' . $badge->id,
+            'display_name' => 'nullable|max:30',
             'target' => 'nullable|regex:/^\d+(\.\d{1,3})?$/',
-            'description' => 'nullable',
+            'description' => 'nullable|max:200',
         ]);
 
         if ($validator->fails()) {
