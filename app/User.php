@@ -3,14 +3,11 @@
 namespace App;
 
 use App\Models\Badge;
+use App\Models\BadgeUnit;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
-use App\Models\BadgeUnit;
-use Twilio\Exceptions\RestException;
-use Twilio\Rest\Client;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Authenticatable
@@ -119,7 +116,8 @@ class User extends Authenticatable
     public function badges()
     {
         return $this->belongsToMany(Badge::class, 'user_badge')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->orderBy('user_badge.created_at', 'DESC');
     }
 
     /**
@@ -127,7 +125,7 @@ class User extends Authenticatable
      */
     public function unitTotal()
     {
-        return $this->belongsToMany(BadgeUnit::class,'user_unit_totals', 'user_id', 'unit_id')
+        return $this->belongsToMany(BadgeUnit::class, 'user_unit_totals', 'user_id', 'unit_id')
             ->withPivot('grand_total')
             ->withTimestamps();
     }
