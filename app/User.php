@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use App\Models\BadgeUnit;
 use Twilio\Exceptions\RestException;
 use Twilio\Rest\Client;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
@@ -117,6 +118,17 @@ class User extends Authenticatable
      */
     public function badges()
     {
-        return $this->belongsToMany(Badge::class);
+        return $this->belongsToMany(Badge::class, 'user_badge')
+            ->withTimestamps();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function unitTotal()
+    {
+        return $this->belongsToMany(BadgeUnit::class,'user_unit_totals', 'user_id', 'unit_id')
+            ->withPivot('grand_total')
+            ->withTimestamps();
     }
 }

@@ -3,10 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\ActivityLogCreated;
-use App\Models\ActivityLog;
 use App\Models\Badge;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Models\UserUnitTotal;
+use App\User;
 use Illuminate\Support\Facades\DB;
 
 class BadgeAssign
@@ -24,22 +23,35 @@ class BadgeAssign
     /**
      * Handle the event.
      *
-     * @param  ActivityLogCreated  $event
-     * @return void
+     * @param ActivityLogCreated $event
      */
     public function handle(ActivityLogCreated $event)
     {
-        $activityJson = json_decode($event->activityLog->activity, TRUE);
+        $activityJson = json_decode($event->activityLog->activity, true);
         $steps = $activityJson['steps'];
+        $user = User::find($event->userID);
 
-        \App\Models\UserUnitTotal::updateOrCreate([
+        UserUnitTotal::updateOrCreate([
             'user_id' => $event->userID,
             'unit_id' => 1
         ], [
-            'grand_total' => DB::raw("grand_total::float + $steps"),
-        ])->limit(1); // optional - to ensure only one record is updated.
+            // 'grand_total' => DB::raw("grand_total + $steps"),
+        ])->increment('grand_total', $steps);
 
-        // $badges = Badge::select('id', 'target')->get();
+        /*$user->unitTotal()->updateExistingPivot(1, [
+            'grand_total' => DB::raw("grand_total + $steps")
+        ]);*/
 
+        $updatedGrandTotal = UserUnitTotal::where([
+            'user_id' => $event->userID,
+            'unit_id' => 1
+        ])->select('grand_total')->first()->grand_total;
+
+        Badge::select('id', 'target')
+            ->where('target', '<=', $updatedGrandTotal)
+            ->where('unit_id', 1)
+            ->get('id')->map(function ($item) use ($user) {
+                $user->badges()->syncWithoutDetaching($item->id);
+            });
     }
 }

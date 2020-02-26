@@ -37,12 +37,14 @@ Route::group(['middleware' => ['auth:api', 'verifiedPhone']], function () {
     Route::post('profile', 'RegisterController@updateProfile');
     Route::post('profile/change-password', 'RegisterController@changePassword');
 
+
     Route::apiResource('users', 'UserController', ['only' => [
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin']);
 
     Route::apiResource('badges', 'BadgeController', ['only' => [
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin|staff|subscriber']);
 
+    Route::get('activities/badges', 'ActivityLogController@activityBadge');
     Route::apiResource('activities', 'ActivityLogController', ['only' => [
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin|staff|subscriber']);
 

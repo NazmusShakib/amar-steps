@@ -7994,6 +7994,8 @@ __webpack_require__.r(__webpack_exports__);
         axios["delete"](_this2.$baseURL + "badges/" + id).then(function (response) {
           _this2.badges.data.splice(index, 1);
 
+          _this2.badges.total--;
+
           _this2.$notification.success(response.data.message);
         })["catch"](function (error) {
           console.log("Could not delete this badge.");
@@ -8011,11 +8013,9 @@ __webpack_require__.r(__webpack_exports__);
 
     this.$emit("update:layout", _components_layouts_MasterLayoutComponent__WEBPACK_IMPORTED_MODULE_0__["default"]);
     this.$eventBus.$on("add-badge", function (badge) {
-      try {
-        _this3.badges.data.unshift(badge);
-      } catch (error) {
-        _this3.getBadges();
-      }
+      _this3.badges.total++;
+
+      _this3.badges.data.unshift(badge);
     });
   }
 });
@@ -8141,7 +8141,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.submitMethod === "create") {
         axios.post(this.$baseURL + 'badges', this.badge).then(function (response) {
-          _this.$eventBus.$emit('add-badge', _this.badge);
+          _this.$eventBus.$emit('add-badge', response.data.data);
 
           _this.$notification.success(response.data.message);
 

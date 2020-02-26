@@ -66,9 +66,9 @@ class Badge extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'user_badge')->withTimestamps();
     }
 
 }

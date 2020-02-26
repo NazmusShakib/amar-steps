@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Events\ActivityLogCreated;
-use App\Helpers\Helper;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\ActivityLog;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -205,5 +205,47 @@ class ActivityLogController extends BaseController
             return $this->sendError($exception->getMessage(), '', 422);
         }
     }
+
+
+    /**
+     * @OA\Get(
+     *      path="/api/v1/activities/badges",
+     *      operationId="activities-badges",
+     *      tags={"Activities"},
+     *      summary="Auth badges",
+     *      description="Returns all badges",
+     *      @OA\Parameter(
+     *          name="authorization",
+     *          description="Bearer token",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *          in="header"
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Retrieve single badge by id.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {})
+     *          )
+     *       ),
+     * )
+     *
+     */
+    public function activityBadge()
+    {
+        $badges = User::with(['badges' => function ($query) {
+            $query->select('badges.id', 'badges.name', 'display_name', 'target', 'description');
+        }])->find(Auth::id())->badges;
+
+        if (count($badges) <= 0) {
+            return $this->sendError('Badge not found.');
+        }
+
+        return $this->sendResponse($badges, 'Badges retrieved successfully.');
+    }
+
 
 }

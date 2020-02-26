@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             RolesPermissionsTableSeeder::class,
         ]);
 
-        \App\Models\Units::updateOrCreate([
+        \App\Models\BadgeUnit::updateOrCreate([
             'actual_name' => 'Walk steps'
         ], [
             'short_name' => 'Steps',

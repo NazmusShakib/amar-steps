@@ -172,6 +172,40 @@
                 }
             }
         },
+        "/api/v1/activities/badges": {
+            "get": {
+                "tags": [
+                    "Activities"
+                ],
+                "summary": "Auth badges",
+                "description": "Returns all badges",
+                "operationId": "activities-badges",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve single badge by id.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": [],
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/badges": {
             "get": {
                 "tags": [

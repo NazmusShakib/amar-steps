@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Helpers\Helper;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\Badge;
-use App\Models\Units;
+use App\Models\BadgeUnit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -131,7 +131,7 @@ class BadgeController extends BaseController
         }
 
         $input = $request->only(['name', 'display_name', 'target', 'description']);
-        $input['unit_id'] = Units::first()->id;;
+        $input['unit_id'] = BadgeUnit::first()->id;;
         $badge = Badge::create($input);
 
         return $this->sendResponse($badge, 'Badge has been created successfully.');
