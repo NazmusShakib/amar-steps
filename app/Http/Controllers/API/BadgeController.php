@@ -41,7 +41,8 @@ class BadgeController extends BaseController
     public function index()
     {
         $badges = Badge::select(
-            'id', 'name', 'display_name','target', 'description', 'created_at', 'updated_at')
+            'id', 'name', 'target', 'unit_id',
+            'description', 'badge_icon', 'created_at', 'updated_at')
             ->orderBy('created_at', 'DESC')->paginate(15);
 
         return response()->json($badges, 200);
@@ -65,15 +66,6 @@ class BadgeController extends BaseController
      *          name="name",
      *          description="name",
      *          required=true,
-     *          in="query",
-     *          @OA\Schema(
-     *              type="string",
-     *          ),
-     *      ),
-     *      @OA\Parameter(
-     *          name="display_name",
-     *          description="display_name",
-     *          required=false,
      *          in="query",
      *          @OA\Schema(
      *              type="string",
@@ -121,18 +113,23 @@ class BadgeController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:30|unique:badges,name,NULL,id,deleted_at,NULL',
-            'display_name' => 'nullable|max:30',
+            'unit_id' => 'required|exists:units,id',
+            'badge_icon' => 'nullable|mimes:jpeg,jpg,png,gif|max:1024',
             'target' => 'nullable|regex:/^\d+(\.\d{1,3})?$/',
             'description' => 'nullable|max:200',
+        ], [
+            'unit_id.required' => 'The unit field is required.',
+            'unit_id.exists' => 'The selected unit is invalid.',
         ]);
 
         if ($validator->fails()) {
             return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
         }
 
-        $input = $request->only(['name', 'display_name', 'target', 'description']);
-        $input['unit_id'] = BadgeUnit::first()->id;;
+        $input = $request->only(['name', 'target', 'description', 'unit_id']);
         $badge = Badge::create($input);
+        $badge['unit'] = BadgeUnit::select('id', 'actual_name', 'short_name')
+            ->find($input['unit_id']);
 
         return $this->sendResponse($badge, 'Badge has been created successfully.');
     }
@@ -166,7 +163,7 @@ class BadgeController extends BaseController
      */
     public function show($id)
     {
-        $badge = Badge::with('createdBy')->find($id);
+        $badge = Badge::with('createdBy', 'unit')->find($id);
 
         if (is_null($badge)) {
             return $this->sendError('Badge not found.');
@@ -184,9 +181,10 @@ class BadgeController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:30|unique:badges,name,' . $badge->id,
-            'display_name' => 'nullable|max:30',
+            'unit_id' => 'required|exists:units,id',
             'target' => 'nullable|regex:/^\d+(\.\d{1,3})?$/',
             'description' => 'nullable|max:200',
+            'badge_icon' => 'nullable|mimes:jpeg,jpg,png,gif|max:1024',
         ]);
 
         if ($validator->fails()) {
@@ -197,6 +195,7 @@ class BadgeController extends BaseController
             'name' => $request->name,
             'display_name' => $request->display_name,
             'target' => $request->target,
+            'unit_id' => $request->unit_id,
             'description' => $request->description,
         ]);
 

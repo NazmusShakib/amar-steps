@@ -22,6 +22,11 @@ class DatabaseSeeder extends Seeder
         ], [
             'short_name' => 'Steps',
         ]);
+        \App\Models\BadgeUnit::updateOrCreate([
+            'actual_name' => 'Walk distance'
+        ], [
+            'short_name' => 'Distance',
+        ]);
 
 
         Artisan::call('passport:install', ['--force' => true]);

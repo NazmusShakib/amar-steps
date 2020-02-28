@@ -44,7 +44,7 @@
                             <tr>
                                 <th>SN</th>
                                 <th>Name</th>
-                                <th>Display name</th>
+                                <th>Unit</th>
                                 <th>Target</th>
                                 <th>Description</th>
                                 <th class="text-nowrap">Action</th>
@@ -57,7 +57,7 @@
                             <tr v-else v-for="(badge, index) in badges.data" v-bind:key="index">
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ badge.name }}</td>
-                                <td>{{ badge.display_name }}</td>
+                                <td>{{ badge.unit.short_name }}</td>
                                 <td>{{ badge.target }}</td>
                                 <td>{{ badge.description }}</td>
                                 <td>
@@ -85,7 +85,7 @@
 
                         <vue-pagination
                             :pagination="badges"
-                            v-if="badges.total >= 11"
+                            v-if="badges.total >= badges.per_page"
                             @paginate="getBadges()"
                             :offset="4"
                         ></vue-pagination>
@@ -174,6 +174,9 @@
             this.$eventBus.$on("add-badge", badge => {
                 this.badges.total++;
                 this.badges.data.unshift(badge);
+            });
+            this.$eventBus.$on("reload-badges", () => {
+                this.getBadges();
             });
         }
     };

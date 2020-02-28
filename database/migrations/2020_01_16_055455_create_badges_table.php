@@ -16,9 +16,9 @@ class CreateBadgesTable extends Migration
         Schema::create('badges', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('display_name')->nullable();
             $table->double('target')->nullable();
             $table->string('description')->nullable();
+            $table->string('badge_icon')->nullable();
 
             $table->bigInteger('unit_id')->unsigned()->nullable();
             $table->foreign('unit_id')->references('id')

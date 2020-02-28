@@ -19,7 +19,7 @@ class Badge extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'display_name', 'target', 'description', 'unit_id'
+        'name', 'target', 'badge_icon', 'description', 'unit_id'
     ];
 
     /**
@@ -45,6 +45,8 @@ class Badge extends Model
         'created_by', 'unit_id'
     ];
 
+    protected $with = ['unit'];
+
     public static function boot()
     {
         parent::boot();
@@ -61,6 +63,15 @@ class Badge extends Model
     {
         return $this->belongsTo(User::class, 'created_by', 'id')
             ->select('id', 'name', 'email', 'phone');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function unit()
+    {
+        return $this->belongsTo(BadgeUnit::class, 'unit_id')
+            ->select('id', 'actual_name', 'short_name');
     }
 
     /**

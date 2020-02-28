@@ -21,23 +21,21 @@
                 </div>
                 <div
                     class="form-group col-md-12"
-                    v-bind:class="{'has-error' : errors.has('display_name')}"
+                    v-bind:class="{'has-error' : errors.has('unit_id')}"
                 >
-                    <label class="control-label">Display name:</label>
-                    <input
-                        type="text"
-                        name="display_name"
-                        v-model.trim="badge.display_name"
-                        v-bind:class="{'has-error' : errors.has('display_name')}"
-                        placeholder="Display name"
-                        class="form-control"
-                    />
-                    <div
-                        v-show="errors.has('display_name')"
-                        class="help text-danger"
-                    >{{ errors.first('display_name') }}
+                    <label class="control-label">Unit:*</label>
+                    <select v-model.trim="badge.unit_id" name="unit_id"
+                            v-validate="'required'"
+                            v-bind:class="{'has-error' : errors.has('unit_id')}"
+                            class="form-control">
+                        <option value="1">Steps</option>
+                        <option value="2">Distance</option>
+                    </select>
+                    <div v-show="errors.has('unit_id')" class="help text-danger">
+                        {{ errors.first('unit_id') }}
                     </div>
                 </div>
+
 
                 <div
                     class="form-group col-md-12"
@@ -117,6 +115,7 @@
                     axios.put(this.$baseURL + 'badges/' + this.badge.id, this.badge)
                         .then(response => {
                             this.$notification.success(response.data.message);
+                            this.$eventBus.$emit('reload-badges');
                             this.onClose();
                         })
                         .catch(error => {
@@ -138,6 +137,7 @@
             this.$eventBus.$on("edit-badge", badge => {
                 this.submitMethod = "update";
                 this.badge = badge;
+                this.badge.unit_id = badge.unit.id;
                 this.$emit("update:dialogVisible", true)
                     .$emit("update:dialogTitle", "Badge update");
             });
