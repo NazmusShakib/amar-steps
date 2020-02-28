@@ -20,12 +20,12 @@ class DatabaseSeeder extends Seeder
         \App\Models\BadgeUnit::updateOrCreate([
             'actual_name' => 'Walk steps'
         ], [
-            'short_name' => 'Steps',
+            'short_name' => 'steps',
         ]);
         \App\Models\BadgeUnit::updateOrCreate([
             'actual_name' => 'Walk distance'
         ], [
-            'short_name' => 'Distance',
+            'short_name' => 'distance',
         ]);
 
 
