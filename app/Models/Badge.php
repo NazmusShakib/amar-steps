@@ -47,11 +47,29 @@ class Badge extends Model
 
     protected $with = ['unit'];
 
+    //Add extra attribute
+    protected $attributes = ['status'];
+
+    //Make it available in the json response
+    protected $appends = ['status'];
+
+    public function getStatusAttribute()
+    {
+        $unlock = 'locked';
+        $status = Badge::whereHas('user', function ($q) {
+            $q->where('users.id', '=', Auth::id());
+        })->find($this->id);
+        if ($status) {
+            $unlock = 'unlocked';
+        }
+        return $unlock;
+    }
+
+
     public static function boot()
     {
         parent::boot();
-        static::creating(function($model)
-        {
+        static::creating(function ($model) {
             $model->created_by = Auth::id();
         });
     }
@@ -79,7 +97,7 @@ class Badge extends Model
      */
     public function user()
     {
-        return $this->belongsToMany(User::class, 'user_badge')->withTimestamps();
+        return $this->belongsToMany(User::class, 'user_badge','badge_id', 'user_id')->withTimestamps();
     }
 
 }

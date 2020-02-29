@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Events\ActivityLogCreated;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\ActivityLog;
+use App\Models\Badge;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -236,9 +237,8 @@ class ActivityLogController extends BaseController
      */
     public function activityBadge()
     {
-        $badges = User::with(['badges' => function ($query) {
-            $query->select('badges.id', 'badges.name', 'display_name', 'target', 'description');
-        }])->find(Auth::id())->badges;
+        $badges = Badge::select('badges.id', 'badges.name', 'target', 'unit_id', 'description', 'badge_icon')
+            ->get();
 
         if (count($badges) <= 0) {
             return $this->sendError('Badge not found.');
