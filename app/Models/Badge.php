@@ -45,10 +45,10 @@ class Badge extends Model
         'created_by', 'unit_id'
     ];
 
-    protected $with = ['unit'];
+    protected $with = ['unit', 'unit.userUnitTotal'];
 
     //Add extra attribute
-    protected $attributes = ['status'];
+    // protected $attributes = ['status'];
 
     //Make it available in the json response
     protected $appends = ['status'];

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class BadgeUnit extends Model
 {
@@ -11,5 +12,11 @@ class BadgeUnit extends Model
     public function badge()
     {
         return $this->hasOne(Badge::class, 'unit_id');
+    }
+
+    public function userUnitTotal()
+    {
+        return $this->hasOne(UserUnitTotal::class, 'unit_id')
+            ->where('user_id', Auth::id())->select('grand_total', 'unit_id');
     }
 }
