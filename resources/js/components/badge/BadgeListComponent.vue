@@ -46,7 +46,7 @@
                                 <th>Name</th>
                                 <th>Unit</th>
                                 <th>Target</th>
-                                <th>Description</th>
+                                <th>Icon</th>
                                 <th class="text-nowrap">Action</th>
                             </tr>
                             </thead>
@@ -58,8 +58,11 @@
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ badge.name }}</td>
                                 <td>{{ badge.unit.short_name }}</td>
-                                <td>{{ badge.target }}</td>
-                                <td>{{ badge.description }}</td>
+                                <td>{{ badge.target || 'n/a'}}</td>
+                                <td>
+                                    <img :src="'/images/badges/thumb/thumb_200x200_' + badge.badge_icon"
+                                         alt="badge_icon" height="30" width="30"/>
+                                </td>
                                 <td>
                                     <a
                                         href="javascript:void(0)"

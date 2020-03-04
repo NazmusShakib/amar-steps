@@ -8,7 +8,11 @@ use App\Models\Badge;
 use App\Models\BadgeUnit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
+use Ramsey\Uuid\Uuid;
 
 class BadgeController extends BaseController
 {
@@ -125,8 +129,24 @@ class BadgeController extends BaseController
         if ($validator->fails()) {
             return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
         }
-
         $input = $request->only(['name', 'target', 'description', 'unit_id']);
+        if($request->hasFile('badge_icon'))
+        {
+            $imageID = Uuid::uuid4()->toString();
+            $imageName = $imageID . '.' . $request->file('badge_icon')->getClientOriginalExtension();
+            $thumb_200x200 = 'thumb_200x200_' . $imageName;
+            if (!file_exists(public_path('images/badges/thumb/'))) {
+                File::makeDirectory(public_path('images/badges/thumb/'),0755, true);
+            }
+            $request->file('badge_icon')->move(
+                public_path('images/badges/'), $imageName
+            );
+            $path = public_path('images/badges/') . $imageName;
+            Image::make($path)->resize(200, 200)->save(public_path('images/badges/thumb/') . $thumb_200x200);
+            $input['badge_icon'] = $imageName;
+        }
+
+
         $badge = Badge::create($input);
         $badge['unit'] = BadgeUnit::select('id', 'actual_name', 'short_name')
             ->find($input['unit_id']);
@@ -190,6 +210,29 @@ class BadgeController extends BaseController
         if ($validator->fails()) {
             return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
         }
+
+        /*$imageID = Uuid::uuid4()->toString();
+
+        $imageName = $imageID . '.' . $request->file('profile_picture')->getClientOriginalExtension();
+        $thumb_200x200 = 'thumb_200x200_' . $imageName;
+        $thumb_96x96 = 'thumb_96x96_' . $imageName;
+
+        $request->file('profile_picture')->move(
+            public_path() . '/images/profiles/', $imageName
+        );
+        $path = public_path() . '/images/profiles/' . $imageName;
+
+        Image::make($path)->resize(200, 200)->save(public_path() . '/images/profiles/thumb/' . $thumb_200x200);
+        Image::make($path)->resize(96, 96)->save(public_path() . '/images/profiles/thumb/' . $thumb_96x96);
+
+        $user = DB::table('users')->where('id', Auth::User()->id)->first();
+
+
+        if (file_exists(public_path() . '/images/profiles/' . $user->profile_picture) && $user->profile_picture != null) {
+            @unlink(public_path() . '/images/profiles/thumb/thumb_200x200_' . $user->profile_picture);
+            @unlink(public_path() . '/images/profiles/thumb/thumb_96x96_' . $user->profile_picture);
+            @unlink(public_path() . '/images/profiles/' . $user->profile_picture);
+        }*/
 
         $badge->update([
             'name' => $request->name,

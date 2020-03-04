@@ -22,7 +22,8 @@ import {
     Option,
     OptionGroup,
     Button,
-    ButtonGroup
+    ButtonGroup,
+    Upload
 } from 'element-ui'
 
 import 'element-ui/lib/theme-chalk/index.css';
@@ -53,5 +54,6 @@ Vue.use(Option);
 Vue.use(OptionGroup);
 Vue.use(Button);
 Vue.use(ButtonGroup);
+Vue.use(Upload);
 
 export default {}
