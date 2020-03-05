@@ -7,6 +7,8 @@ use App\Models\BadgeUnit;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
@@ -14,6 +16,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable, EntrustUserTrait;
 
+    protected $table = 'users';
     /**
      * The attributes that are mass assignable.
      *
@@ -21,7 +24,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 'email', 'phone', 'user_code',
-        'height', 'weight', 'headshot', 'password',
+        'height', 'weight', 'headshot', 'password'
     ];
 
     /**
@@ -30,7 +33,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'verification_code', 'email_verified_at', 'pivot'
+        'password', 'remember_token', 'verification_code', 'email_verified_at'
     ];
 
     /**
@@ -42,6 +45,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'phone_verified_at' => 'datetime',
     ];
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = ['id'];
+
+    //Make it available in the json response
+    // protected $appends = ['grand_total_distance'];
 
     public function hasVerifiedPhone()
     {
@@ -63,13 +76,6 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class)->select('name', 'display_name');
     }
-
-    /**
-     * Return role with auth object
-     * @var array
-     */
-    // protected $with = ['roles'];
-
 
     /**
      * return user profile
@@ -129,5 +135,22 @@ class User extends Authenticatable
             ->withPivot('grand_total')
             ->select('units.short_name', 'grand_total')
             ->withTimestamps();
+    }
+
+
+    /**
+     * @return mixed|null
+     */
+    public function getGrandTotalDistanceAttribute()
+    {
+        $distanceUnitID = BadgeUnit::where('short_name', 'distance')->pluck('id')->first();
+        if($distanceUnitID) {
+            $userDistance = DB::table('user_unit_totals')
+                ->where('user_id', '=', $this->id)
+                ->where('unit_id', '=', $distanceUnitID)
+                ->pluck('grand_total')->first();
+            return $userDistance;
+        }
+       return null;
     }
 }
