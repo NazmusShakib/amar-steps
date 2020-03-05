@@ -130,11 +130,11 @@
                     headers: { 'content-type': 'multipart/form-data' }
                 };
                 let formData = new FormData();
+                $.each(this.badge, function(key, value) {
+                    formData.append(key, value);
+                });
 
                 if (this.submitMethod === "create") {
-                    $.each(this.badge, function(key, value) {
-                        formData.append(key, value);
-                    });
                     axios.post(this.$baseURL + 'badges', formData, config)
                         .then(response => {
                         this.$eventBus.$emit('add-badge', response.data.data);
@@ -145,13 +145,19 @@
                         this.$notification.error(error.response.data.message);
                     });
                 } else if (this.submitMethod === "update") {
-                    axios.put(this.$baseURL + 'badges/' + this.badge.id, this.badge)
+
+                    if(typeof(formData.get('badge_icon')) === 'string') {
+                        formData.delete('badge_icon');
+                    }
+
+                    axios.post(this.$baseURL + 'badges/update/' + this.badge.id, formData, config)
                         .then(response => {
                             this.$notification.success(response.data.message);
                             this.$eventBus.$emit('reload-badges');
                             this.onClose();
                         })
                         .catch(error => {
+                            this.$setErrorsFromResponse(error.response.data);
                             this.$notification.error(error.response.data.message);
                         });
                 }

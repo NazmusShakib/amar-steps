@@ -41,8 +41,9 @@ Route::group(['middleware' => ['auth:api', 'verifiedPhone']], function () {
     Route::apiResource('users', 'UserController', ['only' => [
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin']);
 
+    Route::post('badges/update/{id}', 'BadgeController@update');
     Route::apiResource('badges', 'BadgeController', ['only' => [
-        'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin|staff|subscriber']);
+        'index', 'store', 'show', 'destroy']])->middleware(['role:admin|staff|subscriber']);
 
     Route::get('activities/badges', 'ActivityLogController@activityBadge');
     Route::apiResource('activities', 'ActivityLogController', ['only' => [

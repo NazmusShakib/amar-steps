@@ -146,7 +146,6 @@ class BadgeController extends BaseController
             $input['badge_icon'] = $imageName;
         }
 
-
         $badge = Badge::create($input);
         $badge['unit'] = BadgeUnit::select('id', 'actual_name', 'short_name')
             ->find($input['unit_id']);
@@ -192,15 +191,11 @@ class BadgeController extends BaseController
         return $this->sendResponse($badge, 'Badge retrieved successfully.');
     }
 
-    /**
-     * @param Request $request
-     * @param Badge $badge
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function update(Request $request, Badge $badge)
+
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:30|unique:badges,name,' . $badge->id,
+            'name' => 'required|max:30|unique:badges,name,' . $id,
             'unit_id' => 'required|exists:units,id',
             'target' => 'nullable|regex:/^\d+(\.\d{1,3})?$/',
             'description' => 'nullable|max:200',
@@ -210,37 +205,34 @@ class BadgeController extends BaseController
         if ($validator->fails()) {
             return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
         }
+        $input = $request->only(['name', 'target', 'description', 'unit_id']);
 
-        /*$imageID = Uuid::uuid4()->toString();
+        $badge = Badge::findOrFail($id);
 
-        $imageName = $imageID . '.' . $request->file('profile_picture')->getClientOriginalExtension();
-        $thumb_200x200 = 'thumb_200x200_' . $imageName;
-        $thumb_96x96 = 'thumb_96x96_' . $imageName;
+        if($request->hasFile('badge_icon'))
+        {
+            $imageID = Uuid::uuid4()->toString();
+            $imageName = $imageID . '.' . $request->file('badge_icon')->getClientOriginalExtension();
+            $thumb_200x200 = 'thumb_200x200_' . $imageName;
+            if (!file_exists(public_path('images/badges/thumb/'))) {
+                File::makeDirectory(public_path('images/badges/thumb/'),0755, true);
+            }
+            $request->file('badge_icon')->move(
+                public_path('images/badges/'), $imageName
+            );
+            $path = public_path('images/badges/') . $imageName;
+            Image::make($path)->resize(200, 200)->save(public_path('images/badges/thumb/') . $thumb_200x200);
+            $input['badge_icon'] = $imageName;
 
-        $request->file('profile_picture')->move(
-            public_path() . '/images/profiles/', $imageName
-        );
-        $path = public_path() . '/images/profiles/' . $imageName;
+            // unlink old file
+            if (file_exists(public_path() . '/images/badges/' . $badge->badge_icon) && $badge->badge_icon != null) {
+                @unlink(public_path() . '/images/badges/thumb/thumb_200x200_' . $badge->badge_icon);
+                @unlink(public_path() . '/images/badges/' . $badge->badge_icon);
+            }
+            $input['badge_icon'] = $imageName;
+        }
 
-        Image::make($path)->resize(200, 200)->save(public_path() . '/images/profiles/thumb/' . $thumb_200x200);
-        Image::make($path)->resize(96, 96)->save(public_path() . '/images/profiles/thumb/' . $thumb_96x96);
-
-        $user = DB::table('users')->where('id', Auth::User()->id)->first();
-
-
-        if (file_exists(public_path() . '/images/profiles/' . $user->profile_picture) && $user->profile_picture != null) {
-            @unlink(public_path() . '/images/profiles/thumb/thumb_200x200_' . $user->profile_picture);
-            @unlink(public_path() . '/images/profiles/thumb/thumb_96x96_' . $user->profile_picture);
-            @unlink(public_path() . '/images/profiles/' . $user->profile_picture);
-        }*/
-
-        $badge->update([
-            'name' => $request->name,
-            'display_name' => $request->display_name,
-            'target' => $request->target,
-            'unit_id' => $request->unit_id,
-            'description' => $request->description,
-        ]);
+        $badge->update($input);
 
         return $this->sendResponse($badge, 'Badge has been updated successfully.');
     }
