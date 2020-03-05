@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\ActivityLog;
 use App\Models\Badge;
 use App\Models\BadgeUnit;
 use Carbon\Carbon;
@@ -137,6 +138,15 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function currentMonthActivityLog()
+    {
+        $currentMonth = date('m');
+        return $this->hasMany(ActivityLog::class, 'user_id', 'id')
+            ->whereRaw('MONTH(created_at) = ?',[$currentMonth]);
+    }
 
     /**
      * @return mixed|null
