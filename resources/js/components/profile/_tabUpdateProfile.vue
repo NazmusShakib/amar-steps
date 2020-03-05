@@ -88,6 +88,35 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-md-12" for="city">City</label>
+                        <div class="col-md-12">
+                            <input type="text" placeholder="City" name="city" id="city"
+                                   v-model.trim="auth.profile.city"
+                                   class="form-control form-control-line">
+                            <div v-show="errors.has('city')" class="help text-danger">
+                                {{ errors.first('city') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-sm-12">Country</label>
+                        <div class="col-md-12">
+                            <input type="text" placeholder="Country" name="country" id="country"
+                                   v-model.trim="auth.profile.country"
+                                   class="form-control form-control-line">
+                            <div v-show="errors.has('country')" class="help text-danger">
+                                {{ errors.first('country') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="form-group">
                 <label class="col-md-12" for="address">Address</label>
@@ -144,6 +173,8 @@
                     email: authObj.email,
                     height: authObj.height,
                     weight: authObj.weight,
+                    city: authObj.profile.city,
+                    country: authObj.profile.country,
                     bio: authObj.profile.bio,
                     gender: authObj.profile.gender,
                     address: authObj.profile.address

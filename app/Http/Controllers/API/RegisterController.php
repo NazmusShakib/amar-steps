@@ -227,6 +227,8 @@ class RegisterController extends BaseController
             'email' => 'required|email|unique:users,email,' . $request->user()->id,
             'height' => 'required',
             'weight' => 'required',
+            'city' => 'nullable',
+            'country' => 'nullable',
             'gender' => 'nullable|in:male,female',
             'address' => 'string|nullable',
             'bio' => 'string|nullable',
@@ -239,7 +241,7 @@ class RegisterController extends BaseController
         $userOnly = $request->only('name', 'email', 'height', 'weight');
         $request->user()->update($userOnly);
 
-        $profileOnly = $request->only('gender', 'bio', 'address');
+        $profileOnly = $request->only('gender', 'city', 'country', 'bio', 'address');
         $request->user()->profile()->update($profileOnly);
 
         $profile = new ProfileResource($request->user());

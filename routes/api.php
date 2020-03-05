@@ -49,6 +49,8 @@ Route::group(['middleware' => ['auth:api', 'verifiedPhone']], function () {
     Route::apiResource('activities', 'ActivityLogController', ['only' => [
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin|staff|subscriber']);
 
+    Route::get('leaderboard', 'LeaderBoardController@leaderBoard');
+
 });
 
 Route::fallback(function(){

@@ -30,7 +30,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'verification_code', 'email_verified_at'
+        'password', 'remember_token', 'verification_code', 'email_verified_at', 'pivot'
     ];
 
     /**
@@ -127,6 +127,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(BadgeUnit::class, 'user_unit_totals', 'user_id', 'unit_id')
             ->withPivot('grand_total')
+            ->select('units.short_name', 'grand_total')
             ->withTimestamps();
     }
 }
