@@ -11,6 +11,31 @@ use Illuminate\Http\Request;
 
 class LeaderBoardController extends Controller
 {
+    /**
+     * @OA\Get(
+     *      path="/api/v1/leaderboard",
+     *      operationId="leaderboard",
+     *      tags={"Leader Board"},
+     *      summary="leader board",
+     *      description="Return leader board",
+     *      @OA\Parameter(
+     *          name="authorization",
+     *          description="Bearer token",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *          in="header"
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Retrieve leaderboard.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *       )
+     * )
+     */
     public function leaderboard()
     {
         $wordRank = User::with(['profile' => function($query) {

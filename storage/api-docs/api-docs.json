@@ -261,15 +261,6 @@
                         }
                     },
                     {
-                        "name": "display_name",
-                        "in": "query",
-                        "description": "display_name",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "name": "target",
                         "in": "query",
                         "description": "target",
@@ -424,6 +415,35 @@
                                     "type": "object"
                                 }
                             }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/leaderboard": {
+            "get": {
+                "tags": [
+                    "Leader Board"
+                ],
+                "summary": "leader board",
+                "description": "Return leader board",
+                "operationId": "leaderboard",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve leaderboard.",
+                        "content": {
+                            "application/json": {}
                         }
                     }
                 }

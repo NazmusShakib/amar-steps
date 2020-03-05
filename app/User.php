@@ -149,7 +149,7 @@ class User extends Authenticatable
     }
 
     /**
-     * @return mixed|null
+     * @return int|mixed
      */
     public function getGrandTotalDistanceAttribute()
     {
@@ -161,6 +161,6 @@ class User extends Authenticatable
                 ->pluck('grand_total')->first();
             return $userDistance;
         }
-       return null;
+       return 0;
     }
 }
