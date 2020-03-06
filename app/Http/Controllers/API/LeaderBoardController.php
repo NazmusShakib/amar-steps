@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\LeaderBoardResource;
+use App\Http\Resources\CurrentMonthRankResource;
+use App\Http\Resources\WorldRankResource;
 use App\Models\BadgeUnit;
 use App\User;
-use function foo\func;
 use Illuminate\Http\Request;
 
 class LeaderBoardController extends Controller
@@ -38,16 +38,43 @@ class LeaderBoardController extends Controller
      */
     public function leaderboard()
     {
-        $wordRank = User::with(['profile' => function($query) {
-            $query->select('profiles.city', 'profiles.country','profiles.user_id');
-        }, 'currentMonthActivityLog' => function ($query) {
-            $query->select('activity_logs.activity','activity_logs.user_id');
-        }])
-            ->select('id', 'name', 'headshot')->get();
-        //return $wordRank;
+        return [
+            'world_rank' => $this->worldRank(),
+            'current_month_rank' => $this->currentMonthRank(),
+        ];
+    }
 
-       return LeaderBoardResource::collection($wordRank)
-           ->sortByDesc(('grand_total_distance'));
+
+    /**
+     * Return top 15 globally.
+     */
+    public function worldRank()
+    {
+        $wordRank = User::with(['profile' => function ($query) {
+            $query->select('profiles.city', 'profiles.country', 'profiles.user_id');
+        }])->select('id', 'name', 'headshot')->get();
+
+        $wordRank = WorldRankResource::collection($wordRank)
+            ->sortByDesc(('grand_total_distance'))->take(15);
+
+        return $wordRank;
+    }
+
+    /**
+     * Return top 15 on month.
+     */
+    public function currentMonthRank()
+    {
+        $currentMonthRank = User::with(['profile' => function ($query) {
+            $query->select('profiles.city', 'profiles.country', 'profiles.user_id');
+        }])->whereHas('currentMonthActivityLog', function ($query) {
+            $query->select('activity_logs.activity', 'activity_logs.user_id');
+        })->select('id', 'name', 'headshot')->get();
+
+        $currentMonthRank = CurrentMonthRankResource::collection($currentMonthRank)
+            ->sortByDesc(('current_month_total_distance'))->take(15);
+
+        return $currentMonthRank;
     }
 
 
