@@ -449,6 +449,65 @@
                 }
             }
         },
+        "/api/v1/leaderboard/auth-rank": {
+            "get": {
+                "tags": [
+                    "Leader Board"
+                ],
+                "summary": "leader board auth rank",
+                "description": "Return leader board auth rank",
+                "operationId": "leaderboard-auth-rank",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve leaderboard.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "auth_rank_globally": {
+                                            "id": 1,
+                                            "name": "Admin User",
+                                            "headshot": null,
+                                            "grand_distance": 8151.2232,
+                                            "rank": 1,
+                                            "profile": {
+                                                "city": "Dhaka",
+                                                "country": "Bangladesh",
+                                                "user_id": 1
+                                            }
+                                        },
+                                        "auth_current_month_rank": {
+                                            "id": 1,
+                                            "name": "Admin User",
+                                            "headshot": null,
+                                            "current_month_distance": 6113.4174,
+                                            "rank": 1,
+                                            "profile": {
+                                                "city": "Dhaka",
+                                                "country": "Bangladesh",
+                                                "user_id": 1
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/phone/verify": {
             "post": {
                 "tags": [
