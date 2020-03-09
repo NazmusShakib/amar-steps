@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Resources\WorldRankResource;
 use App\Models\ActivityLog;
 use App\Models\Badge;
 use App\Models\BadgeUnit;
@@ -162,5 +163,40 @@ class User extends Authenticatable
             return $userDistance;
         }
        return 0;
+    }
+
+
+    /**
+     * Return top ranks globally.
+     */
+    public static function worldRanks()
+    {
+        $wordRanks = User::with(['profile' => function ($query) {
+            $query->select('profiles.city', 'profiles.country', 'profiles.user_id');
+        }])->select('id', 'name', 'headshot')->get();
+
+        $wordRanks = $wordRanks->sortByDesc(function ($rank) {
+            return $rank->getGrandTotalDistanceAttribute();
+        });
+
+        return $wordRanks;
+    }
+
+    /**
+     * Return top 15 on month.
+     */
+    public static function currentMonthRanks()
+    {
+        $currentMonthRanks = User::with(['profile' => function ($query) {
+            $query->select('profiles.city', 'profiles.country', 'profiles.user_id');
+        }])->whereHas('currentMonthActivityLog', function ($query) {
+            $query->select('activity_logs.activity', 'activity_logs.user_id');
+        })->select('id', 'name', 'headshot')->get();
+
+        $currentMonthRanks = $currentMonthRanks->sortByDesc(function ($rank) {
+            return $rank->getGrandTotalDistanceAttribute();
+        });
+
+        return $currentMonthRanks;
     }
 }

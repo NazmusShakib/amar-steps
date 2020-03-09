@@ -38,9 +38,12 @@ class LeaderBoardController extends Controller
      */
     public function leaderboard()
     {
+        $worldRanks = WorldRankResource::collection(User::worldRanks())->take(15);
+        $currentMonthRanks = CurrentMonthRankResource::collection(User::currentMonthRanks())->take(15);
+
         return [
-            'world_rank' => $this->worldRank(),
-            'current_month_rank' => $this->currentMonthRank(),
+            'world_ranks' => $worldRanks,
+            'current_month_ranks' => $currentMonthRanks,
         ];
     }
 
