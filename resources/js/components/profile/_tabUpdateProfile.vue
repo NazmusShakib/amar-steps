@@ -62,7 +62,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="col-md-12" for="height">Height (kg)</label>
+                        <label class="col-md-12" for="height">Height (cm)</label>
                         <div class="col-md-12">
                             <input type="number" min="0" placeholder="Height" name="height" id="height"
                                    v-validate="'required'" v-model.trim="auth.height"
@@ -75,7 +75,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="col-sm-12">Weight (cm)</label>
+                        <label class="col-sm-12">Weight (kg)</label>
                         <div class="col-md-12">
                             <input type="number" min="0" placeholder="Weight" name="weight" id="weight"
                                    v-validate="'required'" v-model.trim="auth.weight"

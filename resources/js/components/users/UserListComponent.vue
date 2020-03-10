@@ -17,6 +17,24 @@
         <div class="row">
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="white-box">
+                    <div class="row">
+                        <div class="col-md-10 col-lg-10 col-sm-12">
+
+                        </div>
+                        <div class="col-md-2 col-lg-2 col-sm-12">
+                            <el-dropdown class="pull-right">
+                                <el-button type="primary" size="small">
+                                    Role<i class="el-icon-arrow-down el-icon--right"></i>
+                                </el-button>
+                                <el-dropdown-menu slot="dropdown">
+                                    <el-dropdown-item @click.native="getUsers('admin')">Admin</el-dropdown-item>
+                                    <el-dropdown-item @click.native="getUsers('subscriber')">Subscriber</el-dropdown-item>
+                                    <el-dropdown-item @click.native="getUsers('staff')">Staff</el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
@@ -60,7 +78,7 @@
                         <vue-pagination
                             :pagination="users"
                             v-if="users.total >= 11"
-                            @paginate="getUsers()"
+                            @paginate="getUsers(selected_role)"
                             :offset="4"
                         ></vue-pagination>
                     </div>
@@ -90,15 +108,15 @@
                 to: 0,
                 current_page: 1
             },
-            offset: 4
+            offset: 4,
+            selected_role: 'subscriber'
         }),
         mounted: function () {
-            this.getUsers();
+            this.getUsers(this.selected_role);
         },
         methods: {
-            getUsers() {
-                axios
-                    .get("/api/v1/users?page=" + this.users.current_page)
+            getUsers(selected_role) {
+                axios.get("/api/v1/users?page=" + this.users.current_page + '&role=' + selected_role)
                     .then(response => {
                         this.users = response.data;
                     })
@@ -106,7 +124,6 @@
                         console.log("handle server error from here");
                     });
             },
-
             destroy(id, index) {
                 MessageBox.confirm('This will permanently delete. Continue?', 'Warning', {
                     confirmButtonText: 'OK',

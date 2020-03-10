@@ -19,9 +19,16 @@ class UserController extends BaseController
      * Display a listing of the resource.
      *
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('roles')->select(
+        $builder = User::query();
+        if ($request->has('role') && !empty($request->role)) {
+            $builder->whereHas('roles', function ($role) use ($request) {
+                $role->where('name', '=', $request->role);
+            });
+        }
+
+        $users = $builder->with('roles')->select(
             'id', 'name', 'email', 'phone')->paginate(10);
 
         return new UserCollection($users);
@@ -30,7 +37,7 @@ class UserController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
