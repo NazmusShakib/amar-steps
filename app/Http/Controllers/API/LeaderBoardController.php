@@ -21,7 +21,6 @@ class LeaderBoardController extends Controller
         $this->currentMonthRanks = User::currentMonthRanks();
     }
 
-
     /**
      * @OA\Get(
      *      path="/api/v1/leaderboard",
@@ -50,7 +49,7 @@ class LeaderBoardController extends Controller
     public function leaderboard()
     {
         $worldRanks = WorldRankResource::collection($this->worldRanks)->take(15);
-        $currentMonthRanks = CurrentMonthRankResource::collection($this->currentMonthRanks)->take(15);
+        $currentMonthRanks = $this->currentMonthRanks->take(15);
 
         return [
             'world_ranks' => $worldRanks->values()->toArray(),
@@ -92,7 +91,6 @@ class LeaderBoardController extends Controller
         ];
     }
 
-
     /**
      * Return auth Rank Globally.
      */
@@ -102,7 +100,13 @@ class LeaderBoardController extends Controller
         $authRankGlobally = [];
         foreach ($worldRanks as $key => $rank) {
             if ($rank['id'] == Auth::id()) {
-                $authRankGlobally = $rank;
+                $authRankGlobally = [
+                    'id' => $rank['id'],
+                    'name' => $rank['name'],
+                    'headshot' => $rank['headshot'],
+                    'city' => $rank['profile']['city'],
+                    'country' => $rank['profile']['country'],
+                ];
                 $authRankGlobally['grand_distance'] = $request->user()->grand_total_distance;
                 $authRankGlobally['rank'] = $key + 1;
             }
@@ -121,12 +125,6 @@ class LeaderBoardController extends Controller
         foreach ($currentMonthRanks as $key => $rank) {
             if ($rank['id'] == Auth::id()) {
                 $authCurrentMonthRank = $rank;
-
-                foreach ($request->user()->currentMonthActivityLog as $eachLog) {
-                    $activity = json_decode($eachLog->activity);
-                    $currentMonthDistance += $activity->distance;
-                }
-                $authCurrentMonthRank['current_month_distance'] = $currentMonthDistance;
                 $authCurrentMonthRank['rank'] = $key + 1;
             }
         }

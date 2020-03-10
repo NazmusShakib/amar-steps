@@ -187,16 +187,30 @@ class User extends Authenticatable
      */
     public static function currentMonthRanks()
     {
-        $currentMonthRanks = User::with(['profile' => function ($query) {
+        $usersCurrentMonthLog = User::with(['profile' => function ($query) {
             $query->select('profiles.city', 'profiles.country', 'profiles.user_id');
         }])->whereHas('currentMonthActivityLog', function ($query) {
             $query->select('activity_logs.activity', 'activity_logs.user_id');
         })->select('id', 'name', 'headshot')->get();
 
+        $currentMonthDistanceTotal = $usersCurrentMonthLog->map(function ($user, $key) {
+            $currentMonthDistance = 0;
+            foreach ($user->currentMonthActivityLog as $eachLog) {
+                $activity = json_decode($eachLog->activity);
+                $currentMonthDistance += $activity->distance;
+            }
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'headshot' => $user->headshot,
+                'city' => $user->profile->city,
+                'country' => $user->profile->country,
+                'current_month_distance' => $currentMonthDistance,
+            ];
+        });
 
-
-        $currentMonthRanks = $currentMonthRanks->sortByDesc(function ($rank) {
-            return $rank->currentMonthActivityLog();
+        $currentMonthRanks = $currentMonthDistanceTotal->sortByDesc(function ($rank) {
+            return $rank['current_month_distance'];
         });
 
         return $currentMonthRanks;
