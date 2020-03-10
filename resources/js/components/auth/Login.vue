@@ -102,7 +102,7 @@
                                 var data = response.data.data;
                                 localStorage.setItem("token", data.token);
                                 this.$store.dispatch("setGlobalAuth", data.auth);
-                                this.$router.push("/dashboard");
+                                this.$router.push("/");
                             })
                             .catch(error => {
                                 this.$setErrorsFromResponse(error.response.data);

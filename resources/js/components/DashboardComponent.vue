@@ -124,7 +124,7 @@
             </div>
         </div>
         <!--row -->
-        <div class="row">
+        <!--<div class="row">
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="white-box">
                     <h3 class="box-title">Recent sales
@@ -204,7 +204,7 @@
                         <a href="#">Check all the sales</a></div>
                 </div>
             </div>
-        </div>
+        </div>-->
         <!-- /.row -->
     </div>
 </template>

@@ -65,7 +65,7 @@ const baseRoutes = [{
         }
     },
     {
-        path: '/dashboard',
+        path: '/',
         component: Dashboard,
         name: 'Dashboard',
         meta: {

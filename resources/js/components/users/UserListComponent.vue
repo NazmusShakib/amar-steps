@@ -40,14 +40,14 @@
                                 <td>{{ user.phone}}</td>
                                 <td>{{ user.role }}</td>
                                 <td>
-                                    <a href="#" data-toggle="tooltip" title="Show">
+                                    <!--<a href="#" data-toggle="tooltip" title="Show">
                                         <i class="fa fa-eye text-info m-r-5"></i>
                                     </a>
                                     <span class="m-r-5">|</span>
                                     <a herf="#" data-toggle="tooltip" title="Edit">
                                         <i class="fa fa-edit text-info m-r-5"></i>
                                     </a>
-                                    <span class="m-r-5">|</span>
+                                    <span class="m-r-5">|</span>-->
                                     <a href="javascript:void(0)"
                                        data-toggle="tooltip" title="Delete"
                                        @click="destroy(user.id, index)"><i class="fa fa-trash-o"></i>
@@ -119,7 +119,7 @@
                             this.$notification.success(response.data.message);
                         })
                         .catch(error => {
-                            console.log("Could not delete this.");
+                            this.$notification.error(error.response.data['message']);
                         });
                 }).catch(() => {
                     console.log("Delete canceled");

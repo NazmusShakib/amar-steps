@@ -16,7 +16,7 @@
                         Transport Requisition Management
                     </router-link>
                     </span>-->
-                    <a class="logo" :href="'/dashboard'">
+                    <a class="logo" :href="'/'">
                         <b>
                             <img
                                 :src="'/plugins/images/amar-step-40x40.png'"

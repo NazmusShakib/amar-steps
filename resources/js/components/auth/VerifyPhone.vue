@@ -74,7 +74,7 @@
                             .then(response => {
                                 this.$notification.success(response.data.message);
                                 this.$store.dispatch("setGlobalAuth", response.data.data);
-                                this.$router.push("/dashboard");
+                                this.$router.push("/");
                             })
                             .catch(error => {
                                 this.$setErrorsFromResponse(error.response.data);

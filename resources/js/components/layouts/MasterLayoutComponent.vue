@@ -10,7 +10,7 @@
             </main>
 
             <footer class="footer text-center">
-                {{ new Date().getFullYear() }} &copy; AmarSteps
+                {{ new Date().getFullYear() }} &copy; Amar Steps
             </footer>
         </div>
 
