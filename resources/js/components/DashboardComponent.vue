@@ -18,11 +18,11 @@
                         <div class="col-lg-3 col-sm-6 row-in-br">
                             <div class="col-in row">
                                 <div class="col-md-6 col-sm-6 col-xs-6">
-                                    <i data-icon="M" class="linea-icon linea-ecommerce"></i>
-                                    <h5 class="text-muted vb">Total Balance</h5>
+                                    <i data-icon="M" class="linea-icon linea-elaborate"></i>
+                                    <h5 class="text-muted vb">Total Subscriber</h5>
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-xs-6">
-                                    <h3 class="counter text-right m-t-15 text-danger">00</h3>
+                                    <h3 class="counter text-right m-t-15 text-danger">--</h3>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="progress">
@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-xs-6">
                                     <h3 class="counter text-right m-t-15 text-megna">
-                                        00
+                                        --
                                     </h3>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-xs-6">
                                     <h3 class="counter text-right m-t-15 text-primary">
-                                        00
+                                        --
                                     </h3>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -83,11 +83,11 @@
                             <div class="col-in row">
                                 <div class="col-md-6 col-sm-6 col-xs-6">
                                     <i class="linea-icon linea-basic" data-icon="A"></i>
-                                    <h5 class="text-muted vb">Total Transections</h5>
+                                    <h5 class="text-muted vb">Online Subscribers</h5>
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-xs-6">
                                     <h3 class="counter text-right m-t-15 text-success">
-                                        00
+                                        --
                                     </h3>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -107,7 +107,7 @@
         </div>
         <!--row -->
         <!-- /.row -->
-        <div class="row">
+        <!--<div class="row">
             <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                 <div class="white-box">
                     <h3 class="box-title">Yearly Transection</h3>
@@ -122,7 +122,7 @@
                     <div id="morris-area-chart" style="height: 340px; width: 100%"></div>
                 </div>
             </div>
-        </div>
+        </div>-->
         <!--row -->
         <!--<div class="row">
             <div class="col-md-12 col-lg-12 col-sm-12">
