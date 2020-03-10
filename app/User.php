@@ -193,8 +193,10 @@ class User extends Authenticatable
             $query->select('activity_logs.activity', 'activity_logs.user_id');
         })->select('id', 'name', 'headshot')->get();
 
+
+
         $currentMonthRanks = $currentMonthRanks->sortByDesc(function ($rank) {
-            return $rank->getGrandTotalDistanceAttribute();
+            return $rank->currentMonthActivityLog();
         });
 
         return $currentMonthRanks;
