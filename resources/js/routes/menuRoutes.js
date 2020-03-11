@@ -3,6 +3,7 @@ import Register from '~/components/auth/Register';
 import Login from '~/components/auth/Login';
 import Error404 from '~/components/errors/404';
 import VerifiedForm from '~/components/auth/VerifyPhone';
+import PrivacyPolicy from '~/components/auth/PrivacyPolicyComponent';
 
 // Authenticated
 import Dashboard from '~/components/DashboardComponent';
@@ -43,6 +44,15 @@ const baseRoutes = [{
         meta: {
             guest: true,
             title: 'Verify Phone - App',
+        }
+    },
+    {
+        path: '/privacy-policy',
+        component: PrivacyPolicy,
+        name: 'PrivacyPolicy',
+        meta: {
+            guest: true,
+            title: 'Privacy Policy - Amar Steps',
         }
     },
     {
