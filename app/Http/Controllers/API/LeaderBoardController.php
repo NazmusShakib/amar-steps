@@ -78,7 +78,7 @@ class LeaderBoardController extends Controller
      *          description="Retrieve leaderboard.",
      *          @OA\MediaType(
      *              mediaType="application/json",
-     *              @OA\JsonContent(type="object",example = {"auth_rank_globally":{"id":1,"name":"Admin User","headshot":null,"grand_distance":8151.2232,"rank":1,"profile":{"city":"Dhaka","country":"Bangladesh","user_id":1}},"auth_current_month_rank":{"id":1,"name":"Admin User","headshot":null,"current_month_distance":6113.4174,"rank":1,"profile":{"city":"Dhaka","country":"Bangladesh","user_id":1}}})
+     *              @OA\JsonContent(type="object",example = {"auth_rank_globally":{"id":1,"name":"Admin User","headshot":null,"city":null,"country":null,"address":"6540 Kris Mews\nNew Dorianstad, DC 80324","grand_distance":2037.8058,"rank":1},"auth_current_month_rank":{"id":1,"name":"Admin User","headshot":null,"city":null,"country":null,"address":"6540 Kris Mews\nNew Dorianstad, DC 80324","current_month_distance":2037.8058,"rank":1}})
      *          )
      *       )
      * )
@@ -106,6 +106,7 @@ class LeaderBoardController extends Controller
                     'headshot' => $rank['headshot'],
                     'city' => $rank['profile']['city'],
                     'country' => $rank['profile']['country'],
+                    'address' => $rank['profile']['address'],
                 ];
                 $authRankGlobally['grand_distance'] = $request->user()->grand_total_distance;
                 $authRankGlobally['rank'] = $key + 1;

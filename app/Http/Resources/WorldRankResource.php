@@ -20,6 +20,7 @@ class WorldRankResource extends JsonResource
             'headshot' => $this->headshot,
             'city' => $this->profile->city,
             'country' => $this->profile->country,
+            'address' => $this->profile->address,
             'grand_total_distance' => $this->grand_total_distance,
         ];
     }

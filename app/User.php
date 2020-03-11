@@ -172,7 +172,7 @@ class User extends Authenticatable
     public static function worldRanks()
     {
         $wordRanks = User::with(['profile' => function ($query) {
-            $query->select('profiles.city', 'profiles.country', 'profiles.user_id');
+            $query->select('profiles.city', 'profiles.country', 'profiles.address', 'profiles.user_id');
         }])->select('id', 'name', 'headshot')->get();
 
         $wordRanks = $wordRanks->sortByDesc(function ($rank) {
@@ -188,7 +188,7 @@ class User extends Authenticatable
     public static function currentMonthRanks()
     {
         $usersCurrentMonthLog = User::with(['profile' => function ($query) {
-            $query->select('profiles.city', 'profiles.country', 'profiles.user_id');
+            $query->select('profiles.city', 'profiles.country', 'profiles.address', 'profiles.user_id');
         }])->whereHas('currentMonthActivityLog', function ($query) {
             $query->select('activity_logs.activity', 'activity_logs.user_id');
         })->select('id', 'name', 'headshot')->get();
@@ -205,6 +205,7 @@ class User extends Authenticatable
                 'headshot' => $user->headshot,
                 'city' => $user->profile->city,
                 'country' => $user->profile->country,
+                'address' => $user->profile->address,
                 'current_month_distance' => $currentMonthDistance,
             ];
         });

@@ -479,25 +479,21 @@
                                             "id": 1,
                                             "name": "Admin User",
                                             "headshot": null,
-                                            "grand_distance": 8151.2232,
-                                            "rank": 1,
-                                            "profile": {
-                                                "city": "Dhaka",
-                                                "country": "Bangladesh",
-                                                "user_id": 1
-                                            }
+                                            "city": null,
+                                            "country": null,
+                                            "address": "6540 Kris Mews\\nNew Dorianstad, DC 80324",
+                                            "grand_distance": 2037.8058,
+                                            "rank": 1
                                         },
                                         "auth_current_month_rank": {
                                             "id": 1,
                                             "name": "Admin User",
                                             "headshot": null,
-                                            "current_month_distance": 6113.4174,
-                                            "rank": 1,
-                                            "profile": {
-                                                "city": "Dhaka",
-                                                "country": "Bangladesh",
-                                                "user_id": 1
-                                            }
+                                            "city": null,
+                                            "country": null,
+                                            "address": "6540 Kris Mews\\nNew Dorianstad, DC 80324",
+                                            "current_month_distance": 2037.8058,
+                                            "rank": 1
                                         }
                                     },
                                     "type": "object"
