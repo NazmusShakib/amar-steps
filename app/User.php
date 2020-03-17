@@ -14,7 +14,11 @@ use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
+// Friendship traits
+use App\Traits\FriendableTempFix;
+use Hootlex\Friendships\Traits\Friendable;
 
+// Follow traits
 use Rennokki\Befriended\Traits\Follow;
 use Rennokki\Befriended\Contracts\Following;
 use Rennokki\Befriended\Scopes\FollowFilterable;
@@ -23,7 +27,10 @@ use Rennokki\Befriended\Scopes\FollowFilterable;
 class User extends Authenticatable implements Following
 {
     use HasApiTokens, Notifiable, EntrustUserTrait;
+
     use Follow, FollowFilterable;
+
+    use FriendableTempFix;
 
     protected $table = 'users';
     /**
@@ -172,7 +179,6 @@ class User extends Authenticatable implements Following
         }
        return 0;
     }
-
 
     /**
      * Return top ranks globally.

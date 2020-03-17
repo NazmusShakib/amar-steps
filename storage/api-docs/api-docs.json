@@ -650,6 +650,236 @@
                 }
             }
         },
+        "/api/v1/friends": {
+            "get": {
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "Friends list",
+                "description": "Friends list",
+                "operationId": "friends",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "following List.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "follow_list": [
+                                            {
+                                                "id": 1,
+                                                "name": "Admin User",
+                                                "email": "admin@example.com",
+                                                "phone": "0111",
+                                                "headshot": null,
+                                                "profile": {
+                                                    "city": null,
+                                                    "country": null,
+                                                    "address": "9219 Kris Track Suite 613\\nTylerstad, MA 28181-8012",
+                                                    "user_id": 1
+                                                }
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "Staff Account",
+                                                "email": "staff@example.com",
+                                                "phone": "0222",
+                                                "headshot": null,
+                                                "profile": {
+                                                    "city": null,
+                                                    "country": null,
+                                                    "address": "630 Howell Branch Suite 384\\nNorth Destinytown, AL 41217",
+                                                    "user_id": 2
+                                                }
+                                            }
+                                        ],
+                                        "unfollow_list": [
+                                            {
+                                                "id": 3,
+                                                "name": "Subscriber Account",
+                                                "email": "subscriber@example.com",
+                                                "phone": "0333",
+                                                "headshot": null,
+                                                "profile": {
+                                                    "city": null,
+                                                    "country": null,
+                                                    "address": "73721 Noble Trail ew Christopherchester, NV 62390-3169",
+                                                    "user_id": 3
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/friends/send-request/{id}": {
+            "post": {
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "Send friend request to the given id parameter",
+                "description": "Request has been sent successfully.",
+                "operationId": "send-request",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Request has been sent successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [],
+                                        "message": "Request has been sent successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/friends/accept-request/{id}": {
+            "post": {
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "accept-request",
+                "description": "Request has been accepted successfully.",
+                "operationId": "accept-request",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Request has been accepted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [],
+                                        "message": "Request has been accepted successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/friends/deny-request/{id}": {
+            "post": {
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "deny-request",
+                "description": "Request has been declined successfully.",
+                "operationId": "deny-request",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Request has been declined successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [],
+                                        "message": "Request has been decline successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/friends/un-friend/{id}": {
+            "post": {
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "The follower may cancel the request before getting acceptance.",
+                "description": "Request has been canceled successfully.",
+                "operationId": "un-friend",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Request has been canceled successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [],
+                                        "message": "Request has been cancled successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/leaderboard": {
             "get": {
                 "tags": [
