@@ -14,9 +14,16 @@ use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
-class User extends Authenticatable
+
+use Rennokki\Befriended\Traits\Follow;
+use Rennokki\Befriended\Contracts\Following;
+use Rennokki\Befriended\Scopes\FollowFilterable;
+
+
+class User extends Authenticatable implements Following
 {
     use HasApiTokens, Notifiable, EntrustUserTrait;
+    use Follow, FollowFilterable;
 
     protected $table = 'users';
     /**
@@ -57,6 +64,7 @@ class User extends Authenticatable
 
     //Make it available in the json response
     // protected $appends = ['grand_total_distance'];
+
 
     public function hasVerifiedPhone()
     {

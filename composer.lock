@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "83c865672a6b4e9b1ffe7d698421b813",
+    "content-hash": "deaeb9f43415e28b669fb83d7bf2ae8c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3000,6 +3000,73 @@
                 "uuid"
             ],
             "time": "2019-12-17T08:18:51+00:00"
+        },
+        {
+            "name": "rennokki/befriended",
+            "version": "3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rennokki/befriended.git",
+                "reference": "bb8e2b4a6f39af2b541b3ad60ad6c55a3b19e1b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rennokki/befriended/zipball/bb8e2b4a6f39af2b541b3ad60ad6c55a3b19e1b9",
+                "reference": "bb8e2b4a6f39af2b541b3ad60ad6c55a3b19e1b9",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "^2.10",
+                "laravel/framework": "~5.5|^6.0|^7.0"
+            },
+            "require-dev": {
+                "orchestra/database": "~4.2.0|^5.0",
+                "orchestra/testbench": "~4.2.0|^5.0",
+                "phpunit/phpunit": "^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Rennokki\\Befriended\\BefriendedServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Rennokki\\Befriended\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Renoki",
+                    "homepage": "https://twitter.com/rennokki",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Eloquent Befriended brings social media-like features like following, blocking and filtering content based on following or blocked models.",
+            "homepage": "https://github.com/rennokki/befriended",
+            "keywords": [
+                "Connection",
+                "Followers",
+                "block",
+                "blocker",
+                "blocking",
+                "connections",
+                "eloquent",
+                "friend",
+                "friends",
+                "laravel",
+                "link",
+                "media",
+                "model",
+                "social"
+            ],
+            "time": "2020-03-09T06:57:53+00:00"
         },
         {
             "name": "swagger-api/swagger-ui",

@@ -49,6 +49,14 @@ Route::group(['middleware' => ['auth:api', 'verifiedPhone']], function () {
     Route::apiResource('activities', 'ActivityLogController', ['only' => [
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin|staff|subscriber']);
 
+    # Handel followers request
+    Route::get('followers', 'BeFollowerController@followingList');
+    Route::post('followers/send-follow-request/{id}', 'BeFollowerController@sendFollowRequest');
+    Route::post('followers/accept-follow-request/{id}', 'BeFollowerController@acceptFollowRequest');
+    Route::post('followers/cancel-follow-request/{id}', 'BeFollowerController@cancelFollowRequest');
+    Route::post('followers/decline-follow-request/{id}', 'BeFollowerController@declineFollowRequest');
+
+    # Handel leader board request
     Route::get('leaderboard/auth-rank', 'LeaderBoardController@authRank');
     Route::get('leaderboard', 'LeaderBoardController@leaderBoard');
 

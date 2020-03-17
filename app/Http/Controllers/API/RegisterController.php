@@ -183,7 +183,7 @@ class RegisterController extends BaseController
             $success['token'] = $user->createToken('MyApp')->accessToken;
             $success['auth'] = new ProfileResource($user);
 
-            return $this->sendResponse($success, 'I have logged in successfully.');
+            return $this->sendResponse($success, 'Welcome to Amar Steps.');
         } else {
             return $this->sendError('Invalid credential.', ['error' => ['Invalid credential.']], 401);
         }
@@ -210,6 +210,7 @@ class RegisterController extends BaseController
      *          description="Retrieve auth profile.",
      *          @OA\MediaType(
      *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":{},"message":"Retrieve auth profile."})
      *          )
      *       )
      * )
