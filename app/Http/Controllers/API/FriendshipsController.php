@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PendingRequestCollection;
+use App\Http\Resources\PendingRequestResource;
+
 use App\User;
 use Illuminate\Http\Request;
 
@@ -214,12 +217,42 @@ class FriendshipsController extends BaseController
     }
 
 
+    /**
+     * @OA\GET(
+     *      path="/api/v1/friends/pending-requests",
+     *      operationId="friends-pending-requests",
+     *      tags={"Friends"},
+     *      summary="List of pending friend requests.",
+     *      description="List of pending friend requests.",
+     *      @OA\Parameter(
+     *          name="authorization",
+     *          description="Bearer token",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *          in="header"
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="List of pending friend requests.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":{{"id":1,"name":"Admin User","email":"admin@example.com","phone":"0111","headshot":null,"address":"9219 Kris Track Suite 613 Tylerstad, MA 28181-8012"},{"id":2,"name":"John Dou","email":"dou@example.com","phone":"012345678","headshot":null,"address":"234 Kris Track Suite 613ylerstad, MA 28181-8012"}},"message":"List of pending friend requests."})
+     *          )
+     *       ),
+     * )
+     *
+     */
     public function pendingRequests()
     {
         $pendingFriendRequests = $this->auth->getFriendRequests();
 
-        return $pendingFriendRequests;
-        // return $this->sendResponse($pendingFriendRequests, 'List of pending friend requests.');
+        $pendingRequests = PendingRequestResource::collection($pendingFriendRequests);
+
+        $pendingRequests = $pendingRequests->values()->toArray();
+
+        return $this->sendResponse($pendingRequests, 'List of pending friend requests.');
     }
 
 }

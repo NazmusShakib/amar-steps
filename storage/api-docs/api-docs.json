@@ -880,6 +880,61 @@
                 }
             }
         },
+        "/api/v1/friends/pending-requests": {
+            "get": {
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "List of pending friend requests.",
+                "description": "List of pending friend requests.",
+                "operationId": "friends-pending-requests",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of pending friend requests.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [
+                                            {
+                                                "id": 1,
+                                                "name": "Admin User",
+                                                "email": "admin@example.com",
+                                                "phone": "0111",
+                                                "headshot": null,
+                                                "address": "9219 Kris Track Suite 613 Tylerstad, MA 28181-8012"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "John Dou",
+                                                "email": "dou@example.com",
+                                                "phone": "012345678",
+                                                "headshot": null,
+                                                "address": "234 Kris Track Suite 613ylerstad, MA 28181-8012"
+                                            }
+                                        ],
+                                        "message": "List of pending friend requests."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/leaderboard": {
             "get": {
                 "tags": [
