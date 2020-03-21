@@ -1271,9 +1271,9 @@
                 "tags": [
                     "Registration"
                 ],
-                "summary": "Subscribers list.",
+                "summary": "Subscribers list shows here.",
                 "description": "Subscribers list.",
-                "operationId": "subscribers",
+                "operationId": "subscribers-list",
                 "parameters": [
                     {
                         "name": "authorization",

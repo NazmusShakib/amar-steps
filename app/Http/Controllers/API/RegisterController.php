@@ -317,9 +317,9 @@ class RegisterController extends BaseController
     /**
      * @OA\GET(
      *      path="/api/v1/subscribers",
-     *      operationId="subscribers",
+     *      operationId="subscribers-list",
      *      tags={"Registration"},
-     *      summary="Subscribers list.",
+     *      summary="Subscribers list shows here.",
      *      description="Subscribers list.",
      *      @OA\Parameter(
      *          name="authorization",
