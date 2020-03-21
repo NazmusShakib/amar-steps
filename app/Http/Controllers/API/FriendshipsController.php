@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\PendingRequestCollection;
-use App\Http\Resources\PendingRequestResource;
+use App\Http\Resources\SenderResource;
+use App\Http\Resources\FriendResource;
 
 use App\User;
 use Illuminate\Http\Request;
@@ -39,29 +38,19 @@ class FriendshipsController extends BaseController
      *          description="following List.",
      *          @OA\MediaType(
      *              mediaType="application/json",
-     *              @OA\JsonContent(type="object",example = {"follow_list":{{"id":1,"name":"Admin User","email":"admin@example.com","phone":"0111","headshot":null,"profile":{"city":null,"country":null,"address":"9219 Kris Track Suite 613\nTylerstad, MA 28181-8012","user_id":1}},{"id":2,"name":"Staff Account","email":"staff@example.com","phone":"0222","headshot":null,"profile":{"city":null,"country":null,"address":"630 Howell Branch Suite 384\nNorth Destinytown, AL 41217","user_id":2}}},"unfollow_list":{{"id":3,"name":"Subscriber Account","email":"subscriber@example.com","phone":"0333","headshot":null,"profile":{"city":null,"country":null,"address":"73721 Noble Trail ew Christopherchester, NV 62390-3169","user_id":3}}}})
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":{{"id":1,"name":"Admin User","email":"rahap@example.com","phone":"012312453453543","headshot":null,"address":"9219 Kris Track Suite 613\nTylerstad, MA 28181-8012"},{"id":3,"name":"Subscriber Account","email":"sub@example.com","phone":"34534534","headshot":null,"address":"73721 Noble Trail\nNew Christopherchester, NV 62390-3169"}},"message":"Friends list."})
      *          )
      *       ),
      * )
      *
      */
-    public function friendList()
+    public function friendsList()
     {
-        $followList = User::followedBy($this->auth)
-            ->with(['profile' => function ($query) {
-                $query->select('profiles.city', 'profiles.country', 'profiles.address', 'profiles.user_id');
-            }])
-            ->select('id', 'name', 'email', 'phone', 'headshot')->get();
-        $unfollowList = User::unfollowedBy($this->auth)
-            ->with(['profile' => function ($query) {
-                $query->select('profiles.city', 'profiles.country', 'profiles.address', 'profiles.user_id');
-            }])
-            ->select('id', 'name', 'email', 'phone', 'headshot')->get();
+        $acceptedRequests = $this->auth->getFriends();
 
-        return [
-            'follow_list' => $followList,
-            'unfollow_list' => $unfollowList
-        ];
+        $acceptedRequests = FriendResource::collection($acceptedRequests);
+
+        return $this->sendResponse($acceptedRequests, 'Friends list.');
     }
 
     /**
@@ -94,9 +83,12 @@ class FriendshipsController extends BaseController
     public function sendFriendRequest($id)
     {
         $recipient = User::findOrFail($id);
-        $checkHasSent = $this->auth->hasSentFriendRequestTo($recipient);
+        $hasSent = $this->auth->hasSentFriendRequestTo($recipient);
+        $isFriendWith = $this->auth->isFriendWith($recipient);
 
-        if (!$checkHasSent) {
+        if ($isFriendWith) {
+            return $this->sendResponse([], 'The recipient has already been on your friend list.');
+        } else if (!$hasSent) {
             $this->auth->befriend($recipient);
             return $this->sendResponse([], 'Request has been sent successfully.');
         }
@@ -134,12 +126,13 @@ class FriendshipsController extends BaseController
     public function acceptFriendRequest($id)
     {
         $sender = User::findOrFail($id);
-        if ($sender) {
+        $hasSent = $sender->hasSentFriendRequestTo($this->auth);
+        if ($hasSent) {
             $this->auth->acceptFriendRequest($sender);
             return $this->sendResponse([], 'Request has been accepted successfully.');
         }
 
-        return $this->sendError('Failed to accept request.', [], 403);
+        return $this->sendError('No request to accept.', [], 403);
     }
 
     /**
@@ -172,8 +165,8 @@ class FriendshipsController extends BaseController
     public function denyFriendRequest($id)
     {
         $sender = User::findOrFail($id);
-        $checkHasSent = $this->auth->hasSentFriendRequestTo($sender);
-        if ($checkHasSent) {
+        $hasSent = $sender->hasSentFriendRequestTo($this->auth);
+        if ($hasSent) {
             $this->auth->denyFriendRequest($sender);
             return $this->sendResponse([], 'Request has been declined successfully.');
         }
@@ -208,10 +201,12 @@ class FriendshipsController extends BaseController
      * )
      *
      */
-    public function removeFriend($id)
+    public function unFriend($id)
     {
         $friend = User::findOrFail($id);
-        if ($friend) {
+        $isFriendWith = $this->auth->isFriendWith($friend);
+
+        if ($isFriendWith) {
             $this->auth->unfriend($friend);
             return $this->sendResponse([], 'Request has been canceled successfully.');
         }
@@ -240,7 +235,7 @@ class FriendshipsController extends BaseController
      *          description="List of pending friend requests.",
      *          @OA\MediaType(
      *              mediaType="application/json",
-     *              @OA\JsonContent(type="object",example = {"success":true,"data":{{"id":1,"name":"Admin User","email":"admin@example.com","phone":"0111","headshot":null,"address":"9219 Kris Track Suite 613 Tylerstad, MA 28181-8012"},{"id":2,"name":"John Dou","email":"dou@example.com","phone":"012345678","headshot":null,"address":"234 Kris Track Suite 613ylerstad, MA 28181-8012"}},"message":"List of pending friend requests."})
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":{{"id":1,"name":"Admin User","email":"raptn@example.com","phone":"0453453454353","headshot":null,"address":"9219 Kris Track Suite 613 Tylerstad, MA 28181-8012"},{"id":2,"name":"John Dou","email":"dou@example.com","phone":"012345678","headshot":null,"address":"234 Kris Track Suite 613ylerstad, MA 28181-8012"}},"message":"List of pending friend requests."})
      *          )
      *       ),
      * )
@@ -250,7 +245,7 @@ class FriendshipsController extends BaseController
     {
         $pendingFriendRequests = $this->auth->getFriendRequests();
 
-        $pendingRequests = PendingRequestResource::collection($pendingFriendRequests);
+        $pendingRequests = SenderResource::collection($pendingFriendRequests);
 
         $pendingRequests = $pendingRequests->values()->toArray();
 

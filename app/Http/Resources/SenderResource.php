@@ -7,7 +7,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\Resource;
 
-class PendingRequestResource extends JsonResource
+class SenderResource extends JsonResource
 {
     /**
      * Transform the resource collection into an array.

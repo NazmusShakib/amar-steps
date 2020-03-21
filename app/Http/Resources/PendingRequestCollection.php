@@ -17,7 +17,7 @@ class PendingRequestCollection extends ResourceCollection
     public function toArray($request)
     {
         $this->collection->transform(function ($user) {
-            return (new PendingRequestResource($user));
+            return (new SenderResource($user));
         });
 
         return parent::toArray($request);

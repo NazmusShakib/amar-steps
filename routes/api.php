@@ -50,11 +50,11 @@ Route::group(['middleware' => ['auth:api', 'verifiedPhone']], function () {
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin|staff|subscriber']);
 
     # Handel friends request
-    Route::get('friends', 'FriendshipsController@friendList');
+    Route::get('friends', 'FriendshipsController@friendsList');
     Route::post('friends/send-request/{id}', 'FriendshipsController@sendFriendRequest');
     Route::post('friends/accept-request/{id}', 'FriendshipsController@acceptFriendRequest');
     Route::post('friends/deny-request/{id}', 'FriendshipsController@denyFriendRequest');
-    Route::post('friends/un-friend/{id}', 'FriendshipsController@removeFriend');
+    Route::post('friends/un-friend/{id}', 'FriendshipsController@unFriend');
     Route::get('friends/pending-requests', 'FriendshipsController@pendingRequests');
 
     # Handel followers request

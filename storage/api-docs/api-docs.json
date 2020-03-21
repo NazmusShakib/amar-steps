@@ -676,49 +676,26 @@
                             "application/json": {
                                 "schema": {
                                     "example": {
-                                        "follow_list": [
+                                        "success": true,
+                                        "data": [
                                             {
                                                 "id": 1,
                                                 "name": "Admin User",
-                                                "email": "admin@example.com",
-                                                "phone": "0111",
+                                                "email": "rahap@example.com",
+                                                "phone": "012312453453543",
                                                 "headshot": null,
-                                                "profile": {
-                                                    "city": null,
-                                                    "country": null,
-                                                    "address": "9219 Kris Track Suite 613\\nTylerstad, MA 28181-8012",
-                                                    "user_id": 1
-                                                }
+                                                "address": "9219 Kris Track Suite 613\\nTylerstad, MA 28181-8012"
                                             },
-                                            {
-                                                "id": 2,
-                                                "name": "Staff Account",
-                                                "email": "staff@example.com",
-                                                "phone": "0222",
-                                                "headshot": null,
-                                                "profile": {
-                                                    "city": null,
-                                                    "country": null,
-                                                    "address": "630 Howell Branch Suite 384\\nNorth Destinytown, AL 41217",
-                                                    "user_id": 2
-                                                }
-                                            }
-                                        ],
-                                        "unfollow_list": [
                                             {
                                                 "id": 3,
                                                 "name": "Subscriber Account",
-                                                "email": "subscriber@example.com",
-                                                "phone": "0333",
+                                                "email": "sub@example.com",
+                                                "phone": "34534534",
                                                 "headshot": null,
-                                                "profile": {
-                                                    "city": null,
-                                                    "country": null,
-                                                    "address": "73721 Noble Trail ew Christopherchester, NV 62390-3169",
-                                                    "user_id": 3
-                                                }
+                                                "address": "73721 Noble Trail\\nNew Christopherchester, NV 62390-3169"
                                             }
-                                        ]
+                                        ],
+                                        "message": "Friends list."
                                     },
                                     "type": "object"
                                 }
@@ -911,8 +888,8 @@
                                             {
                                                 "id": 1,
                                                 "name": "Admin User",
-                                                "email": "admin@example.com",
-                                                "phone": "0111",
+                                                "email": "raptn@example.com",
+                                                "phone": "0453453454353",
                                                 "headshot": null,
                                                 "address": "9219 Kris Track Suite 613 Tylerstad, MA 28181-8012"
                                             },
