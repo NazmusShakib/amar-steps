@@ -94,12 +94,14 @@ class FriendshipsController extends BaseController
     public function sendFriendRequest($id)
     {
         $recipient = User::findOrFail($id);
-        if ($recipient) {
+        $checkHasSent = $this->auth->hasSentFriendRequestTo($recipient);
+
+        if (!$checkHasSent) {
             $this->auth->befriend($recipient);
             return $this->sendResponse([], 'Request has been sent successfully.');
         }
 
-        return $this->sendError('Failed to send request.', [], 403);
+        return $this->sendResponse([], 'A request has already been sent.');
     }
 
     /**
@@ -170,12 +172,13 @@ class FriendshipsController extends BaseController
     public function denyFriendRequest($id)
     {
         $sender = User::findOrFail($id);
-        if ($sender) {
+        $checkHasSent = $this->auth->hasSentFriendRequestTo($sender);
+        if ($checkHasSent) {
             $this->auth->denyFriendRequest($sender);
             return $this->sendResponse([], 'Request has been declined successfully.');
         }
 
-        return $this->sendError('Failed to decline request.', [], 403);
+        return $this->sendError('No request to deny.', [], 403);
     }
 
     /**
@@ -215,7 +218,6 @@ class FriendshipsController extends BaseController
 
         return $this->sendError('Failed to cancel request.', [], 403);
     }
-
 
     /**
      * @OA\GET(
