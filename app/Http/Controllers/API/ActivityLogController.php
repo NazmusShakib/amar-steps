@@ -204,7 +204,6 @@ class ActivityLogController extends BaseController
         }
     }
 
-
     /**
      * @OA\Get(
      *      path="/api/v1/activities/badges",

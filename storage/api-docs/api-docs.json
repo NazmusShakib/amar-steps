@@ -1266,6 +1266,84 @@
                 }
             }
         },
+        "/api/v1/subscribers": {
+            "get": {
+                "tags": [
+                    "Registration"
+                ],
+                "summary": "Subscribers list.",
+                "description": "Subscribers list.",
+                "operationId": "subscribers",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of subscribers. NB: 'friendship_status' would be 'PENDING', 'ACCEPTED', 'DENIED', 'BLOCKED' or null ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [
+                                            {
+                                                "id": 1,
+                                                "name": "Admin User",
+                                                "email": "adm@example.com",
+                                                "user_code": null,
+                                                "phone": "034565434",
+                                                "height": null,
+                                                "weight": null,
+                                                "phone_verified_at": null,
+                                                "friendship_status": "PENDING",
+                                                "headshot": null,
+                                                "role": "Administrator"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "Staff Account",
+                                                "email": "people@example.com",
+                                                "user_code": null,
+                                                "phone": "0231234",
+                                                "height": null,
+                                                "weight": null,
+                                                "phone_verified_at": null,
+                                                "friendship_status": null,
+                                                "headshot": null,
+                                                "role": "Staff"
+                                            },
+                                            {
+                                                "id": 3,
+                                                "name": "Subscriber Account",
+                                                "email": "sus@example.com",
+                                                "user_code": null,
+                                                "phone": "0321312",
+                                                "height": null,
+                                                "weight": null,
+                                                "phone_verified_at": null,
+                                                "friendship_status": null,
+                                                "headshot": null,
+                                                "role": "Subscriber"
+                                            }
+                                        ],
+                                        "message": "List of subscribers."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/users/{id}": {
             "delete": {
                 "tags": [

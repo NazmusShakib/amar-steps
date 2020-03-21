@@ -313,4 +313,45 @@ class RegisterController extends BaseController
 
         return $this->sendResponse($profile, 'Password has been changed successfully.');
     }
+
+    /**
+     * @OA\GET(
+     *      path="/api/v1/subscribers",
+     *      operationId="subscribers",
+     *      tags={"Registration"},
+     *      summary="Subscribers list.",
+     *      description="Subscribers list.",
+     *      @OA\Parameter(
+     *          name="authorization",
+     *          description="Bearer token",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *          in="header"
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="List of subscribers. NB: 'friendship_status' would be 'PENDING', 'ACCEPTED', 'DENIED', 'BLOCKED' or null ",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":{{"id":1,"name":"Admin User","email":"adm@example.com","user_code":null,"phone":"034565434","height":null,"weight":null,"phone_verified_at":null,"friendship_status":"PENDING","headshot":null,"role":"Administrator"},{"id":2,"name":"Staff Account","email":"people@example.com","user_code":null,"phone":"0231234","height":null,"weight":null,"phone_verified_at":null,"friendship_status":null,"headshot":null,"role":"Staff"},{"id":3,"name":"Subscriber Account","email":"sus@example.com","user_code":null,"phone":"0321312","height":null,"weight":null,"phone_verified_at":null,"friendship_status":null,"headshot":null,"role":"Subscriber"}},"message":"List of subscribers."})
+     *          )
+     *       ),
+     * )
+     *
+     */
+    public function usersListWithFriendShipStatus()
+    {
+        $builder = User::query();
+        $builder->whereHas('roles', function ($role) {
+            $role->where('name', '=', 'subscriber');
+        });
+        $subscribers = $builder->with('roles')->select(
+            'id', 'name', 'email', 'phone')->get();
+
+        $subscribers = UserResource::collection($subscribers);
+
+        return $this->sendResponse($subscribers, 'List of subscribers.');
+    }
 }

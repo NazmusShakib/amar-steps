@@ -70,7 +70,7 @@ class User extends Authenticatable implements Following
     protected $guarded = ['id'];
 
     //Make it available in the json response
-    // protected $appends = ['grand_total_distance'];
+    protected $appends = ['friendship_status'];
 
 
     public function hasVerifiedPhone()
@@ -161,7 +161,7 @@ class User extends Authenticatable implements Following
     {
         $currentMonth = date('m');
         return $this->hasMany(ActivityLog::class, 'user_id', 'id')
-            ->whereRaw('MONTH(created_at) = ?',[$currentMonth]);
+            ->whereRaw('MONTH(created_at) = ?', [$currentMonth]);
     }
 
     /**
@@ -170,14 +170,14 @@ class User extends Authenticatable implements Following
     public function getGrandTotalDistanceAttribute()
     {
         $distanceUnitID = BadgeUnit::where('short_name', 'distance')->pluck('id')->first();
-        if($distanceUnitID) {
+        if ($distanceUnitID) {
             $userDistance = DB::table('user_unit_totals')
                 ->where('user_id', '=', $this->id)
                 ->where('unit_id', '=', $distanceUnitID)
                 ->pluck('grand_total')->first();
             return $userDistance;
         }
-       return 0;
+        return 0;
     }
 
     /**
@@ -229,5 +229,31 @@ class User extends Authenticatable implements Following
         });
 
         return $currentMonthRanks;
+    }
+
+    /**
+     * Get the users list with friendship status.
+     *
+     * @return string|null
+     */
+    public function getFriendshipStatusAttribute()
+    {
+        $auth = Auth::user();
+        $status = null;
+        try {
+            $isFriend = $auth->getFriendship($this);
+            if ($isFriend->staus == 0)
+                $status = 'PENDING';
+            elseif ($isFriend->staus == 1)
+                $status = 'ACCEPTED';
+            elseif ($isFriend->staus == 2)
+                $status = 'DENIED';
+            elseif ($isFriend->staus == 3)
+                $status = 'BLOCKED';
+        } catch (\Exception $exception) {
+            //
+        } finally {
+            return $status;
+        }
     }
 }

@@ -145,4 +145,5 @@ class UserController extends BaseController
         }
         return $this->sendError('Failed to delete.', [], 403);
     }
+
 }
