@@ -9,7 +9,10 @@ use App\Models\Badge;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
+use Ramsey\Uuid\Uuid;
 
 class ActivityLogController extends BaseController
 {
@@ -19,7 +22,7 @@ class ActivityLogController extends BaseController
      *      operationId="activities-get",
      *      tags={"Activities"},
      *      summary="Get auth activities",
-     *      description="Returns auth data",
+     *      description="Thumbnail:: http://localhost:8000/images/activities/thumb/thumb_200x200_b2f1778c-b46e-4274-8380-3eee19bfd0bd.jpg",
      *      @OA\Parameter(
      *          name="authorization",
      *          description="Bearer token",
@@ -34,6 +37,7 @@ class ActivityLogController extends BaseController
      *          description="Retrieve auth activities.",
      *          @OA\MediaType(
      *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {})
      *          )
      *       ),
      * )
@@ -41,8 +45,9 @@ class ActivityLogController extends BaseController
      */
     public function index()
     {
-        $activityLogs = ActivityLog::with('user')->select(
-            'id', 'activity', 'created_at', 'updated_at')->where('user_id', Auth::id())
+        $activityLogs = ActivityLog::select(
+            'id', 'activity', 'notes', 'thumbnail', 'created_at', 'updated_at')
+            ->where('user_id', Auth::id())
             ->orderBy('created_at', 'DESC')->get();
 
         return response()->json($activityLogs, 200);
@@ -80,6 +85,15 @@ class ActivityLogController extends BaseController
      *              type="string",
      *          ),
      *      ),
+     *      @OA\Parameter(
+     *          name="thumbnail",
+     *          description="Thumbnail should be: sometimes|mimes:jpeg,jpg,png,gif|max:5120",
+     *          required=false,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="file",
+     *          ),
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Activity has been created successfully.",
@@ -106,13 +120,37 @@ class ActivityLogController extends BaseController
         $validator = Validator::make($request->all(), [
             'activity' => 'required',
             'notes' => 'nullable',
+            'thumbnail' => 'sometimes|mimes:jpeg,jpg,png,gif|max:5120',
         ]);
 
         if ($validator->fails()) {
             return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
         }
 
-        $input = $request->only(['activity', 'notes']);
+        $input = $request->only(['activity', 'notes', 'thumbnail']);
+
+        if ($request->hasFile('thumbnail')) {
+            $imageID = Uuid::uuid4()->toString();
+            $imageName = $imageID . '.' . $request->file('thumbnail')
+                    ->getClientOriginalExtension();
+
+            $originalImagePath = public_path('images/activities/');
+            $thumbPath = public_path('images/activities/thumb/');
+            $thumb_200x200 = 'thumb_200x200_' . $imageName;
+
+            if (!file_exists($thumbPath)) {
+                File::makeDirectory($thumbPath, 0755, true);
+            }
+
+            $request->file('thumbnail')->move(
+                $originalImagePath, $imageName
+            );
+
+            $path = $originalImagePath . $imageName;
+            Image::make($path)->resize(200, 200)->save($thumbPath . $thumb_200x200);
+            $input['thumbnail'] = $imageName;
+        }
+
         $activityLog = ActivityLog::create($input);
 
         // Event dispatcher to create badge
@@ -147,6 +185,7 @@ class ActivityLogController extends BaseController
         $validator = Validator::make($request->all(), [
             'activity' => 'required',
             'notes' => 'nullable',
+            'thumbnail' => 'sometimes|mimes:jpeg,jpg,png,gif|max:5120',
         ]);
 
         if ($validator->fails()) {

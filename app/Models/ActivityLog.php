@@ -16,7 +16,7 @@ class ActivityLog extends Model
      * @var array
      */
     protected $fillable = [
-        'activity', 'notes', 'user_id',
+        'activity', 'notes', 'thumbnail', 'user_id',
     ];
 
     /**

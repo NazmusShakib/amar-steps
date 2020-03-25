@@ -21,7 +21,7 @@
                     "Activities"
                 ],
                 "summary": "Get auth activities",
-                "description": "Returns auth data",
+                "description": "thumbnail:: http://localhost:8000/images/activities/thumb/thumb_200x200_b2f1778c-b46e-4274-8380-3eee19bfd0bd.jpg",
                 "operationId": "activities-get",
                 "parameters": [
                     {
@@ -76,6 +76,15 @@
                         "required": false,
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    {
+                        "name": "thumbnail",
+                        "in": "query",
+                        "description": "Thumbnail should be: sometimes|mimes:jpeg,jpg,png,gif|max:5120",
+                        "required": false,
+                        "schema": {
+                            "type": "file"
                         }
                     }
                 ],
