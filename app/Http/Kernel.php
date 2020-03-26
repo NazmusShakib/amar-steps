@@ -70,6 +70,7 @@ class Kernel extends HttpKernel
         'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
 		'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
 		'verifiedPhone' => EnsurePhoneIsVerified::class,
+        'markNotificationAsRead' => \App\Http\Middleware\MarkNotificationAsRead::class,
     ];
 
     /**

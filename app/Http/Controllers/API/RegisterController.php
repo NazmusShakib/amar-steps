@@ -354,4 +354,9 @@ class RegisterController extends BaseController
 
         return $this->sendResponse($subscribers, 'List of subscribers.');
     }
+
+    public function notifications()
+    {
+        return auth()->user()->unreadNotifications()->limit(5)->get()->toArray();
+    }
 }

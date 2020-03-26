@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Resources\SenderResource;
 use App\Http\Resources\FriendResource;
 
+use App\Notifications\FriendRequestNotification;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -90,6 +91,10 @@ class FriendshipsController extends BaseController
             return $this->sendResponse([], 'The recipient has already been on your friend list.');
         } else if (!$hasSent) {
             $this->auth->befriend($recipient);
+
+            // send a notification to the recipient
+            $recipient->notify(new FriendRequestNotification($this->auth));
+
             return $this->sendResponse([], 'Request has been sent successfully.');
         }
 
