@@ -21,7 +21,7 @@
                     "Activities"
                 ],
                 "summary": "Get auth activities",
-                "description": "thumbnail:: http://localhost:8000/images/activities/thumb/thumb_200x200_b2f1778c-b46e-4274-8380-3eee19bfd0bd.jpg",
+                "description": "Thumbnail:: http://localhost:8000/images/activities/thumb/thumb_200x200_b2f1778c-b46e-4274-8380-3eee19bfd0bd.jpg",
                 "operationId": "activities-get",
                 "parameters": [
                     {
@@ -38,7 +38,12 @@
                     "200": {
                         "description": "Retrieve auth activities.",
                         "content": {
-                            "application/json": {}
+                            "application/json": {
+                                "schema": {
+                                    "example": [],
+                                    "type": "object"
+                                }
+                            }
                         }
                     }
                 }
@@ -1344,6 +1349,58 @@
                                             }
                                         ],
                                         "message": "List of subscribers."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notifications": {
+            "get": {
+                "tags": [
+                    "Registration"
+                ],
+                "summary": "List of un-read notifications.",
+                "description": "Notifications list.",
+                "operationId": "notifications-list",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of unread notifications.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [
+                                            {
+                                                "id": "5bc2a364-d2c6-4f0a-a286-c29da4c9cfc1",
+                                                "type": "App\\\\Notifications\\\\FriendRequestNotification",
+                                                "notifiable_type": "App\\\\User",
+                                                "notifiable_id": 3,
+                                                "data": {
+                                                    "sender_id": 2,
+                                                    "sender_name": "Staff Account"
+                                                },
+                                                "read_at": null,
+                                                "created_at": "2020-04-02 19:28:49",
+                                                "updated_at": "2020-04-02 19:55:39"
+                                            }
+                                        ],
+                                        "message": "List of unread notifications."
                                     },
                                     "type": "object"
                                 }

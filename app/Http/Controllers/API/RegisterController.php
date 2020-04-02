@@ -355,8 +355,36 @@ class RegisterController extends BaseController
         return $this->sendResponse($subscribers, 'List of subscribers.');
     }
 
+    /**
+     * @OA\GET(
+     *      path="/api/v1/notifications",
+     *      operationId="notifications-list",
+     *      tags={"Registration"},
+     *      summary="List of un-read notifications.",
+     *      description="Notifications list.",
+     *      @OA\Parameter(
+     *          name="authorization",
+     *          description="Bearer token",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *          in="header"
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="List of unread notifications.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":{{"id":"5bc2a364-d2c6-4f0a-a286-c29da4c9cfc1","type":"App\\Notifications\\FriendRequestNotification","notifiable_type":"App\\User","notifiable_id":3,"data":{"sender_id":2,"sender_name":"Staff Account"},"read_at":null,"created_at":"2020-04-02 19:28:49","updated_at":"2020-04-02 19:55:39"}},"message":"List of unread notifications."})
+     *          )
+     *       ),
+     * )
+     *
+     */
     public function notifications()
     {
-        return auth()->user()->unreadNotifications()->limit(5)->get()->toArray();
+        $unreadNotifications =  auth()->user()->unreadNotifications()->limit(5)->get()->toArray();
+        return $this->sendResponse($unreadNotifications, 'List of unread notifications.');
     }
 }

@@ -44,6 +44,7 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
+            \App\Http\Middleware\MarkNotificationAsRead::class
         ],
     ];
 
@@ -70,7 +71,7 @@ class Kernel extends HttpKernel
         'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
 		'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
 		'verifiedPhone' => EnsurePhoneIsVerified::class,
-        'markNotificationAsRead' => \App\Http\Middleware\MarkNotificationAsRead::class,
+        // 'markNotificationAsRead' => \App\Http\Middleware\MarkNotificationAsRead::class,
     ];
 
     /**
