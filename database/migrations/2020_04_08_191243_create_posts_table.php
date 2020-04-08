@@ -18,6 +18,7 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('thumbnail')->nullable();
+            $table->string('post_slug')->nullable();
 
             $table->enum('status', ['published', 'draft', 'unpublished'])
                 ->nullable();
