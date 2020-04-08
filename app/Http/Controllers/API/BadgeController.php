@@ -174,7 +174,7 @@ class BadgeController extends BaseController
      *          description="Retrieve single badge by id.",
      *          @OA\MediaType(
      *              mediaType="application/json",
-     *              @OA\JsonContent(type="object",example = {"success":true,"data":{"id":4,"name":"Aspen Morse","display_name":"Alfreda Eaton","target":50,"description":"Aliquid veniam quo","deleted_at":null,"created_at":"2020-02-16 01:30:13","updated_at":"2020-02-16 01:30:13","created_by":{"id":1,"name":"Admin User","email":"admin@example.com","phone":"0111"}},"message":"Badge retrieved successfully."})
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":{"id":4,"name":"Aspen Morse","display_name":"Alfreda Eaton","target":50,"description":"Aliquid veniam quo","deleted_at":null,"created_at":"2020-02-16 01:30:13","updated_at":"2020-02-16 01:30:13","created_by":{"id":1,"name":"Admin User","email":"amiampn@example.com","phone":"45678"}},"message":"Badge retrieved successfully."})
      *          )
      *       ),
      * )
@@ -272,7 +272,7 @@ class BadgeController extends BaseController
     public function destroy($id)
     {
         try {
-            Badge::find($id)->delete();
+            Badge::findOrFail($id)->delete();
             return $this->sendResponse([], 'Badge has been deleted successfully.');
         } catch (\Exception $exception) {
             return $this->sendError($exception->getMessage(), '', 422);
