@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Dhaka',
 
     /*
     |--------------------------------------------------------------------------
@@ -169,6 +169,7 @@ return [
         Zizaco\Entrust\EntrustServiceProvider::class,
         L5Swagger\L5SwaggerServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -238,6 +239,8 @@ return [
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
 
         'Helper' => App\Helpers\Helper::class,
+
+        'Image' => Intervention\Image\Facades\Image::class
 
     ],
 

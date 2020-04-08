@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+    amar-steps-db:
+        image: mysql:5.7.22
+        container_name: amar_steps_db
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "8103:3306"
+        environment:
+            MYSQL_USER: root
+            MYSQL_DATABASE: docker_amar_steps
+            MYSQL_ROOT_PASSWORD: root
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        networks:
+            - amar-steps-network
+
+    amar-steps-web:
+        command: sleep 99999999999
+        build: ./
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./:/var/www/html/amar-steps-web
+        container_name: amar_steps_web
+        networks:
+            - amar-steps-network
+
+networks:
+    amar-steps-network:
+        driver: bridge

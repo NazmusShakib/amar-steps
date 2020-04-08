@@ -1,44 +1,135 @@
 <template>
     <div class="tab-pane" id="update-profile">
-        <form class="form-horizontal form-material" @submit.prevent="updateProfile">
-            <div class="form-group">
-                <label class="col-md-12">Full Name</label>
-                <div class="col-md-12">
-                    <input type="text" v-model="auth.name" placeholder="Johnathan Doe"
-                           class="form-control form-control-line"></div>
+        <form class="form-horizontal form-material" @submit.prevent="updateProfile()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-md-12" for="full-name">Full name</label>
+                        <div class="col-md-12">
+                            <input type="text" v-model="auth.name" id="full-name"
+                                   v-validate="'required'" name="name" placeholder="Full name"
+                                   class="form-control form-control-line">
+                            <div v-show="errors.has('name')" class="help text-danger">
+                                {{ errors.first('name') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-md-12" for="email">Email</label>
+                        <div class="col-md-12">
+                            <input type="email" name="email" v-model="auth.email" placeholder="Email"
+                                   v-validate="'required'" class="form-control form-control-line"
+                                   id="email">
+                            <div v-show="errors.has('email')" class="help text-danger">
+                                {{ errors.first('email') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="example-email" class="col-md-12">Email</label>
-                <div class="col-md-12">
-                    <input type="email" v-model="auth.email" placeholder="johnathan@admin.com"
-                           class="form-control form-control-line"
-                           name="example-email" id="example-email" readonly></div>
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-md-12" for="phone">Phone</label>
+                        <div class="col-md-12">
+                            <input type="text" placeholder="Phone" name="phone" id="phone"
+                                   v-validate="'required'" v-model.trim="auth.phone"
+                                   class="form-control form-control-line" readonly>
+                            <div v-show="errors.has('phone')" class="help text-danger">
+                                {{ errors.first('phone') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-sm-12">Gender</label>
+                        <div class="col-sm-12">
+                            <select v-model="auth.profile.gender"
+                                    class="form-control form-control-line">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label class="col-md-12">Phone No</label>
-                <div class="col-md-12">
-                    <input type="text" placeholder="123 456 7890"
-                           v-model="auth.phone" class="form-control form-control-line"></div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-md-12" for="height">Height (cm)</label>
+                        <div class="col-md-12">
+                            <input type="number" min="0" placeholder="Height" name="height" id="height"
+                                   v-validate="'required'" v-model.trim="auth.height"
+                                   class="form-control form-control-line">
+                            <div v-show="errors.has('height')" class="help text-danger">
+                                {{ errors.first('height') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-sm-12">Weight (kg)</label>
+                        <div class="col-md-12">
+                            <input type="number" min="0" placeholder="Weight" name="weight" id="weight"
+                                   v-validate="'required'" v-model.trim="auth.weight"
+                                   class="form-control form-control-line">
+                            <div v-show="errors.has('weight')" class="help text-danger">
+                                {{ errors.first('weight') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-md-12" for="city">City</label>
+                        <div class="col-md-12">
+                            <input type="text" placeholder="City" name="city" id="city"
+                                   v-model.trim="auth.profile.city"
+                                   class="form-control form-control-line">
+                            <div v-show="errors.has('city')" class="help text-danger">
+                                {{ errors.first('city') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-sm-12">Country</label>
+                        <div class="col-md-12">
+                            <input type="text" placeholder="Country" name="country" id="country"
+                                   v-model.trim="auth.profile.country"
+                                   class="form-control form-control-line">
+                            <div v-show="errors.has('country')" class="help text-danger">
+                                {{ errors.first('country') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="form-group">
-                <label class="col-sm-12">Gender</label>
-                <div class="col-sm-12">
-                    <select v-model="auth.profile.gender" class="form-control form-control-line">
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
+                <label class="col-md-12" for="address">Address</label>
+                <div class="col-md-12">
+                    <textarea v-model="auth.profile.address" id="address"
+                              rows="5" class="form-control form-control-line"/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-12">Address</label>
+                <label class="col-md-12" for="bio">Bio</label>
                 <div class="col-md-12">
-                    <textarea v-model="auth.profile.address" rows="5" class="form-control form-control-line"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-12">Bio</label>
-                <div class="col-md-12">
-                    <textarea v-model="auth.profile.bio" rows="5" class="form-control form-control-line"></textarea>
+                    <textarea v-model="auth.profile.bio" id="bio"
+                              rows="5" class="form-control form-control-line"/>
                 </div>
             </div>
             <div class="form-group">
@@ -74,12 +165,30 @@
                         console.log(error);
                     });
             },
+
             updateProfile() {
-                let user = {
-                    'name' : 'Tanvir Ahmed',
-                    'email' :'tanvier@example.com'
+                let authObj = this.auth;
+                let input = {
+                    name: authObj.name,
+                    email: authObj.email,
+                    height: authObj.height,
+                    weight: authObj.weight,
+                    city: authObj.profile.city,
+                    country: authObj.profile.country,
+                    bio: authObj.profile.bio,
+                    gender: authObj.profile.gender,
+                    address: authObj.profile.address
                 };
-                this.$store.dispatch('authStore', user);
+
+                axios.post(this.$baseURL + 'profile', input)
+                    .then(response => {
+                        // this.$validator.reset();
+                        this.$notification.success(response.data.message);
+                        this.$store.dispatch("setGlobalAuth", response.data.data);
+                    }).catch(error => {
+                    this.$setErrorsFromResponse(error.response.data);
+                    this.$notification.error(error.response.data.message);
+                });
             }
         }
     }

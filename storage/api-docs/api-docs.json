@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "L5 Swagger API",
-        "description": "L5 Swagger OpenApi description",
+        "title": "Amar Steps - Swagger DOC ",
+        "description": "L6 Swagger OpenApi description",
         "contact": {
             "email": "nshakib.se@gmail.com"
         },
@@ -15,19 +15,1055 @@
         }
     ],
     "paths": {
+        "/api/v1/activities": {
+            "get": {
+                "tags": [
+                    "Activities"
+                ],
+                "summary": "Get auth activities",
+                "description": "Thumbnail:: http://localhost:8000/images/activities/thumb/thumb_200x200_b2f1778c-b46e-4274-8380-3eee19bfd0bd.jpg",
+                "operationId": "activities-get",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve auth activities.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": [],
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Activities"
+                ],
+                "summary": "Save activity log.",
+                "description": "Activity has been created successfully.",
+                "operationId": "activities-post",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "activity",
+                        "in": "query",
+                        "description": "activity json",
+                        "required": true,
+                        "schema": {
+                            "type": "json"
+                        }
+                    },
+                    {
+                        "name": "notes",
+                        "in": "query",
+                        "description": "notes",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "thumbnail",
+                        "in": "query",
+                        "description": "Thumbnail should be: sometimes|mimes:jpeg,jpg,png,gif|max:5120",
+                        "required": false,
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Activity has been created successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [
+                                            "saved data"
+                                        ],
+                                        "message": "Activity has been created successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Prerequisite failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "data": [
+                                            "errors"
+                                        ],
+                                        "message": "Prerequisite failed."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorised"
+                    }
+                }
+            }
+        },
+        "/api/v1/activities/{id}": {
+            "delete": {
+                "tags": [
+                    "Activities"
+                ],
+                "summary": "Delete activity.",
+                "description": "Activity has been deleted successfully.",
+                "operationId": "destroy-activity",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Activity has been deleted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": "",
+                                        "message": "Activity has been deleted successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Failed to delete.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "message": "Failed to delete."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/activities/badges": {
+            "get": {
+                "tags": [
+                    "Activities"
+                ],
+                "summary": "Auth badges",
+                "description": "Returns all badges",
+                "operationId": "activities-badges",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve single badge by id.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": [],
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/badges": {
+            "get": {
+                "tags": [
+                    "Badges"
+                ],
+                "summary": "Get all badges",
+                "description": "Returns badges",
+                "operationId": "badges-get",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve badges.",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Badges"
+                ],
+                "summary": "Create badge.",
+                "description": "Badge has been created successfully.",
+                "operationId": "Badges-post",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "target",
+                        "in": "query",
+                        "description": "target",
+                        "required": false,
+                        "schema": {
+                            "type": "double"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "description",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Badge has been created successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [
+                                            "saved data"
+                                        ],
+                                        "message": "Badge has been created successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Prerequisite failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "data": [
+                                            "errors"
+                                        ],
+                                        "message": "Prerequisite failed."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/badges/{id}": {
+            "get": {
+                "tags": [
+                    "Badges"
+                ],
+                "summary": "Singel badge",
+                "description": "Returns single badge",
+                "operationId": "badges-single",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve single badge by id.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": {
+                                            "id": 4,
+                                            "name": "Aspen Morse",
+                                            "display_name": "Alfreda Eaton",
+                                            "target": 50,
+                                            "description": "Aliquid veniam quo",
+                                            "deleted_at": null,
+                                            "created_at": "2020-02-16 01:30:13",
+                                            "updated_at": "2020-02-16 01:30:13",
+                                            "created_by": {
+                                                "id": 1,
+                                                "name": "Admin User",
+                                                "email": "admin@example.com",
+                                                "phone": "0111"
+                                            }
+                                        },
+                                        "message": "Badge retrieved successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Badges"
+                ],
+                "summary": "Delete badge.",
+                "description": "Badge has been deleted successfully.",
+                "operationId": "destroy-badge",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Badge has been deleted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": "",
+                                        "message": "Badge has been deleted successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Failed to delete.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "message": "Failed to delete."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/followers": {
+            "get": {
+                "tags": [
+                    "Followers"
+                ],
+                "summary": "Follow list",
+                "description": "Following list",
+                "operationId": "followers",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "following List.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "follow_list": [
+                                            {
+                                                "id": 1,
+                                                "name": "Admin User",
+                                                "email": "admin@example.com",
+                                                "phone": "0111",
+                                                "headshot": null,
+                                                "profile": {
+                                                    "city": null,
+                                                    "country": null,
+                                                    "address": "9219 Kris Track Suite 613\\nTylerstad, MA 28181-8012",
+                                                    "user_id": 1
+                                                }
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "Staff Account",
+                                                "email": "staff@example.com",
+                                                "phone": "0222",
+                                                "headshot": null,
+                                                "profile": {
+                                                    "city": null,
+                                                    "country": null,
+                                                    "address": "630 Howell Branch Suite 384\\nNorth Destinytown, AL 41217",
+                                                    "user_id": 2
+                                                }
+                                            }
+                                        ],
+                                        "unfollow_list": [
+                                            {
+                                                "id": 3,
+                                                "name": "Subscriber Account",
+                                                "email": "subscriber@example.com",
+                                                "phone": "0333",
+                                                "headshot": null,
+                                                "profile": {
+                                                    "city": null,
+                                                    "country": null,
+                                                    "address": "73721 Noble Trail ew Christopherchester, NV 62390-3169",
+                                                    "user_id": 3
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/followers/send-follow-request/{id}": {
+            "post": {
+                "tags": [
+                    "Followers"
+                ],
+                "summary": "Send follow request to the given id parameter",
+                "description": "Request has been sent successfully.",
+                "operationId": "send-follow-request",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Request has been sent successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [],
+                                        "message": "Request has been sent successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/followers/cancel-follow-request/{id}": {
+            "post": {
+                "tags": [
+                    "Followers"
+                ],
+                "summary": "The follower may cancel the request before getting acceptance.",
+                "description": "Request has been canceled successfully.",
+                "operationId": "cancel-follow-request",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Request has been canceled successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [],
+                                        "message": "Request has been cancled successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/followers/accept-follow-request/{id}": {
+            "post": {
+                "tags": [
+                    "Followers"
+                ],
+                "summary": "accept-follow-request",
+                "description": "Request has been accepted successfully.",
+                "operationId": "accept-follow-request",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Request has been accepted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [],
+                                        "message": "Request has been accepted successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/followers/decline-follow-request/{id}": {
+            "post": {
+                "tags": [
+                    "Followers"
+                ],
+                "summary": "decline-follow-request",
+                "description": "Request has been declined successfully.",
+                "operationId": "decline-follow-request",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Request has been declined successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [],
+                                        "message": "Request has been decline successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/friends": {
+            "get": {
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "Friends list",
+                "description": "Friends list",
+                "operationId": "friends",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "following List.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [
+                                            {
+                                                "id": 1,
+                                                "name": "Admin User",
+                                                "email": "rahap@example.com",
+                                                "phone": "012312453453543",
+                                                "headshot": null,
+                                                "address": "9219 Kris Track Suite 613\\nTylerstad, MA 28181-8012"
+                                            },
+                                            {
+                                                "id": 3,
+                                                "name": "Subscriber Account",
+                                                "email": "sub@example.com",
+                                                "phone": "34534534",
+                                                "headshot": null,
+                                                "address": "73721 Noble Trail\\nNew Christopherchester, NV 62390-3169"
+                                            }
+                                        ],
+                                        "message": "Friends list."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/friends/send-request/{id}": {
+            "post": {
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "Send friend request to the given id parameter",
+                "description": "Request has been sent successfully.",
+                "operationId": "send-request",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Request has been sent successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [],
+                                        "message": "Request has been sent successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/friends/accept-request/{id}": {
+            "post": {
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "accept-request",
+                "description": "Request has been accepted successfully.",
+                "operationId": "accept-request",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Request has been accepted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [],
+                                        "message": "Request has been accepted successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/friends/deny-request/{id}": {
+            "post": {
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "deny-request",
+                "description": "Request has been declined successfully.",
+                "operationId": "deny-request",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Request has been declined successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [],
+                                        "message": "Request has been decline successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/friends/un-friend/{id}": {
+            "post": {
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "The follower may cancel the request before getting acceptance.",
+                "description": "Request has been canceled successfully.",
+                "operationId": "un-friend",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Request has been canceled successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [],
+                                        "message": "Request has been cancled successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/friends/pending-requests": {
+            "get": {
+                "tags": [
+                    "Friends"
+                ],
+                "summary": "List of pending friend requests.",
+                "description": "List of pending friend requests.",
+                "operationId": "friends-pending-requests",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of pending friend requests.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [
+                                            {
+                                                "id": 1,
+                                                "name": "Admin User",
+                                                "email": "raptn@example.com",
+                                                "phone": "0453453454353",
+                                                "headshot": null,
+                                                "address": "9219 Kris Track Suite 613 Tylerstad, MA 28181-8012"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "John Dou",
+                                                "email": "dou@example.com",
+                                                "phone": "012345678",
+                                                "headshot": null,
+                                                "address": "234 Kris Track Suite 613ylerstad, MA 28181-8012"
+                                            }
+                                        ],
+                                        "message": "List of pending friend requests."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/leaderboard": {
+            "get": {
+                "tags": [
+                    "Leader Board"
+                ],
+                "summary": "leader board",
+                "description": "Return leader board",
+                "operationId": "leaderboard",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve leaderboard.",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/leaderboard/auth-rank": {
+            "get": {
+                "tags": [
+                    "Leader Board"
+                ],
+                "summary": "leader board auth rank",
+                "description": "Return leader board auth rank",
+                "operationId": "leaderboard-auth-rank",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve leaderboard.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "auth_rank_globally": {
+                                            "id": 1,
+                                            "name": "Admin User",
+                                            "headshot": null,
+                                            "city": null,
+                                            "country": null,
+                                            "address": "6540 Kris Mews\\nNew Dorianstad, DC 80324",
+                                            "grand_distance": 2037.8058,
+                                            "rank": 1
+                                        },
+                                        "auth_current_month_rank": {
+                                            "id": 1,
+                                            "name": "Admin User",
+                                            "headshot": null,
+                                            "city": null,
+                                            "country": null,
+                                            "address": "6540 Kris Mews\\nNew Dorianstad, DC 80324",
+                                            "current_month_distance": 2037.8058,
+                                            "rank": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/phone/verify": {
+            "post": {
+                "tags": [
+                    "Registration"
+                ],
+                "summary": "Verify phone.",
+                "description": "Your phone was successfully verified.",
+                "operationId": "post-phone-verify",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "Verification code",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Your phone was successfully verified.",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorised"
+                    }
+                }
+            }
+        },
         "/api/v1/register": {
             "post": {
                 "tags": [
                     "Registration"
                 ],
-                "summary": "Register Users!",
+                "summary": "Register Users.",
                 "description": "Returns user name email and token.",
                 "operationId": "register",
                 "parameters": [
                     {
-                        "name": "name",
+                        "name": "phone",
                         "in": "query",
-                        "description": "User Name",
+                        "description": "Phone Number",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -63,15 +1099,20 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User register successfully.",
+                        "description": "Account has been created successfully.",
                         "content": {
                             "application/json": {}
                         }
-                    },
-                    "400": {
-                        "description": "Bad request"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "oauth2_security_example": [
+                            "write:auth",
+                            "read:auth"
+                        ]
+                    }
+                ]
             }
         },
         "/api/v1/login": {
@@ -79,14 +1120,14 @@
                 "tags": [
                     "Registration"
                 ],
-                "summary": "Login Users!",
+                "summary": "Login Users.",
                 "description": "Returns user details with token",
                 "operationId": "login",
                 "parameters": [
                     {
-                        "name": "email",
+                        "name": "phone",
                         "in": "query",
-                        "description": "User Email",
+                        "description": "User Phone",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -108,11 +1149,16 @@
                         "content": {
                             "application/json": {}
                         }
-                    },
-                    "401": {
-                        "description": "Unauthorised"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "oauth2_security_example": [
+                            "write:auth",
+                            "read:auth"
+                        ]
+                    }
+                ]
             }
         },
         "/api/v1/profile": {
@@ -138,21 +1184,282 @@
                     "200": {
                         "description": "Retrieve auth profile.",
                         "content": {
-                            "application/json": {}
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [],
+                                        "message": "Retrieve auth profile."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/profile/change-password": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Auth password changed.",
+                "description": "Returns updated details.",
+                "operationId": "change-password",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
                         }
                     },
-                    "404": {
-                        "description": "Resource Not Found"
-                    }
-                },
-                "security": [
                     {
-                        "oauth2_security_example": [
-                            "write:auth",
-                            "read:auth"
-                        ]
+                        "name": "Accept",
+                        "in": "query",
+                        "description": "application/json",
+                        "required": true,
+                        "schema": {
+                            "example": {
+                                "old_password": "123456",
+                                "password": "123abc",
+                                "password_confirmation": "123abcd"
+                            },
+                            "type": "object"
+                        }
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password has been changed successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": {
+                                            "id": 1,
+                                            "name": "Admin User",
+                                            "email": "admin@example.com",
+                                            "phone": "+2992233690457",
+                                            "role": "Administrator",
+                                            "profile": {
+                                                "gender": "male",
+                                                "dob": "1970-07-11",
+                                                "bio": "Duchess, 'chop off her knowledge, as there was no more to do that,' said the Cat, and vanished. Alice was soon submitted to by all three dates on.",
+                                                "address": "7749 Dana Trail Suite 868\\nGibsonmouth, HI 32195-3665"
+                                            }
+                                        },
+                                        "message": "Password has been changed successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "message": "Validation failed.",
+                                        "errors": {
+                                            "password": "Doesn't match."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/subscribers": {
+            "get": {
+                "tags": [
+                    "Registration"
+                ],
+                "summary": "Subscribers list shows here.",
+                "description": "Subscribers list.",
+                "operationId": "subscribers-list",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of subscribers. NB: 'friendship_status' would be 'PENDING', 'ACCEPTED', 'DENIED', 'BLOCKED' or null ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [
+                                            {
+                                                "id": 1,
+                                                "name": "Admin User",
+                                                "email": "adm@example.com",
+                                                "user_code": null,
+                                                "phone": "034565434",
+                                                "height": null,
+                                                "weight": null,
+                                                "phone_verified_at": null,
+                                                "friendship_status": "PENDING",
+                                                "headshot": null,
+                                                "role": "Administrator"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "Staff Account",
+                                                "email": "people@example.com",
+                                                "user_code": null,
+                                                "phone": "0231234",
+                                                "height": null,
+                                                "weight": null,
+                                                "phone_verified_at": null,
+                                                "friendship_status": null,
+                                                "headshot": null,
+                                                "role": "Staff"
+                                            },
+                                            {
+                                                "id": 3,
+                                                "name": "Subscriber Account",
+                                                "email": "sus@example.com",
+                                                "user_code": null,
+                                                "phone": "0321312",
+                                                "height": null,
+                                                "weight": null,
+                                                "phone_verified_at": null,
+                                                "friendship_status": null,
+                                                "headshot": null,
+                                                "role": "Subscriber"
+                                            }
+                                        ],
+                                        "message": "List of subscribers."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notifications": {
+            "get": {
+                "tags": [
+                    "Registration"
+                ],
+                "summary": "List of un-read notifications.",
+                "description": "Notifications list.",
+                "operationId": "notifications-list",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of unread notifications.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [
+                                            {
+                                                "id": "5bc2a364-d2c6-4f0a-a286-c29da4c9cfc1",
+                                                "type": "App\\\\Notifications\\\\FriendRequestNotification",
+                                                "notifiable_type": "App\\\\User",
+                                                "notifiable_id": 3,
+                                                "data": {
+                                                    "sender_id": 2,
+                                                    "sender_name": "Staff Account"
+                                                },
+                                                "read_at": null,
+                                                "created_at": "2020-04-02 19:28:49",
+                                                "updated_at": "2020-04-02 19:55:39"
+                                            }
+                                        ],
+                                        "message": "List of unread notifications."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}": {
+            "delete": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Delete user.",
+                "description": "User has been deleted successfully.",
+                "operationId": "destroy-user",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User has been deleted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": "",
+                                        "message": "User has been deleted successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Failed to delete.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "message": "Failed to delete."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

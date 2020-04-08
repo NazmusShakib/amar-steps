@@ -18,6 +18,7 @@ class CreateActivityLogsTable extends Migration
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->json('activity')->nullable();
             $table->text('notes')->nullable();
+            $table->string('thumbnail')->nullable();
 
             $table->foreign('user_id')->references('id')
                 ->on('users')->onDelete('cascade');

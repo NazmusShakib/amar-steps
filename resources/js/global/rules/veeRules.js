@@ -40,6 +40,9 @@ const dictionary = {
             min: 'The acc number field must be at least 11 characters',
             max: 'The acc number field may not be greater than 11 characters',
             digits: 'The acc number field must be numeric and contains exactly 11 digits'
+        },
+        unit_id: {
+            required: 'The unit field is required.'
         }
     }
 };

@@ -3,31 +3,25 @@
         <div class="row">
             <div class="col-md-3 col-xs-6 b-r"><strong>Full Name</strong>
                 <br>
-                <p class="text-muted">Johnathan Deo</p>
+                <p class="text-muted">{{ auth.name || 'N/A' }}</p>
             </div>
             <div class="col-md-3 col-xs-6 b-r"><strong>Mobile</strong>
                 <br>
-                <p class="text-muted">(123) 456 7890</p>
+                <p class="text-muted">{{ auth.phone || 'N/A' }}</p>
             </div>
-            <div class="col-md-3 col-xs-6 b-r"><strong>Email</strong>
+            <div class="col-md-4 col-xs-6 b-r"><strong>Email</strong>
                 <br>
-                <p class="text-muted">johnathan@admin.com</p>
+                <p class="text-muted">{{ auth.email || 'N/A' }}</p>
             </div>
-            <div class="col-md-3 col-xs-6"><strong>Gender</strong>
+            <div class="col-md-2 col-xs-6"><strong>Gender</strong>
                 <br>
-                <p class="text-muted">London</p>
+                <p class="text-muted">{{ auth.profile.gender || 'N/A' }}</p>
             </div>
         </div>
         <hr>
-        <p class="m-t-30">Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
-            imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras
-            dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu,
-            consequat vitae, eleifend ac, enim.</p>
-        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-            industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-            scrambled it to make a type specimen book. It has survived not only five centuries </p>
-        <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
-            recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+        <p class="m-t-30">{{ auth.profile.bio || 'N/A' }}</p>
+        <b>Address: </b>
+        <p> {{ auth.profile.address || 'N/A' }}</p>
         <h4 class="font-bold m-t-30">Skill Set</h4>
         <hr>
         <h5>Wordpress <span class="pull-right">80%</span></h5>
@@ -56,7 +50,10 @@
 <script>
     export default {
         props: {
-            //
+            auth: {
+                type: Object,
+                required: false
+            },
         },
         data: () => ({
             //

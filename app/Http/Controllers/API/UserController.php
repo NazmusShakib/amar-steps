@@ -5,12 +5,13 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Http\Resources\ProfileResource;
 use App\Http\Resources\UserCollection;
+use App\Http\Resources\UserResource;
 use App\Profile;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\UserResource;
 
 class UserController extends BaseController
 {
@@ -18,18 +19,24 @@ class UserController extends BaseController
      * Display a listing of the resource.
      *
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('roles')->select(
+        $builder = User::query();
+        if ($request->has('role') && !empty($request->role)) {
+            $builder->whereHas('roles', function ($role) use ($request) {
+                $role->where('name', '=', $request->role);
+            });
+        }
+
+        $users = $builder->with('roles')->select(
             'id', 'name', 'email', 'phone')->paginate(10);
 
         return new UserCollection($users);
     }
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -59,8 +66,8 @@ class UserController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
@@ -76,9 +83,9 @@ class UserController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Profile $profile
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Profile $profile)
     {
@@ -88,7 +95,7 @@ class UserController extends BaseController
             'bio' => 'required',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
@@ -99,14 +106,44 @@ class UserController extends BaseController
     }
 
     /**
-     * Remove the specified resource from storage.
-     * @param User $user
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
+     * @OA\Delete(
+     *      path="/api/v1/users/{id}",
+     *      operationId="destroy-user",
+     *      tags={"Profile"},
+     *      summary="Delete user.",
+     *      description="User has been deleted successfully.",
+     *      @OA\Parameter(
+     *          name="Authorization",
+     *          description="Bearer token",
+     *          required=true,
+     *          in="header",
+     *          @OA\Schema(type="string"),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="User has been deleted successfully.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":"","message":"User has been deleted successfully."})
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Failed to delete.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":false,"message":"Failed to delete."})
+     *          )
+     *      ),
+     * )
      */
     public function destroy(User $user)
     {
-        $user->delete();
-        return $this->sendResponse([], 'User has been deleted successfully.');
+        if (Auth::id() != $user->id) {
+            $user->delete();
+            return $this->sendResponse([], 'User has been deleted successfully.');
+        }
+        return $this->sendError('Failed to delete.', [], 403);
     }
+
 }

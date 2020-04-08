@@ -14,9 +14,13 @@
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
         "gghughunishvili/entrust": "^2.0",
+        "hootlex/laravel-friendships": "^1.0",
+        "intervention/image": "^2.5",
         "laravel/framework": "^6.2",
         "laravel/passport": "^8.0",
         "laravel/tinker": "^1.0",
+        "rennokki/befriended": "^3.1",
+        "twilio/sdk": "^5.42",
         "zircote/swagger-php": "3.*"
     },
     "require-dev": {

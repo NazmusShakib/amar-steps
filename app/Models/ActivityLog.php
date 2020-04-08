@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityLog extends Model
 {
@@ -15,7 +16,7 @@ class ActivityLog extends Model
      * @var array
      */
     protected $fillable = [
-        'activity', 'notes', 'user_id',
+        'activity', 'notes', 'thumbnail', 'user_id',
     ];
 
     /**
@@ -33,6 +34,15 @@ class ActivityLog extends Model
     protected $casts = [
         'activity' => 'json'
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function($model)
+        {
+            $model->user_id = Auth::id();
+        });
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

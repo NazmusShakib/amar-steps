@@ -1,16 +1,18 @@
 // Authenticated
-import ListOfUsers from '~/components/users/ListOfUsersComponent';
+import UserList from '~/components/users/UserListComponent';
 import UserCreate from '~/components/users/UserCreateComponent';
 import UserEdit from '~/components/users/UserEditComponent';
 
+// Middleware
+import requireAuth from '~/routes/middleware/requireAuthCheck'
 
 const index = [
     {
-        path: '/users', component: ListOfUsers,
-        name: 'ListOfUsers',
+        path: '/users', component: UserList,
+        name: 'UserList',
         meta: {
-            requireAuth: true,
             title: 'Users - App',
+            middleware: [requireAuth],
             metaTags: [
                 {
                     name: 'description',
@@ -28,8 +30,8 @@ const index = [
         name: 'UserCreate',
         component: UserCreate,
         meta: {
-            requireAuth: true,
             title: 'User Create - App',
+            middleware: [requireAuth],
             metaTags: [
                 {
                     name: 'description',

@@ -10,7 +10,9 @@ class BaseController extends Controller
     /**
      * success response method.
      *
-     * @return \Illuminate\Http\Response
+     * @param $result
+     * @param $message
+     * @return \Illuminate\Http\JsonResponse
      */
     public function sendResponse($result, $message)
     {
@@ -20,14 +22,16 @@ class BaseController extends Controller
             'message' => $message,
         ];
 
-
         return response()->json($response, 200);
     }
 
     /**
      * return error response.
      *
-     * @return \Illuminate\Http\Response
+     * @param $error
+     * @param array $errorMessages
+     * @param int $code
+     * @return \Illuminate\Http\JsonResponse
      */
     public function sendError($error, $errorMessages = [], $code = 404)
     {
@@ -36,11 +40,9 @@ class BaseController extends Controller
             'message' => $error,
         ];
 
-
-        if(!empty($errorMessages)){
-            $response['data'] = $errorMessages;
+        if(!empty($errorMessages)) {
+            $response['errors'] = $errorMessages;
         }
-
 
         return response()->json($response, $code);
     }

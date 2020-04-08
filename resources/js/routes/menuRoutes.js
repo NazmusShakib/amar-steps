@@ -2,6 +2,8 @@
 import Register from '~/components/auth/Register';
 import Login from '~/components/auth/Login';
 import Error404 from '~/components/errors/404';
+import VerifiedForm from '~/components/auth/VerifyPhone';
+import PrivacyPolicy from '~/components/auth/PrivacyPolicyComponent';
 
 // Authenticated
 import Dashboard from '~/components/DashboardComponent';
@@ -9,41 +11,77 @@ import Profile from '~/components/ProfileComponent';
 import Blank from '~/components/BlankComponent';
 
 
+// Middleware
+import requireAuth from '~/routes/middleware/requireAuthCheck'
+
 // Import Module Routes
 import userRoutes from './userRoutes';
-import requisitionRoutes from './requisitionRoutes';
+import badgeRoutes from './badgeRoutes';
 
 
-
-const baseRoutes = [
-    {
+const baseRoutes = [{
         path: '/login',
         component: Login,
         name: 'Login',
-        meta: {title: 'Login Page - App', guest: true}
+        meta: {
+            title: 'Login - App',
+            guest: true,
+        }
     },
     {
-        path: '/register', component: Register,
+        path: '/register',
+        component: Register,
         name: 'Register',
-        meta: {title: 'Register Page - App', guest: true}
+        meta: {
+            title: 'Register - App',
+            guest: true,
+        }
     },
     {
-        path: '/blank', component: Blank,
+        path: '/verify',
+        component: VerifiedForm,
+        name: 'VerifiedForm',
+        meta: {
+            guest: true,
+            title: 'Verify Phone - App',
+        }
+    },
+    {
+        path: '/privacy-policy',
+        component: PrivacyPolicy,
+        name: 'PrivacyPolicy',
+        meta: {
+            guest: true,
+            title: 'Privacy Policy - Amar Steps',
+        }
+    },
+    {
+        path: '/blank',
+        component: Blank,
         name: 'Blank',
-        meta: {title: 'Blank Page - App', guest: true}
+        meta: {
+            middleware: [requireAuth],
+            title: 'Blank - App',
+            guest: true
+        }
     },
     {
-        path: '*', component: Error404,
-        name: '404', meta: {title: 'Not Found - App'}
+        path: '*',
+        component: Error404,
+        name: '404',
+        meta: {
+            middleware: [requireAuth],
+            title: 'Not Found - App'
+        }
     },
     {
-        path: '/dashboard', component: Dashboard,
+        path: '/',
+        component: Dashboard,
         name: 'Dashboard',
         meta: {
-            requireAuth: true,
+            middleware: [requireAuth],
             title: 'Dashboard - App',
-            metaTags: [
-                {
+            metaTags: [{
                     name: 'description',
                     content: 'The home page of our app.'
                 },
@@ -59,10 +97,9 @@ const baseRoutes = [
         name: 'Profile',
         component: Profile,
         meta: {
-            requireAuth: true,
+            middleware: [requireAuth],
             title: 'Profile - App',
-            metaTags: [
-                {
+            metaTags: [{
                     name: 'description',
                     content: 'The profile page of our app.'
                 },
@@ -76,7 +113,7 @@ const baseRoutes = [
 ];
 
 const routes = baseRoutes.concat(
-    userRoutes, requisitionRoutes
+    userRoutes, badgeRoutes
 );
 
 export default routes;

@@ -2,7 +2,7 @@
     <div>
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse slimscrollsidebar">
-                <div class="user-profile">
+                <!-- <div class="user-profile">
                     <div class="dropdown user-pro-body">
                         <div>
                             <img :src="'/plugins/images/users/blank-profile-picture.png'" alt="user-img"
@@ -26,36 +26,40 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div>-->
                 <ul class="nav" id="side-menu">
                     <li class="sidebar-search hidden-sm hidden-md hidden-lg">
                         <!-- input-group -->
                         <div class="input-group custom-search-form">
-                            <input type="text" class="form-control" placeholder="Search..."> <span
-                            class="input-group-btn">
-            <button class="btn btn-default" type="button"> <i class="fa fa-search"></i> </button>
-            </span></div>
+                            <input type="text" class="form-control" placeholder="Search..." />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
                         <!-- /input-group -->
                     </li>
 
                     <li>
                         <router-link :to="{ name: 'Dashboard'}" class="waves-effect">
                             <i class="fa fa-dashboard" data-icon="v"></i>
-                            <span class="hide-menu"> Dashboard</span>
+                            <span class="hide-menu">Dashboard</span>
                         </router-link>
                     </li>
 
                     <li>
                         <router-link :to="{ name: 'Blank'}" class="waves-effect">
                             <i class="fa fa-sticky-note" data-icon="v"></i>
-                            <span class="hide-menu"> Blank Page</span>
+                            <span class="hide-menu">Blank Page</span>
                         </router-link>
                     </li>
 
                     <li>
                         <a href="javascript:void(0)" class="waves-effect">
                             <i class="fa fa-user" data-icon="v"></i>
-                            <span class="hide-menu"> Users
+                            <span class="hide-menu">
+                                Users
                                 <span class="fa arrow"></span>
                             </span>
                         </a>
@@ -63,57 +67,31 @@
                             <li>
                                 <router-link :to="{ name: 'UserCreate'}" class="waves-effect">
                                     <i class="fa fa-plus" data-icon="v"></i>
-                                    <span class="hide-menu"> Create New </span>
+                                    <span class="hide-menu">Create New</span>
                                 </router-link>
                             </li>
                             <li>
-                                <router-link :to="{ name: 'ListOfUsers'}" class="waves-effect">
+                                <router-link :to="{ name: 'UserList'}" class="waves-effect">
                                     <i class="fa fa-th-list" data-icon="v"></i>
-                                    <span class="hide-menu"> List </span>
+                                    <span class="hide-menu">List</span>
                                 </router-link>
                             </li>
                         </ul>
                     </li>
+
                     <li>
                         <a href="javascript:void(0)" class="waves-effect">
-                            <i class="fa fa-plane" data-icon="v"></i>
-                            <span class="hide-menu"> Export
+                            <i class="fa fa-user" data-icon="v"></i>
+                            <span class="hide-menu">
+                                Settings
                                 <span class="fa arrow"></span>
                             </span>
                         </a>
                         <ul class="nav nav-second-level collapse" aria-expanded="true">
                             <li>
-                                <router-link :to="{ name: 'ExportCreate'}" class="waves-effect">
-                                    <i class="fa fa-plus" data-icon="v"></i>
-                                    <span class="hide-menu"> Create Export </span>
-                                </router-link>
-                            </li>
-                            <li>
-                                <router-link :to="{ name: 'ExportList'}" class="waves-effect">
-                                    <i class="fa fa-th-list" data-icon="v"></i>
-                                    <span class="hide-menu"> List Of Exports </span>
-                                </router-link>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)" class="waves-effect">
-                            <i class="fa fa-truck" data-icon="v"></i>
-                            <span class="hide-menu"> Import
-                                <span class="fa arrow"></span>
-                            </span>
-                        </a>
-                        <ul class="nav nav-second-level collapse" aria-expanded="true">
-                            <li>
-                                <router-link :to="{ name: 'ImportCreate'}" class="waves-effect">
-                                    <i class="fa fa-plus" data-icon="v"></i>
-                                    <span class="hide-menu"> Create Import </span>
-                                </router-link>
-                            </li>
-                            <li>
-                                <router-link :to="{ name: 'ImportList'}" class="waves-effect">
-                                    <i class="fa fa-th-list" data-icon="v"></i>
-                                    <span class="hide-menu"> List of Imports </span>
+                                <router-link :to="{ name: 'BadgeList'}" class="waves-effect">
+                                    <i class="fa fa-diamond" data-icon="v"></i>
+                                    <span class="hide-menu">Badge</span>
                                 </router-link>
                             </li>
                         </ul>
@@ -122,10 +100,9 @@
                     <li>
                         <a href="#" class="waves-effect">
                             <i class="fa fa-sticky-note" data-icon="v"></i>
-                            <span class="hide-menu"> Reports</span>
+                            <span class="hide-menu">Reports</span>
                         </a>
                     </li>
-
                 </ul>
             </div>
         </div>
@@ -133,17 +110,16 @@
 </template>
 
 <script>
-    export default {
-        props: [],
-        created: function () {
-            console.log('NavBar component.')
-        },
-        methods: {
-            logout() {
-                this.$localStorage.clear();
-                this.$router.push({name: 'Login'});
-            }
+export default {
+    props: [],
+    created: function() {
+        console.log("NavBar component.");
+    },
+    methods: {
+        logout() {
+            this.$store.dispatch("globalLogout");
+            this.$router.push({name: 'Login'});
         }
     }
-
+};
 </script>

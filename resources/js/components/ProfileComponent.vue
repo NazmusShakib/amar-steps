@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-md-4 col-xs-12">
 
-                <left-card></left-card>
+                <left-card :auth="profile"></left-card>
 
             </div>
 
@@ -50,7 +50,7 @@
                     <div class="tab-content">
 
                         <keep-alive>
-                            <component v-bind:is="activeTab"></component>
+                            <component v-bind:is="activeTab" :auth="profile"></component>
                         </keep-alive>
 
                     </div>
@@ -64,12 +64,17 @@
 <script>
     import MasterLayout from './layouts/MasterLayoutComponent.vue';
 
-    import {LeftCard, Profile, UpdateProfile, Headshot, ChangePassword} from './profile';
+    import {ChangePassword, Headshot, LeftCard, Profile, UpdateProfile} from './profile';
 
     export default {
         name: 'ProfileDetails',
         components: {
             LeftCard, Profile, UpdateProfile, Headshot, ChangePassword
+        },
+        computed: {
+            profile() {
+                return this.$store.getters.globalAuth;
+            },
         },
         data: () => ({
             activeTab: Profile
