@@ -272,7 +272,7 @@ class BadgeController extends BaseController
     public function destroy($id)
     {
         try {
-            Badge::find($id)->delete();
+            Badge::findOrFail($id)->delete();
             return $this->sendResponse([], 'Badge has been deleted successfully.');
         } catch (\Exception $exception) {
             return $this->sendError($exception->getMessage(), '', 422);

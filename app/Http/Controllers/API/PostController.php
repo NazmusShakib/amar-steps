@@ -257,7 +257,7 @@ class PostController extends BaseController
     public function destroy($id)
     {
         try {
-            Post::find($id)->delete();
+            Post::findOrFail($id)->delete();
             return $this->sendResponse([], 'Post has been deleted successfully.');
         } catch (\Exception $exception) {
             return $this->sendError($exception->getMessage(), '', 422);

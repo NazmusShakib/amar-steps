@@ -370,8 +370,8 @@
                                             "created_by": {
                                                 "id": 1,
                                                 "name": "Admin User",
-                                                "email": "admin@example.com",
-                                                "phone": "0111"
+                                                "email": "amiampn@example.com",
+                                                "phone": "45678"
                                             }
                                         },
                                         "message": "Badge retrieved successfully."
@@ -1047,6 +1047,219 @@
                     },
                     "401": {
                         "description": "Unauthorised"
+                    }
+                }
+            }
+        },
+        "/api/v1/posts": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Get all posts",
+                "description": "Returns posts",
+                "operationId": "posts-get",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve badges.",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Create post.",
+                "description": "Post has been created successfully.",
+                "operationId": "post-store",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "Title",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "description",
+                        "required": false,
+                        "schema": {
+                            "type": "text"
+                        }
+                    },
+                    {
+                        "name": "thumbnail",
+                        "in": "query",
+                        "description": "thumbnail",
+                        "required": false,
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Post has been created successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": [
+                                            "saved data"
+                                        ],
+                                        "message": "Post has been created successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Prerequisite failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "data": [
+                                            "errors"
+                                        ],
+                                        "message": "Prerequisite failed."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/posts/{id}": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Singel post",
+                "description": "Returns single post",
+                "operationId": "posts-single",
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Retrieve single post by id.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": {
+                                            "id": 4,
+                                            "title": "Aspen Morse",
+                                            "description": "Aliquid veniam quo",
+                                            "thumbnail": "uuid.mime",
+                                            "deleted_at": null,
+                                            "created_at": "2020-02-16 01:30:13",
+                                            "updated_at": "2020-02-16 01:30:13",
+                                            "created_by": {
+                                                "id": 1,
+                                                "name": "John Doe",
+                                                "email": "createor@example.com",
+                                                "phone": "023782732"
+                                            }
+                                        },
+                                        "message": "Post retrieved successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Delete post.",
+                "description": "Post has been deleted successfully.",
+                "operationId": "destroy-post",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Post has been deleted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": "",
+                                        "message": "Post has been deleted successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Failed to delete.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "message": "Failed to delete."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
