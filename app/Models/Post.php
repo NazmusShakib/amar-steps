@@ -52,7 +52,7 @@ class Post extends Model
         static::creating(function ($model) {
             $model->created_by = Auth::id();
         });
-
+      
         static::addGlobalScope('order', function (Builder $builder) {
             $builder->orderBy('created_at', 'DESC');
         });
