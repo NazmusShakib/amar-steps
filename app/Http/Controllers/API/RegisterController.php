@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Resources\ProfileResource;
 use App\Http\Resources\UserResource;
+use App\Models\ActivityLog;
+use App\Models\Post;
 use App\Profile;
 use App\Role;
 use App\User;
@@ -386,5 +388,42 @@ class RegisterController extends BaseController
     {
         $unreadNotifications =  auth()->user()->unreadNotifications()->limit(5)->get()->toArray();
         return $this->sendResponse($unreadNotifications, 'List of unread notifications.');
+    }
+
+    /**
+     * @OA\GET(
+     *      path="/api/v1/wall",
+     *      operationId="wall-list",
+     *      tags={"Registration"},
+     *      summary="Wall post- the combination of posts and activities.",
+     *      description="Wall posts from all friends along with auth- the combination of posts and activities.",
+     *      @OA\Parameter(
+     *          name="authorization",
+     *          description="Bearer token",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string",
+     *          ),
+     *          in="header"
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Wall post- the combination of posts and activities.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"will return a json."})
+     *          )
+     *       ),
+     * )
+     */
+    public function wall(Request $request)
+    {
+        $auth = $request->user('api');
+        $friendsID = $auth->getFriends()->pluck('id')->all();
+        array_push($friendsID, $auth->id);
+        $posts = Post::with('createdBy')->whereIn('created_by', $friendsID)->limit(10)->get()->toArray();
+        $activityLog = ActivityLog::with('createdBy')->whereIn('user_id', $friendsID)->limit(10)->Ordered()->toArray();
+
+        return $this->sendResponse(array_merge($activityLog, $posts), 'Wall post- the combination of posts and activities.');
     }
 }
