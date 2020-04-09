@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth:api', 'verifiedPhone']], function () {
     Route::post('profile/change-password', 'RegisterController@changePassword');
     Route::get('subscribers', 'RegisterController@usersListWithFriendShipStatus');
     Route::get('notifications', 'RegisterController@notifications');
+    Route::get('wall', 'RegisterController@wall');
 
     Route::apiResource('users', 'UserController', ['only' => [
         'index', 'store', 'show', 'update', 'destroy']])->middleware(['role:admin']);

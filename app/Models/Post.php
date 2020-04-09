@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -50,6 +51,10 @@ class Post extends Model
         parent::boot();
         static::creating(function ($model) {
             $model->created_by = Auth::id();
+        });
+
+        static::addGlobalScope('order', function (Builder $builder) {
+            $builder->orderBy('created_at', 'DESC');
         });
     }
 

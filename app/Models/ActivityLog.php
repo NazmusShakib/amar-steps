@@ -51,4 +51,15 @@ class ActivityLog extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id')
+            ->select('id', 'name', 'email', 'phone');
+    }
+
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('created_at', 'DESC')->get();
+    }
 }
