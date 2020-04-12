@@ -1380,7 +1380,7 @@
                     "Profile"
                 ],
                 "summary": "Get auth information",
-                "description": "Returns auth data",
+                "description": "Return user full profile. <br>\n                         headshot original:: http://localhost:8000/images/users/d23ef93f-9b19-4630-849d-de1c33aa3ccf.jpg <br>\n                         headshot thumb:: http://localhost:8000/images/users/thumb/thumb_200x200_d23ef93f-9b19-4630-849d-de1c33aa3ccf.jpg",
                 "operationId": "profile",
                 "parameters": [
                     {
@@ -1403,6 +1403,90 @@
                                         "success": true,
                                         "data": [],
                                         "message": "Retrieve auth profile."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/profile/change-headshot": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Auth headshot changed.",
+                "description": "headshot original:: http://localhost:8000/images/users/d23ef93f-9b19-4630-849d-de1c33aa3ccf.jpg <br>\n                        headshot thumb:: http://localhost:8000/images/users/thumb/thumb_200x200_d23ef93f-9b19-4630-849d-de1c33aa3ccf.jpg",
+                "operationId": "change-headshot",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "headshot",
+                        "in": "query",
+                        "description": "headshot",
+                        "required": true,
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Profile picture has been updated successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": true,
+                                        "data": {
+                                            "id": 3,
+                                            "name": "Subscriber Account",
+                                            "email": "subscriber@example.com",
+                                            "phone": "0333",
+                                            "phone_verified_at": "2020-04-09T11:26:59.000000Z",
+                                            "role": "Subscriber",
+                                            "height": null,
+                                            "weight": null,
+                                            "headshot": "d23ef93f-9b19-4630-849d-de1c33aa3ccf.jpg",
+                                            "profile": {
+                                                "gender": "female",
+                                                "dob": "2011-05-26",
+                                                "country": null,
+                                                "city": null,
+                                                "bio": "Then they both cried. 'Wake up, Dormouse!' And they pinched it on both sides at once. The Dormouse again took a great crowd assembled about.",
+                                                "address": "37768 Nikita Unions\\nEmmaborough, HI 26662"
+                                            }
+                                        },
+                                        "message": "Profile picture has been updated successfully."
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "example": {
+                                        "success": false,
+                                        "message": "Prerequisite failed.",
+                                        "errors": {
+                                            "headshot": [
+                                                "The headshot field is required."
+                                            ]
+                                        }
                                     },
                                     "type": "object"
                                 }
