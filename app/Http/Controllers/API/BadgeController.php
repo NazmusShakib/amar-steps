@@ -229,7 +229,6 @@ class BadgeController extends BaseController
                 @unlink(public_path() . '/images/badges/thumb/thumb_200x200_' . $badge->badge_icon);
                 @unlink(public_path() . '/images/badges/' . $badge->badge_icon);
             }
-            $input['badge_icon'] = $imageName;
         }
 
         $badge->update($input);

@@ -11,11 +11,14 @@ use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Validation\ValidationException;
+use Intervention\Image\Facades\Image;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @OA\Info(
@@ -197,7 +200,9 @@ class RegisterController extends BaseController
      *      operationId="profile",
      *      tags={"Profile"},
      *      summary="Get auth information",
-     *      description="Returns auth data",
+     *      description="Return user full profile. <br>
+                         headshot original:: http://localhost:8000/images/users/d23ef93f-9b19-4630-849d-de1c33aa3ccf.jpg <br>
+                         headshot thumb:: http://localhost:8000/images/users/thumb/thumb_200x200_d23ef93f-9b19-4630-849d-de1c33aa3ccf.jpg",
      *      @OA\Parameter(
      *          name="authorization",
      *          description="Bearer token",
@@ -248,8 +253,82 @@ class RegisterController extends BaseController
         $request->user()->profile()->update($profileOnly);
 
         $profile = new ProfileResource($request->user());
-
         return $this->sendResponse($profile, 'Profile has been updated successfully.');
+    }
+
+    /**
+     * @OA\Post(
+     *      path="/api/v1/profile/change-headshot",
+     *      operationId="change-headshot",
+     *      tags={"Profile"},
+     *      summary="Auth headshot changed.",
+     *      description="headshot original:: http://localhost:8000/images/users/d23ef93f-9b19-4630-849d-de1c33aa3ccf.jpg <br>
+                        headshot thumb:: http://localhost:8000/images/users/thumb/thumb_200x200_d23ef93f-9b19-4630-849d-de1c33aa3ccf.jpg",
+     *      @OA\Parameter(
+     *          name="Authorization",
+     *          description="Bearer token",
+     *          required=true,
+     *          in="header",
+     *          @OA\Schema(type="string"),
+     *      ),
+     *      @OA\Parameter(
+     *          name="headshot",
+     *          description="headshot",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(type="file"),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Profile picture has been updated successfully.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":true,"data":{"id":3,"name":"Subscriber Account","email":"subscriber@example.com","phone":"0333","phone_verified_at":"2020-04-09T11:26:59.000000Z","role":"Subscriber","height":null,"weight":null,"headshot":"d23ef93f-9b19-4630-849d-de1c33aa3ccf.jpg","profile":{"gender":"female","dob":"2011-05-26","country":null,"city":null,"bio":"Then they both cried. 'Wake up, Dormouse!' And they pinched it on both sides at once. The Dormouse again took a great crowd assembled about.","address":"37768 Nikita Unions\nEmmaborough, HI 26662"}},"message":"Profile picture has been updated successfully."})
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=422,
+     *          description="Validation failed.",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\JsonContent(type="object",example = {"success":false,"message":"Prerequisite failed.","errors":{"headshot":{"The headshot field is required."}}})
+     *          )
+     *      )
+     * )
+     */
+    public function changeHeadshot(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'headshot' => 'required|mimes:jpeg,jpg,png|max:6024',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Prerequisite failed.', $validator->errors(), 422);
+        }
+
+        $auth = Auth::user();
+
+        $imageID = Uuid::uuid4()->toString();
+        $imageName = $imageID . '.' . $request->file('headshot')->getClientOriginalExtension();
+        $thumb_200x200 = 'thumb_200x200_' . $imageName;
+        if (!file_exists(public_path('images/users/thumb/'))) {
+            File::makeDirectory(public_path('images/users/thumb/'),0755, true);
+        }
+        $request->file('headshot')->move(
+            public_path('images/users/'), $imageName
+        );
+        $path = public_path('images/users/') . $imageName;
+        Image::make($path)->resize(200, 200)->save(public_path('images/users/thumb/') . $thumb_200x200);
+        $input['headshot'] = $imageName;
+
+        // unlink old file
+        if (file_exists(public_path() . '/images/users/' . $auth->headshot) && $auth->headshot != null) {
+            @unlink(public_path() . '/images/users/thumb/thumb_200x200_' . $auth->headshot);
+            @unlink(public_path() . '/images/users/' . $auth->headshot);
+        }
+        $auth->update($input);
+
+        return $this->sendResponse(new ProfileResource($auth), 'Profile picture has been updated successfully.');
     }
 
     /**

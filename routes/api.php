@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth:api', 'verifiedPhone']], function () {
 
     Route::get('profile', 'RegisterController@profile');
     Route::post('profile', 'RegisterController@updateProfile');
+    Route::post('profile/change-headshot', 'RegisterController@changeHeadshot');
     Route::post('profile/change-password', 'RegisterController@changePassword');
     Route::get('subscribers', 'RegisterController@usersListWithFriendShipStatus');
     Route::get('notifications', 'RegisterController@notifications');
